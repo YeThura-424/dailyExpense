@@ -1,0 +1,5 @@
+<template>
+  <div>
+    <h1>Welcome To The Finance Tracker App</h1>
+  </div>
+</template>
