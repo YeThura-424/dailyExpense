@@ -11,20 +11,6 @@
           />
         </div>
         <div class="month_select">
-          <!-- <select
-            v-model="month"
-            name="month"
-            id="month"
-            class="p-2 rounded-xl border border-[#7F3DFF] focus:border focus:border-[#7F3DFF] focus:outline-[#7F3DFF]"
-          >
-            <option
-              v-for="(month, index) in months"
-              :key="index"
-              :value="index + 1"
-            >
-              {{ month }}
-            </option>
-          </select> -->
           <CoreMonthSelect />
         </div>
         <div class="notification">
