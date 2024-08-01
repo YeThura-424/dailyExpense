@@ -116,6 +116,19 @@
     </div>
     <!-- header section ends here  -->
 
+    <!-- recent transaction section starts here  -->
+    <!-- <div class="recent_transaction_wrapper py-4">
+      <div class="transaction_header flex items-center justify-between">
+        <h1 class="text-xl font-medium">Recent Transaction</h1>
+        <button
+          class="bg-[#ccc0e2] rounded-2xl text-[#7F3DFF] px-2 py-1 cursor-pointer"
+        >
+          See All
+        </button>
+      </div>
+    </div> -->
+    <CoreRecentTransaction />
+    <!-- recent transaction section ends here  -->
     <MobileMainNav />
   </div>
 </template>
