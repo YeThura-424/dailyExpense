@@ -1,6 +1,6 @@
 <template>
   <div class="bg-[#eee] h-screen">
     <slot />
-    <MobileMainNav />
+    <!-- <MobileMainNav /> -->
   </div>
 </template>

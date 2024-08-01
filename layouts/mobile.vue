@@ -2,6 +2,6 @@
   <div class="bg-green-300">
     <p>mobile layout</p>
     <slot />
-    <MobileMainNav />
+    <!-- <MobileMainNav /> -->
   </div>
 </template>
