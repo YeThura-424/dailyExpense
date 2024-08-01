@@ -11,7 +11,7 @@
           />
         </div>
         <div class="month_select">
-          <select
+          <!-- <select
             v-model="month"
             name="month"
             id="month"
@@ -24,7 +24,8 @@
             >
               {{ month }}
             </option>
-          </select>
+          </select> -->
+          <CoreMonthSelect />
         </div>
         <div class="notification">
           <svg

@@ -1,11 +1,11 @@
 <template>
-  <div class="fixed top-16 w-72">
-    <Listbox v-model="selectedPerson">
+  <div class="min-w-28">
+    <Listbox v-model="selectedMonth">
       <div class="relative mt-1">
         <ListboxButton
-          class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+          class="relative min-w-28 cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-center shadow-md focus:outline-none border-2 border-[#7F3DFF]"
         >
-          <span class="block truncate">{{ selectedPerson.name }}</span>
+          <span class="block truncate">{{ selectedMonth.name }}</span>
           <span
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
@@ -26,9 +26,9 @@
           >
             <ListboxOption
               v-slot="{ active, selected }"
-              v-for="person in people"
-              :key="person.name"
-              :value="person"
+              v-for="month in months"
+              :key="month.name"
+              :value="month"
               as="template"
             >
               <li
@@ -42,7 +42,7 @@
                     selected ? 'font-medium' : 'font-normal',
                     'block truncate',
                   ]"
-                  >{{ person.name }}</span
+                  >{{ month.name }}</span
                 >
                 <span
                   v-if="selected"
@@ -70,13 +70,19 @@ import {
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
 
-const people = [
-  { name: "Wade Cooper" },
-  { name: "Arlene Mccoy" },
-  { name: "Devon Webb" },
-  { name: "Tom Cook" },
-  { name: "Tanya Fox" },
-  { name: "Hellen Schmidt" },
+const months = [
+  { name: "January", value: 1 },
+  { name: "Febuary", value: 2 },
+  { name: "March", value: 3 },
+  { name: "Apirl", value: 4 },
+  { name: "May", value: 5 },
+  { name: "June", value: 6 },
+  { name: "July", value: 7 },
+  { name: "Augest", value: 8 },
+  { name: "September", value: 9 },
+  { name: "October", value: 10 },
+  { name: "November", value: 11 },
+  { name: "December", value: 12 },
 ];
-const selectedPerson = ref(people[0]);
+const selectedMonth = ref(months[0]);
 </script>
