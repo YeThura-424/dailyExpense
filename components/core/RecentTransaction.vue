@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full max-w-md px-2 py-16 sm:px-0">
+  <div class="w-full max-w-md">
     <TabGroup>
       <TabList class="flex space-x-1 rounded-xl p-1">
         <Tab
@@ -51,10 +51,10 @@ import {
 } from "@heroicons/vue/20/solid";
 
 const title = ["Today", "Week", "Month", "Year"];
-const props = defineProps({
-  transactions: {
-    type: Object,
-    required: true,
-  },
-});
+// const props = defineProps({
+//   transactions: {
+//     type: Object,
+//     required: true,
+//   },
+// });
 </script>
