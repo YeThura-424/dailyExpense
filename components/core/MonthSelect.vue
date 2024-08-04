@@ -69,20 +69,12 @@ import {
   ListboxOption,
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
+const props = defineProps({
+  months: {
+    type: Array,
+    required: true,
+  },
+});
 
-const months = [
-  { name: "January", value: 1 },
-  { name: "Febuary", value: 2 },
-  { name: "March", value: 3 },
-  { name: "Apirl", value: 4 },
-  { name: "May", value: 5 },
-  { name: "June", value: 6 },
-  { name: "July", value: 7 },
-  { name: "Augest", value: 8 },
-  { name: "September", value: 9 },
-  { name: "October", value: 10 },
-  { name: "November", value: 11 },
-  { name: "December", value: 12 },
-];
-const selectedMonth = ref(months[0]);
+const selectedMonth = ref(props.months[0]);
 </script>

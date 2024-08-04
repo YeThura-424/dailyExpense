@@ -12,7 +12,7 @@
             />
           </div>
           <div class="month_select">
-            <CoreMonthSelect />
+            <CoreMonthSelect :months="months" />
           </div>
           <div class="notification">
             <svg
@@ -116,19 +116,17 @@
 
 <script setup>
 const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  { name: "January", value: 1 },
+  { name: "Febuary", value: 2 },
+  { name: "March", value: 3 },
+  { name: "Apirl", value: 4 },
+  { name: "May", value: 5 },
+  { name: "June", value: 6 },
+  { name: "July", value: 7 },
+  { name: "Augest", value: 8 },
+  { name: "September", value: 9 },
+  { name: "October", value: 10 },
+  { name: "November", value: 11 },
+  { name: "December", value: 12 },
 ];
-
-const month = ref(1);
 </script>
