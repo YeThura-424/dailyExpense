@@ -28,6 +28,7 @@
           </svg>
         </div>
       </div>
+      <!-- see report section  -->
       <div
         class="flex justify-between bg-[#ddd2f1] text-[#7F3DFF] p-3 my-6 rounded-lg"
       >
@@ -45,6 +46,14 @@
             stroke="#7F3DFF"
           />
         </svg>
+      </div>
+
+      <!-- transaction list  -->
+      <div class="transaction_list_warpper">
+        <div>
+          <h1 class="font-semibold text-lg">Today</h1>
+          <div class="transaction_list"></div>
+        </div>
       </div>
     </div>
     <CoreModelBox
