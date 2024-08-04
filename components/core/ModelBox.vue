@@ -15,7 +15,10 @@
 
       <div class="fixed inset-0 overflow-y-auto">
         <div
-          class="flex min-h-full items-center justify-center p-4 text-center"
+          :class="[
+            'flex min-h-full justify-center p-4 text-center',
+            verticalAlign,
+          ]"
         >
           <TransitionChild
             as="template"
@@ -71,6 +74,10 @@ const props = defineProps({
   visible: {
     type: Boolean,
     required: true,
+  },
+  verticalAlign: {
+    type: String,
+    default: "items-center",
   },
 });
 const emit = defineEmits(["dismiss"]);
