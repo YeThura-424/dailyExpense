@@ -112,16 +112,80 @@
       verticalAlign="items-end"
       :visible="openFilter"
       @dismiss="closeFilterDialog"
-    />
+    >
+      <div class="filter_content">
+        <div class="filter-head flex justify-between items-center py-4">
+          <h1>Filter Transaction</h1>
+          <button class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-2 rounded-[22px]">
+            Reset
+          </button>
+        </div>
+        <div class="filter-body">
+          <!-- filter by section  -->
+          <RadioGroup v-model="filterBy">
+            <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
+            <div class="grid grid-cols-3 gap-4 pt-3">
+              <RadioGroupOption
+                as="template"
+                v-for="value in ['income', 'expense', 'transfer']"
+                :value="value"
+                v-slot="{ active, checked }"
+              >
+                <div
+                  :class="[
+                    active ? 'bg-[#EEE5FF] text-[#7F3DFF]' : '',
+                    checked
+                      ? 'bg-[#EEE5FF] text-[#7F3DFF] border border-[#7F3DFF]'
+                      : 'bg-white border border-[#E3E5E5]',
+                  ]"
+                  class="cursor-pointer rounded-3xl px-3 py-2"
+                >
+                  <span class="capitalize">{{ value }}</span>
+                </div>
+              </RadioGroupOption>
+            </div>
+          </RadioGroup>
+
+          <!-- sort by section  -->
+          <RadioGroup v-model="sortBy">
+            <RadioGroupLabel class="font-semibold">Sort By</RadioGroupLabel>
+            <div class="grid grid-cols-3 gap-4 pt-3">
+              <RadioGroupOption
+                as="template"
+                v-for="value in ['highest', 'lowest', 'newest', 'oldest']"
+                :value="value"
+                v-slot="{ active, checked }"
+              >
+                <div
+                  :class="[
+                    active ? 'bg-[#EEE5FF] text-[#7F3DFF]' : '',
+                    checked
+                      ? 'bg-[#EEE5FF] text-[#7F3DFF] border border-[#7F3DFF]'
+                      : 'bg-white border border-[#E3E5E5]',
+                  ]"
+                  class="cursor-pointer rounded-3xl px-3 py-2"
+                >
+                  <span class="capitalize">{{ value }}</span>
+                </div>
+              </RadioGroupOption>
+            </div>
+          </RadioGroup>
+        </div>
+      </div>
+    </CoreModelBox>
     <MobileMainNav />
   </div>
 </template>
 
 <script setup>
+import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
 const transaction_type = [
   { name: "Month", value: "month" },
   { name: "Year", value: "year" },
 ];
+
+const filterBy = ref("income");
+const sortBy = ref("highest");
 
 const openFilter = ref(false);
 const openFilterDialog = () => {
