@@ -172,6 +172,10 @@
           </RadioGroup>
 
           <!-- category selection here  -->
+          <div>
+            <h1>Category</h1>
+            <CoreMultiSelect />
+          </div>
         </div>
       </div>
     </CoreModelBox>
@@ -197,4 +201,11 @@ const openFilterDialog = () => {
 const closeFilterDialog = (value) => {
   openFilter.value = value;
 };
+
+const category = [
+  { name: "Food", value: 1 },
+  { name: "Shopping", value: 2 },
+  { name: "Salary", value: 3 },
+  { name: "Cosmetic", value: 4 },
+];
 </script>
