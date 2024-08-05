@@ -170,6 +170,8 @@
               </RadioGroupOption>
             </div>
           </RadioGroup>
+
+          <!-- category selection here  -->
         </div>
       </div>
     </CoreModelBox>

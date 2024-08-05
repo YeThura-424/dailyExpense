@@ -28,7 +28,7 @@
               v-slot="{ active, selected }"
               v-for="month in months"
               :key="month.name"
-              :value="month"
+              :value="month.value"
               as="template"
             >
               <li
