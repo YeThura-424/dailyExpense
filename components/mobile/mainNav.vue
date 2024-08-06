@@ -89,6 +89,7 @@
         viewBox="0 0 57 57"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        @click="openMenuDialog"
       >
         <circle cx="29" cy="28" r="28" fill="#7F3DFF" />
         <mask id="path-2-inside-1_1409_3671" fill="white">
@@ -107,8 +108,19 @@
         />
       </svg>
     </div>
+    <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
   </div>
 </template>
+<script setup>
+const openMenu = ref(false);
+const openMenuDialog = () => {
+  openMenu.value = true;
+};
+
+const closeMenu = (value) => {
+  openMenu.value = value;
+};
+</script>
 <style scoped>
 .nav-link-item.center-item {
   box-shadow: -1px -1px 0px 9px #eee;
