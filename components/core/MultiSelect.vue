@@ -1,5 +1,5 @@
 <template>
-  <div class="fixed top-16 w-72">
+  <div class="w-72">
     <Combobox v-model="selected" multiple>
       <div class="relative mt-1">
         <div
