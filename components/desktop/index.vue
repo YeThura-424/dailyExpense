@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="py-12">
     <h1>
       <!-- This web only runs on mobile device!! Try Switching to mobile device! -->
-
-      <CoreImageCarousel :carousel="carousel" />
     </h1>
+    <CoreImageCarousel :carousel="carousel" />
   </div>
 </template>
 
