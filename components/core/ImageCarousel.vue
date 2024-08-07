@@ -4,18 +4,18 @@
       <div
         class="main-card min-w-fit"
         ref="sliderCard"
-        v-for="(data, index) in carouselData"
+        v-for="(data, index) in carousel"
         :key="index"
       >
         <img
-          v-if="data.banner_image"
-          :src="data.icon"
+          v-if="data.image"
+          :src="data.image"
           alt="image"
           class="w-[130px] h-[90px] object-cover rounded-lg"
         />
         <img
           v-else
-          src="/images/placeholder.png"
+          src="/images/user.jpg"
           alt=""
           class="w-[130px] h-[90px] object-cover rounded-lg"
         />
@@ -72,11 +72,9 @@
 </template>
 
 <script setup>
-import { useI18n } from "vue-i18n";
-
 const props = defineProps({
   carousel: {
-    type: Array,
+    type: Object,
     required: true,
   },
   itemToShow: {
