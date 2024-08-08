@@ -1,7 +1,7 @@
 <template>
   <div class="w-full max-w-md">
     <TabGroup>
-      <TabList class="flex space-x-1 rounded-xl p-1">
+      <TabList class="flex justify-between space-x-1 rounded-xl p-1">
         <Tab
           v-for="(data, index) in title"
           :key="index"
@@ -10,7 +10,7 @@
         >
           <button
             :class="[
-              'px-3 rounded-2xl py-2 text-sm font-medium leading-5 ',
+              'px-3 rounded-2xl py-2 text-base font-medium leading-5 ',
               'ring-white/60 ring-offset-2 ring-offset-none focus:outline-none',
               selected
                 ? 'bg-[#FCEED4] text-[#FCAC12] shadow'
