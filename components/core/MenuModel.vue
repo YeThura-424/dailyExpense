@@ -25,7 +25,7 @@
             leave-to="opacity-0 scale-95"
           >
             <DialogPanel
-              class="w-full max-w-md transform overflow-hidden rounded-2xl p-6 text-left align-middle transition-all"
+              class="w-fit max-w-md transform overflow-hidden transition-all absolute bottom-[90px]"
             >
               <div class="menu_wrapper flex justify-center gap-x-24">
                 <div class="income_menu">
