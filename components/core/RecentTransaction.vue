@@ -21,7 +21,7 @@
           </button>
         </Tab>
       </TabList>
-      <div class="filter-head flex justify-between items-center">
+      <div class="filter-head flex justify-between items-center pt-2">
         <h1 class="text-xl font-semibold text-[#292B2D]">Filter Transaction</h1>
         <button class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-1.5 rounded-[22px]">
           See All
