@@ -3,7 +3,7 @@ export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
   devtools: { enabled: false },
   css: ["~/assets/css/main.css"],
-  modules: ["@nuxtjs/device"],
+  modules: ["@nuxtjs/device", "@nuxt/icon"],
   postcss: {
     plugins: {
       tailwindcss: {},
