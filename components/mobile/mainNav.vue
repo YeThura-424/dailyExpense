@@ -54,8 +54,9 @@
       class="nav-link-item center-item absolute -top-1/2 -1/2 left-1/2 -translate-x-1/2"
     >
       <Icon
-        name="ion:plus-circled"
+        :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
         class="text-6xl w-[57px] h-[63px] text-[#7F3DFF]"
+        @click="openMenuDialog"
       />
     </div>
     <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
