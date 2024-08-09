@@ -23,9 +23,13 @@
       </TabList>
       <div class="filter-head flex justify-between items-center pt-2">
         <h1 class="text-xl font-semibold text-[#292B2D]">Filter Transaction</h1>
-        <button class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-1.5 rounded-[22px]">
-          See All
-        </button>
+        <NuxtLink to="/transaction">
+          <button
+            class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-1.5 rounded-[22px]"
+          >
+            See All
+          </button>
+        </NuxtLink>
       </div>
       <TabPanels class="mt-2">
         <TabPanel
@@ -96,18 +100,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-import {
-  ShoppingBagIcon,
-  ClipboardDocumentListIcon,
-} from "@heroicons/vue/20/solid";
 
 const title = ["Today", "Week", "Month", "Year"];
-// const props = defineProps({
-//   transactions: {
-//     type: Object,
-//     required: true,
-//   },
-// });
 </script>
