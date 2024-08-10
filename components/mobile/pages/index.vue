@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="px-4 relative h-[100vh]">
+    <div class="relative h-[100vh]">
       <!-- header section starts here  -->
-      <div class="py-4">
+      <div class="py-4 px-4 bg-[#eed1ac] rounded-b-3xl">
         <div class="flex justify-between items-center">
           <div class="profile">
             <img
