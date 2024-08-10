@@ -1,65 +1,69 @@
 <template>
-  <div
-    class="nav-wrapper bg-[#fff] w-full fixed bottom-0 rounded-t-lg p-3 m-w-[56px]"
-  >
-    <div class="nav-link-container flex justify-between items-center relative">
-      <div class="flex gap-x-10">
-        <nuxt-link to="/">
-          <span class="nav-link-item">
-            <Icon
-              name="ion:md-home"
-              :class="[
-                'text-3xl',
-                activeRoute('index') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
-              ]"
-            />
-          </span>
-        </nuxt-link>
-        <nuxt-link to="/transaction">
-          <span class="nav-link-item">
-            <Icon
-              name="ion:arrow-swap"
-              :class="[
-                'text-3xl',
-                activeRoute('transaction')
-                  ? 'text-[#7F3DFF]'
-                  : 'text-[#C6C6C6]',
-              ]"
-            />
-          </span>
-        </nuxt-link>
-      </div>
-      <div class="flex gap-x-10">
-        <span class="nav-link-item">
-          <Icon
-            name="ion:pie-chart"
-            :class="[
-              'text-3xl',
-              activeRoute('budget') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
-            ]"
-          />
-        </span>
-        <span class="nav-link-item">
-          <Icon
-            name="ion:person"
-            :class="[
-              'text-xl',
-              activeRoute('profile') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
-            ]"
-          />
-        </span>
-      </div>
-    </div>
+  <div class="">
     <div
-      class="nav-link-item center-item absolute -top-1/2 -1/2 left-1/2 -translate-x-1/2"
+      class="nav-wrapper bg-[#fff] w-full fixed bottom-0 rounded-t-lg p-3 m-w-[56px]"
     >
-      <Icon
-        :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
-        class="text-6xl w-[57px] h-[63px] text-[#7F3DFF]"
-        @click="openMenuDialog"
-      />
+      <div
+        class="nav-link-container flex justify-between items-center relative"
+      >
+        <div class="flex gap-x-10">
+          <nuxt-link to="/">
+            <span class="nav-link-item">
+              <Icon
+                name="ion:md-home"
+                :class="[
+                  'text-3xl',
+                  activeRoute('index') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
+                ]"
+              />
+            </span>
+          </nuxt-link>
+          <nuxt-link to="/transaction">
+            <span class="nav-link-item">
+              <Icon
+                name="ion:arrow-swap"
+                :class="[
+                  'text-3xl',
+                  activeRoute('transaction')
+                    ? 'text-[#7F3DFF]'
+                    : 'text-[#C6C6C6]',
+                ]"
+              />
+            </span>
+          </nuxt-link>
+        </div>
+        <div class="flex gap-x-10">
+          <span class="nav-link-item">
+            <Icon
+              name="ion:pie-chart"
+              :class="[
+                'text-3xl',
+                activeRoute('budget') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
+              ]"
+            />
+          </span>
+          <span class="nav-link-item">
+            <Icon
+              name="ion:person"
+              :class="[
+                'text-xl',
+                activeRoute('profile') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
+              ]"
+            />
+          </span>
+        </div>
+      </div>
+      <div
+        class="nav-link-item center-item absolute -top-1/2 -1/2 left-1/2 -translate-x-1/2"
+      >
+        <Icon
+          :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
+          class="text-6xl w-[57px] h-[63px] text-[#7F3DFF]"
+          @click="openMenuDialog"
+        />
+      </div>
+      <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
     </div>
-    <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
   </div>
 </template>
 <script setup>
