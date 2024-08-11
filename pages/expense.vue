@@ -3,6 +3,6 @@
 <template>
   <div>
     <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesTransaction v-else />
+    <LazyMobilePagesExpense v-else />
   </div>
 </template>

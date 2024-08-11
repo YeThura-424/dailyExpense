@@ -29,7 +29,7 @@
             >
               <div class="menu_wrapper flex justify-center gap-x-24">
                 <div class="income_menu">
-                  <nuxt-link to="/transaction">
+                  <nuxt-link to="/expense">
                     <button
                       class="bg-[#00A86B] flex items-center justify-center rounded-full w-14 h-14"
                     >
