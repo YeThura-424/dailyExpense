@@ -17,11 +17,22 @@
         <h1 class="font-extrabold text-5xl">$ 0</h1>
       </div>
     </div>
-    <div class="expense_form bg-white rounded-t-[40px] shadow">
-      <div>
-        <h1>Category</h1>
-        <CoreMultiSelect />
-      </div>
+    <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
+      <input
+        type="text"
+        placeholder="Description"
+        class="text-xl px-4 py-2 rounded-lg h-14 w-full focus:outline-none border border-[#91919F]"
+      />
+
+      <select
+        name="wallet"
+        id="wallet"
+        class="text-xl px-4 py-2 rounded-lg h-14 w-full focus:outline-none border border-[#91919F]"
+      >
+        <option value="val1">1</option>
+        <option value="val2">2</option>
+        <option value="val3">3</option>
+      </select>
     </div>
     <MobileMainNav />
   </div>
