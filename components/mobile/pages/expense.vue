@@ -14,7 +14,14 @@
       </div>
       <div class="expense_amount text-white pt-40">
         <span class="text-base">How Much ?</span>
-        <h1 class="font-extrabold text-5xl">$ 0</h1>
+        <div class="flex items-center">
+          <span class="font-extrabold text-5xl">$</span>
+          <input
+            v-model="form.amount"
+            type="text"
+            class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3"
+          />
+        </div>
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
@@ -29,6 +36,7 @@
 <script setup>
 const router = useRouter();
 const form = reactive({
+  amount: 0,
   description: "",
 });
 const setDescription = (val) => {
