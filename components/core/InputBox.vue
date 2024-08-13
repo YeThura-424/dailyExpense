@@ -1,10 +1,16 @@
 <template>
-  <div class="input-box-wrapper">
-    <div class="input_label" v-if="showLabel">
-      <label>{{ label }}</label>
+  <div class="input-box-wrapper py-4">
+    <div class="input_label py-2" v-if="showLabel">
+      <label class="text-xl font-medium">{{ label }}</label>
     </div>
     <div class="input-box">
-      <input type="text" :placeholder="placeholder" :class="inputClass" />
+      <input
+        v-model="inputValue"
+        :type="type"
+        :placeholder="placeholder"
+        :class="inputClass"
+        @input="updateValue"
+      />
     </div>
   </div>
 </template>
@@ -14,6 +20,10 @@ const props = defineProps({
     type: String,
     required: false,
     default: "Label",
+  },
+  type: {
+    type: String,
+    default: "text",
   },
   showLabel: {
     type: Boolean,
@@ -33,4 +43,10 @@ const props = defineProps({
     default: "Please Type Something...",
   },
 });
+const emit = defineEmits("update:v-model");
+const inputValue = ref(null);
+
+const updateValue = () => {
+  emit("update:v-model", inputValue.value);
+};
 </script>

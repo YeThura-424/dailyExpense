@@ -18,7 +18,10 @@
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
-      <CoreInputBox />
+      <CoreInputBox
+        placeholder="Description"
+        @update:v-model="setDescription"
+      />
 
       <select
         name="wallet"
@@ -33,3 +36,9 @@
     <MobileMainNav />
   </div>
 </template>
+
+<script setup>
+const setDescription = (val) => {
+  console.log(val);
+};
+</script>
