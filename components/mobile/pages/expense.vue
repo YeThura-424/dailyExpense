@@ -18,11 +18,7 @@
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
-      <input
-        type="text"
-        placeholder="Description"
-        class="text-xl px-4 py-2 rounded-lg h-14 w-full focus:outline-none border border-[#91919F]"
-      />
+      <CoreInputBox />
 
       <select
         name="wallet"
