@@ -13,7 +13,7 @@
         </div>
       </div>
       <div class="expense_amount text-white pt-40">
-        <span class="text-base">How Much ?</span>
+        <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">$</span>
           <input
@@ -29,6 +29,7 @@
         placeholder="Description"
         @update:v-model="setDescription"
       />
+      <CoreSelectBox :options="category" />
     </div>
   </div>
 </template>
@@ -46,4 +47,6 @@ const setDescription = (val) => {
 const backAction = () => {
   router.back();
 };
+
+const category = ["Category1", "Category2", "Category3"];
 </script>
