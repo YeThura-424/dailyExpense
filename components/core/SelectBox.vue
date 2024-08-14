@@ -7,7 +7,7 @@
       {{ errors.join(" ") }}
     </p>
 
-    <select v-show="false" multiple class="bordered" :name="name">
+    <select v-show="false" class="bordered" :name="name">
       <option
         v-for="(option, idx) in selectedOptions"
         :key="idx"
@@ -16,7 +16,7 @@
         {{ getOptionDescription(option) }}
       </option>
     </select>
-    <div v-if="debug">
+    <div v-if="debug" class="hereeeeeeeeeeeeee">
       {{ selectedOptions }}
       <hr />
     </div>
@@ -181,7 +181,7 @@ export default {
     debug: {
       type: Boolean,
       required: false,
-      default: () => false,
+      default: () => true,
     },
     taggable: {
       type: Boolean,
