@@ -36,7 +36,7 @@ const props = defineProps({
   inputClass: {
     type: String,
     default:
-      "text-xl px-4 py-2 rounded-lg h-14 w-full focus:outline-none border border-[#91919F]",
+      "text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]",
   },
   placeholder: {
     type: String,
