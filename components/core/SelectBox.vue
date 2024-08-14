@@ -1,7 +1,7 @@
 <template>
   <div :class="[classes.wrapper]" ref="taggable-select">
     <p
-      class="border-2 mb-3 border-red-dark p-4 text-red bg-red-lightest text-bold rounded text-3xl required"
+      class="border-2 mb-3 border-red-200 p-4 text-red bg-red-lightest text-bold rounded text-3xl required"
       v-show="errors.length"
     >
       {{ errors.join(" ") }}
@@ -21,7 +21,7 @@
       <hr />
     </div>
     <div class="relative text-left" :class="[classes.searchWrapper]">
-      <div class="rounded bordered border-grey hover:border-blue">
+      <div class="rounded border border-slate-300">
         <ul
           :class="[isRequired]"
           class="items-center flex flex-wrap list-reset pb-1 pr-1 m-0 text-black w-full"
@@ -181,7 +181,7 @@ export default {
     debug: {
       type: Boolean,
       required: false,
-      default: () => true,
+      default: () => false,
     },
     taggable: {
       type: Boolean,
