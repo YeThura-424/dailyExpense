@@ -29,7 +29,7 @@
         placeholder="Description"
         @update:v-model="setDescription"
       />
-      <CoreSelectBox :options="category" />
+      <CoreSelectBox :option="category" name="Category" />
     </div>
   </div>
 </template>
@@ -48,5 +48,12 @@ const backAction = () => {
   router.back();
 };
 
-const category = ["Category1", "Category2", "Category3"];
+const category = [
+  { name: "Category1", value: 1 },
+  { name: "Category2", value: 2 },
+  { name: "Category3", value: 3 },
+  { name: "Category4", value: 4 },
+  { name: "Category5", value: 5 },
+  { name: "Category6", value: 6 },
+];
 </script>
