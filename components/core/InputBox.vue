@@ -1,5 +1,5 @@
 <template>
-  <div class="input-box-wrapper py-4">
+  <div class="input-box-wrapper">
     <div class="input_label py-2" v-if="showLabel">
       <label class="text-xl font-medium">{{ label }}</label>
     </div>

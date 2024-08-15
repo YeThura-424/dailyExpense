@@ -1,5 +1,5 @@
 <template>
-  <div class="select-wrapper py-4">
+  <div class="select-wrapper">
     <select
       v-model="selectValue"
       :name="name"

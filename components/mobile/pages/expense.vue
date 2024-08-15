@@ -25,11 +25,22 @@
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
-      <CoreInputBox
-        placeholder="Description"
-        @update:v-model="setDescription"
-      />
-      <CoreSelectBox :option="category" name="Category" />
+      <div class="category_select py-2">
+        <CoreSelectBox
+          :option="category"
+          name="Category"
+          v-model="form.category"
+        />
+      </div>
+      <div class="description_input py-2">
+        <CoreInputBox
+          placeholder="Description"
+          @update:v-model="setDescription"
+        />
+      </div>
+      <div class="wallet_select py-2">
+        <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
+      </div>
     </div>
   </div>
 </template>
@@ -39,6 +50,8 @@ const router = useRouter();
 const form = reactive({
   amount: 0,
   description: "",
+  category: "",
+  wallet: "",
 });
 const setDescription = (val) => {
   form.description = val;
@@ -55,5 +68,14 @@ const category = [
   { name: "Category4", value: 4 },
   { name: "Category5", value: 5 },
   { name: "Category6", value: 6 },
+];
+
+const wallet = [
+  { name: "Wallet 1", value: 1 },
+  { name: "Wallet 2", value: 2 },
+  { name: "Wallet 3", value: 3 },
+  { name: "Wallet 4", value: 4 },
+  { name: "Wallet 5", value: 5 },
+  { name: "Wallet 6", value: 6 },
 ];
 </script>
