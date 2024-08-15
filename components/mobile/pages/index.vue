@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="relative h-[100vh]">
+    <div class="relative pb-[78px]">
       <!-- header section starts here  -->
       <div class="py-4 px-4 bg-[#eed1ac] rounded-b-3xl">
         <div class="flex justify-between items-center">

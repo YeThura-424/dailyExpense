@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="z-10">
     <div
       class="nav-wrapper bg-[#fff] w-full fixed bottom-0 rounded-t-lg p-3 m-w-[56px]"
     >
@@ -54,11 +54,11 @@
         </div>
       </div>
       <div
-        class="nav-link-item center-item absolute -top-1/2 -1/2 left-1/2 -translate-x-1/2"
+        class="rounded-full w-[50px] h-[55px] flex items-center nav-link-item center-item absolute left-1/2 -translate-x-1/2 bottom-5"
       >
         <Icon
           :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
-          class="text-6xl w-[57px] h-[63px] text-[#7F3DFF]"
+          class="text-6xl text-[#7F3DFF]"
           @click="openMenuDialog"
         />
       </div>
@@ -84,13 +84,13 @@ const activeRoute = (route) => {
 };
 </script>
 <style scoped>
-.nav-link-item.center-item {
+/* .nav-link-item.center-item {
   box-shadow: 0px -7px 0px 9px #eee;
   background: #eee;
   border-radius: 999px;
-}
+} */
 
-.nav-link-item.center-item::before {
+/* .nav-link-item.center-item::before {
   content: "";
   position: absolute;
   width: 20px;
@@ -111,5 +111,5 @@ const activeRoute = (route) => {
   top: 30px;
   left: 65px;
   box-shadow: -2px -5px 0px 0px #eee;
-}
+} */
 </style>
