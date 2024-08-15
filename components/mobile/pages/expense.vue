@@ -25,6 +25,13 @@
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
+      <div class="time-input-box">
+        <CoreInputBox
+          placeholder="Date"
+          @update:v-model="setDescription"
+          type="date"
+        />
+      </div>
       <div class="category_select py-2">
         <CoreSelectBox
           :option="category"
@@ -40,6 +47,14 @@
       </div>
       <div class="wallet_select py-2">
         <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
+      </div>
+      <div class="save-button">
+        <button
+          type="button"
+          class="w-full inline-flex justify-center rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-3.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+        >
+          Confirm
+        </button>
       </div>
     </div>
   </div>
