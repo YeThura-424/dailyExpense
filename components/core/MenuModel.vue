@@ -29,7 +29,7 @@
             >
               <div class="menu_wrapper flex justify-center gap-x-24">
                 <div class="income_menu">
-                  <nuxt-link to="/expense">
+                  <nuxt-link to="/income">
                     <button
                       class="bg-[#00A86B] flex items-center justify-center rounded-full w-14 h-14"
                     >
@@ -41,14 +41,16 @@
                   </nuxt-link>
                 </div>
                 <div class="expense_menu">
-                  <button
-                    class="bg-[#FD3C4A] flex items-center justify-center rounded-full w-14 h-14"
-                  >
-                    <Icon
-                      name="ion:cloud-upload-sharp"
-                      class="text-3xl text-[#fff]"
-                    />
-                  </button>
+                  <nuxt-link to="/expense">
+                    <button
+                      class="bg-[#FD3C4A] flex items-center justify-center rounded-full w-14 h-14"
+                    >
+                      <Icon
+                        name="ion:cloud-upload-sharp"
+                        class="text-3xl text-[#fff]"
+                      />
+                    </button>
+                  </nuxt-link>
                 </div>
               </div>
             </DialogPanel>
