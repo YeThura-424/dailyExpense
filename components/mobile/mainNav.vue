@@ -46,24 +46,25 @@
             <Icon
               name="ion:person"
               :class="[
-                'text-xl',
+                'text-3xl',
                 activeRoute('profile') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
               ]"
             />
           </span>
         </div>
       </div>
+      <!-- center icon  -->
       <div
-        class="z-10 justify-center flex items-center nav-link-item center-item absolute left-1/2 -translate-x-1/2 bottom-7"
+        class="z-10 justify-center flex items-center nav-link-item center-item absolute left-1/2 -translate-x-1/2 bottom-[30px]"
       >
         <Icon
-          :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
+          :name="openMenu ? 'ion:close-circled' : 'ion:plus-circled'"
           class="text-6xl text-[#7F3DFF]"
           @click="openMenuDialog"
         />
       </div>
       <div
-        class="rounded-b-full w-[70px] h-[35px] bg-[#eee] absolute left-1/2 -translate-x-1/2 bottom-6"
+        class="rounded-b-full w-[70px] h-[35px] bg-[#eee] absolute left-1/2 -translate-x-1/2 bottom-[25px]"
       ></div>
       <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
     </div>
@@ -114,14 +115,5 @@ const activeRoute = (route) => {
   top: 30px;
   left: 65px;
   box-shadow: -2px -5px 0px 0px #eee;
-} */
-
-/* .nav-link-item.center-item::before {
-  content: "";
-  position: absolute;
-  width: 50px;
-  height: 55px;
-  background: red;
-  border-radius: 10px 10px 0 0;
 } */
 </style>
