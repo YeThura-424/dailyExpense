@@ -107,7 +107,9 @@
       <!-- header section ends here  -->
 
       <!-- recent transaction section starts here  -->
-      <CoreRecentTransaction />
+      <div class="py-3 px-4">
+        <CoreRecentTransaction />
+      </div>
       <!-- recent transaction section ends here  -->
     </div>
     <MobileMainNav />

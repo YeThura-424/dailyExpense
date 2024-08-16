@@ -54,7 +54,7 @@
         </div>
       </div>
       <div
-        class="rounded-full w-[50px] h-[55px] flex items-center nav-link-item center-item absolute left-1/2 -translate-x-1/2 bottom-5"
+        class="z-10 justify-center flex items-center nav-link-item center-item absolute left-1/2 -translate-x-1/2 bottom-7"
       >
         <Icon
           :name="openMenu ? 'ion:close-circle' : 'ion:plus-circled'"
@@ -62,6 +62,9 @@
           @click="openMenuDialog"
         />
       </div>
+      <div
+        class="rounded-b-full w-[70px] h-[35px] bg-[#eee] absolute left-1/2 -translate-x-1/2 bottom-6"
+      ></div>
       <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
     </div>
   </div>
@@ -111,5 +114,14 @@ const activeRoute = (route) => {
   top: 30px;
   left: 65px;
   box-shadow: -2px -5px 0px 0px #eee;
+} */
+
+/* .nav-link-item.center-item::before {
+  content: "";
+  position: absolute;
+  width: 50px;
+  height: 55px;
+  background: red;
+  border-radius: 10px 10px 0 0;
 } */
 </style>
