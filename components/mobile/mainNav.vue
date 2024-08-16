@@ -88,13 +88,7 @@ const activeRoute = (route) => {
 };
 </script>
 <style scoped>
-/* .nav-link-item.center-item {
-  box-shadow: 0px -7px 0px 9px #eee;
-  background: #eee;
-  border-radius: 999px;
-} */
-
-/* .nav-link-item.center-item::before {
+.nav-link-item.center-item::before {
   content: "";
   position: absolute;
   width: 20px;
@@ -115,5 +109,5 @@ const activeRoute = (route) => {
   top: 30px;
   left: 65px;
   box-shadow: -2px -5px 0px 0px #eee;
-} */
+}
 </style>
