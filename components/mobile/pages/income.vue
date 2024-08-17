@@ -48,12 +48,23 @@
       <div class="wallet_select py-2">
         <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
       </div>
-      <div class="save-button">
+      <!-- <div class="repeat-transaction">
+        <div class="text">
+          <h1>Repeat</h1>
+          <p>Repeat transaction</p>
+        </div>
+        <div class="toggle"></div>
+      </div> -->
+      <div class="save-button flex justify-end gap-x-5">
         <button
           type="button"
-          class="w-full inline-flex justify-center rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-3.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+          class="w-fit flex items-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
         >
-          Confirm
+          <Icon
+            name="ion:save-outline"
+            class="text-white text-2xl cursor-pointer"
+          />
+          Save
         </button>
       </div>
     </div>
