@@ -2,7 +2,7 @@
   <div>
     <div class="relative pb-[78px]">
       <!-- header section starts here  -->
-      <div class="py-4 px-4 bg-[#eed1ac] rounded-b-3xl">
+      <div class="py-4 px-4 bg-[#FFF6E5] rounded-b-3xl">
         <div class="flex justify-between items-center">
           <div class="profile">
             <img
