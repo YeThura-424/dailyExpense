@@ -1,3 +1,8 @@
+<script setup></script>
+
 <template>
-  <div>Expense Detail</div>
+  <div>
+    <LazyDesktop v-if="$device.isDesktopOrTablet" />
+    <LazyMobilePagesExpenseDetail v-else />
+  </div>
 </template>
