@@ -57,7 +57,7 @@
         <img src="/images/receipt.png" alt="" />
       </div>
       <!-- <div class="fixed w-[92%] bottom-3 left-1/2 -translate-x-1/2"> -->
-      <div>
+      <div class="pb-4">
         <button
           type="button"
           class="w-full flex items-center gap-x-2 justify-center rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"

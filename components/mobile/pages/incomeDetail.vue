@@ -27,11 +27,11 @@
       >
         <div class="type text-center">
           <p class="text-lg text-[#91919F]">Type</p>
-          <h1 class="text-xl text-[#0D0E0F] font-semibold">Expense</h1>
+          <h1 class="text-xl text-[#0D0E0F] font-semibold">Income</h1>
         </div>
         <div class="category text-center">
           <p class="text-lg text-[#91919F]">Category</p>
-          <h1 class="text-xl text-[#0D0E0F] font-semibold">Shopping</h1>
+          <h1 class="text-xl text-[#0D0E0F] font-semibold">Salary</h1>
         </div>
         <div class="wallet text-center">
           <p class="text-lg text-[#91919F]">Wallet</p>
@@ -57,7 +57,7 @@
         <img src="/images/receipt.png" alt="" />
       </div>
       <!-- <div class="fixed w-[92%] bottom-3 left-1/2 -translate-x-1/2"> -->
-      <div>
+      <div class="pb-4">
         <button
           type="button"
           class="w-full flex items-center gap-x-2 justify-center rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
