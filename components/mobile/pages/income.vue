@@ -12,7 +12,7 @@
           <p class="text-center text-white text-xl font-bold">Income</p>
         </div>
       </div>
-      <div class="expense_amount text-white pt-40">
+      <div class="expense_amount text-white pt-36">
         <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">$</span>
@@ -48,13 +48,26 @@
       <div class="wallet_select py-2">
         <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
       </div>
-      <!-- <div class="repeat-transaction">
+      <div class="repeat-transaction flex justify-between items-center py-3">
         <div class="text">
-          <h1>Repeat</h1>
-          <p>Repeat transaction</p>
+          <h1 class="text-xl font-semibold text-[#292B2D]">Repeat</h1>
+          <p class="text-sm text-[#91919F]">Repeat transaction</p>
         </div>
-        <div class="toggle"></div>
-      </div> -->
+        <div class="toggle">
+          <Switch v-model="form.repeat" as="template" v-slot="{ checked }">
+            <button
+              class="relative inline-flex h-6 w-11 items-center rounded-full"
+              :class="checked ? 'bg-blue-600' : 'bg-gray-200'"
+            >
+              <span class="sr-only">Enable notifications</span>
+              <span
+                :class="checked ? 'translate-x-6' : 'translate-x-1'"
+                class="inline-block h-4 w-4 transform rounded-full bg-white transition"
+              />
+            </button>
+          </Switch>
+        </div>
+      </div>
       <div class="save-button flex justify-end gap-x-5">
         <button
           type="button"
@@ -72,12 +85,15 @@
 </template>
 
 <script setup>
+import { Switch } from "@headlessui/vue";
+
 const router = useRouter();
 const form = reactive({
   amount: 0,
   description: "",
   category: "",
   wallet: "",
+  repeat: false,
 });
 const setDescription = (val) => {
   form.description = val;
