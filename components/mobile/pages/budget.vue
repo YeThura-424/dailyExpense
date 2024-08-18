@@ -1,3 +1,5 @@
 <template>
-  <div>budget page</div>
+  <div>
+    <div class="budget-month-carousel"></div>
+  </div>
 </template>
