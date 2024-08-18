@@ -33,15 +33,17 @@
           </nuxt-link>
         </div>
         <div class="flex gap-x-10">
-          <span class="nav-link-item">
-            <Icon
-              name="ion:pie-chart"
-              :class="[
-                'text-3xl',
-                activeRoute('budget') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
-              ]"
-            />
-          </span>
+          <nuxt-link to="/budget">
+            <span class="nav-link-item">
+              <Icon
+                name="ion:pie-chart"
+                :class="[
+                  'text-3xl',
+                  activeRoute('budget') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
+                ]"
+              />
+            </span>
+          </nuxt-link>
           <span class="nav-link-item">
             <Icon
               name="ion:person"
