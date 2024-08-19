@@ -11,10 +11,16 @@
         </template>
       </Carousel>
     </div>
-    <div class="budget-list rounded-t-[40px] bg-[#eee] relative">
-      <MobileBudgetEmptyState v-if="true" />
+    <div
+      class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
+    >
+      <MobileBudgetEmptyState v-if="false" />
+      <!-- budget listing  -->
+      <div class="budget-listing">
+        <MobileBudgetListingCard />
+      </div>
       <div
-        class="budget-create absolute bottom-10 w-[95%] left-1/2 -translate-x-1/2"
+        class="budget-create fixed bottom-24 w-[95%] left-1/2 -translate-x-1/2"
       >
         <button
           type="button"
@@ -46,6 +52,24 @@ const months = [
   "November",
   "December",
 ];
+
+const budgets = [
+  {
+    category: "Shopping",
+    limit: 1200,
+    spent: 650,
+  },
+  {
+    category: "Food",
+    limit: 800,
+    spent: 750,
+  },
+  {
+    category: "Cosmetic",
+    limit: 1500,
+    spent: 1800,
+  },
+];
 </script>
 
 <style>
@@ -55,6 +79,6 @@ button.carousel__prev.budget-carousel {
 }
 
 .budget-list {
-  height: calc(100vh - 164px);
+  height: calc(100vh - 204px);
 }
 </style>
