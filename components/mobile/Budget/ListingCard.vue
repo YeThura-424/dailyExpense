@@ -1,23 +1,34 @@
 <template>
-  <div class="listing-card-wrapper p-4 bg-[#ffffff] rounded-2xl">
+  <div
+    class="listing-card-wrapper p-4 bg-[#ffffff] rounded-2xl mb-3"
+    v-for="budget in budgets"
+    :key="budget"
+  >
     <div class="card-header flex justify-between items-center">
       <div class="header-type py-2">
         <button
-          class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-2 py-1.5"
+          class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5"
         >
-          <Icon name="ion:ios-radio-button-on" class="text-yellow-500" />
-          Shopping
+          <Icon name="ion:ios-radio-button-on" :class="alertTheme(budget)" />
+          {{ budget.category }}
         </button>
       </div>
       <div class="header-alert">
-        <Icon name="ion:information-circled" class="text-yellow-500 text-3xl" />
+        <Icon
+          name="ion:information-circled"
+          :class="['text-3xl', alertTheme(budget)]"
+        />
       </div>
     </div>
     <div class="card-info">
-      <h1 class="text-xl font-bold pb-2">Remaining $0</h1>
-      <div class="budget-bar bg-yellow-500 p-2 rounded-lg"></div>
-      <p class="text-[#6f6f74] text-lg">$1200 of $1000</p>
-      <span class="text-xl text-red-500">You've exceed the limit!</span>
+      <h1 class="text-xl font-bold pb-2">Remaining ${{ remaining(budget) }}</h1>
+      <div :class="['budget-bar p-2 rounded-lg', alertTheme(budget)]"></div>
+      <p class="text-[#6f6f74] text-lg">
+        $ {{ budget.spent }} of $ {{ budget.limit }}
+      </p>
+      <span v-if="isExceed(budget)" :class="['text-xl', alertTheme(budget)]"
+        >You've exceed the limit!</span
+      >
     </div>
   </div>
 </template>
@@ -30,17 +41,17 @@ const props = defineProps({
 });
 
 const remaining = (budget) => {
-  return budget.amount - budget.spent;
+  return budget.limit - budget.spent;
 };
 
 const isExceed = (budget) => {
-  return budget.spent > budget.amount;
+  return budget.spent > budget.limit;
 };
 
 const alertTheme = (budget) => {
-  const spentPercent = (budget.spent / budget.amount) * 100;
+  const spentPercent = (budget.spent / budget.limit) * 100;
 
-  if (spentPercent > 50) return "text-yellow-500";
+  if (spentPercent < 51) return "text-yellow-500";
   if (spentPercent > 100) return "text-red-500";
 
   return "text-blue-500";
