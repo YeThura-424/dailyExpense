@@ -9,7 +9,7 @@
     <Meta property="og:title" content="Expence Tracker" />
     <Meta property="og:type" content="website" />
   </Head>
-  <div class="bg-[#eee] h-full">
+  <div class="bg-[#eee] min-h-screen">
     <NuxtLoadingIndicator color="#801c1d" />
     <slot />
     <!-- <MobileMainNav /> -->
