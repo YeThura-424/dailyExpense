@@ -17,7 +17,7 @@
       <MobileBudgetEmptyState v-if="false" />
       <!-- budget listing  -->
       <div class="budget-listing">
-        <MobileBudgetListingCard />
+        <MobileBudgetListingCard :budgets="budgets" />
       </div>
       <div
         class="budget-create fixed bottom-24 w-[95%] left-1/2 -translate-x-1/2"

@@ -21,3 +21,28 @@
     </div>
   </div>
 </template>
+<script setup>
+const props = defineProps({
+  budgets: {
+    type: Array,
+    required: true,
+  },
+});
+
+const remaining = (budget) => {
+  return budget.amount - budget.spent;
+};
+
+const isExceed = (budget) => {
+  return budget.spent > budget.amount;
+};
+
+const alertTheme = (budget) => {
+  const spentPercent = (budget.spent / budget.amount) * 100;
+
+  if (spentPercent > 50) return "text-yellow-500";
+  if (spentPercent > 100) return "text-red-500";
+
+  return "text-blue-500";
+};
+</script>
