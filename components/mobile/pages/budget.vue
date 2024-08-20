@@ -57,7 +57,7 @@ const budgets = [
   {
     category: "Shopping",
     limit: 1200,
-    spent: 650,
+    spent: 550,
   },
   {
     category: "Food",

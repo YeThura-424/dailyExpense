@@ -22,7 +22,12 @@
     </div>
     <div class="card-info">
       <h1 class="text-xl font-bold pb-2">Remaining ${{ remaining(budget) }}</h1>
-      <div :class="['budget-bar p-2 rounded-lg', alertTheme(budget)]"></div>
+      <div class="budget-bar-wrapper rounded-lg w-full bg-slate-300 flex">
+        <div
+          :class="['budget-bar p-2 rounded-lg', alertBg(budget)]"
+          :style="{ width: spentPercent(budget) }"
+        ></div>
+      </div>
       <p class="text-[#6f6f74] text-lg">
         $ {{ budget.spent }} of $ {{ budget.limit }}
       </p>
@@ -51,9 +56,24 @@ const isExceed = (budget) => {
 const alertTheme = (budget) => {
   const spentPercent = (budget.spent / budget.limit) * 100;
 
-  if (spentPercent < 51) return "text-yellow-500";
+  if (spentPercent < 51) return "text-blue-500";
   if (spentPercent > 100) return "text-red-500";
 
-  return "text-blue-500";
+  return "text-yellow-500";
+};
+
+const alertBg = (budget) => {
+  const percent = (budget.spent / budget.limit) * 100;
+
+  if (percent < 51) return "bg-blue-500";
+  if (percent > 100) return "bg-red-500";
+
+  return "bg-yellow-500";
+};
+
+const spentPercent = (budget) => {
+  const percent = Math.floor((budget.spent / budget.limit) * 100);
+
+  return `${percent}%`;
 };
 </script>
