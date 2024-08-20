@@ -43,10 +43,10 @@
           </p>
         </div>
         <div class="toggle">
-          <Switch v-model="form.repeat" as="template" v-slot="{ checked }">
+          <Switch v-model="form.alert" as="template" v-slot="{ checked }">
             <button
               class="relative inline-flex h-6 w-11 items-center rounded-full"
-              :class="checked ? 'bg-blue-600' : 'bg-gray-200'"
+              :class="checked ? 'bg-[#7F3DFF]' : 'bg-gray-200'"
             >
               <span class="sr-only">Enable notifications</span>
               <span
@@ -79,10 +79,8 @@ import { Switch } from "@headlessui/vue";
 const router = useRouter();
 const form = reactive({
   amount: 0,
-  description: "",
   category: "",
-  wallet: "",
-  repeat: false,
+  alert: false,
 });
 const setDescription = (val) => {
   form.description = val;

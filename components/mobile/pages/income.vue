@@ -57,7 +57,7 @@
           <Switch v-model="form.repeat" as="template" v-slot="{ checked }">
             <button
               class="relative inline-flex h-6 w-11 items-center rounded-full"
-              :class="checked ? 'bg-blue-600' : 'bg-gray-200'"
+              :class="checked ? 'bg-[#7F3DFF]' : 'bg-gray-200'"
             >
               <span class="sr-only">Enable notifications</span>
               <span
