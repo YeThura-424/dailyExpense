@@ -18,8 +18,8 @@
     </div>
 
     <div class="main-info px-4">
-      <div class="budget-info">
-        <div class="category-wrapper">
+      <div class="budget-info flex flex-col items-center">
+        <div class="category-wrapper py-4">
           <button
             class="flex w-fit items-center gap-x-3 py-3 px-4 rounded-3xl shadow-md border border-[#E3E5E5] text-base font-medium"
           >
@@ -43,11 +43,11 @@
             Shopping
           </button>
         </div>
-        <div class="remaining-wrapper">
+        <div class="remaining-wrapper text-center py-4">
           <h1 class="text-xl font-semibold">Remaining</h1>
           <span class="text-6xl font-bold">$0</span>
         </div>
-        <div class="budget-progress-bar">
+        <div class="budget-progress-bar w-full pt-4 pb-8">
           <div class="budget-bar-wrapper rounded-lg w-full bg-slate-300 flex">
             <div
               class="budget-bar p-2 rounded-lg bg-yellow-500"
@@ -57,14 +57,14 @@
         </div>
         <div class="limit-status">
           <button
-            class="bg-[#FD3C4A] px-4 py-2 rounded-full flex items-center gap-x-2 text-white"
+            class="bg-[#FD3C4A] px-4 py-2 rounded-full flex items-center gap-x-2 text-white font-medium"
           >
             <Icon name="ion:information-circled" class="text-2xl" />
             You have exceed the limit!
           </button>
         </div>
       </div>
-      <div class="pb-4">
+      <div class="pb-4 pt-[230px]">
         <button
           type="button"
           class="w-full flex items-center gap-x-2 justify-center rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
