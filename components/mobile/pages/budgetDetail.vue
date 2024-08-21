@@ -47,6 +47,22 @@
           <h1 class="text-xl font-semibold">Remaining</h1>
           <span class="text-6xl font-bold">$0</span>
         </div>
+        <div class="budget-progress-bar">
+          <div class="budget-bar-wrapper rounded-lg w-full bg-slate-300 flex">
+            <div
+              class="budget-bar p-2 rounded-lg bg-yellow-500"
+              style="width: 60%"
+            ></div>
+          </div>
+        </div>
+        <div class="limit-status">
+          <button
+            class="bg-[#FD3C4A] px-4 py-2 rounded-full flex items-center gap-x-2 text-white"
+          >
+            <Icon name="ion:information-circled" class="text-2xl" />
+            You have exceed the limit!
+          </button>
+        </div>
       </div>
       <div class="pb-4">
         <button
