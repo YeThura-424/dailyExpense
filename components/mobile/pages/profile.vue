@@ -39,31 +39,42 @@
           <div
             class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
           >
-            <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
+            <Icon name="ion:ios-settings" class="text-4xl text-[#7F3DFF]" />
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
+          <h1 class="text-[#292B2D] text-xl font-medium">Setting</h1>
         </div>
-
+        <!-- category  -->
         <div
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
         >
           <div
             class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
           >
-            <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
+            <Icon name="ion:ios-list-box" class="text-4xl text-[#7F3DFF]" />
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
+          <h1 class="text-[#292B2D] text-xl font-medium">Category</h1>
         </div>
-
+        <!-- export  -->
         <div
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
         >
           <div
             class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
           >
-            <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
+            <Icon name="ion:ios-cloud-upload" class="text-4xl text-[#7F3DFF]" />
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
+          <h1 class="text-[#292B2D] text-xl font-medium">Export</h1>
+        </div>
+        <!-- logout  -->
+        <div
+          class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
+        >
+          <div
+            class="account-logo w-14 h-14 bg-[#FFE2E4] rounded-2xl flex justify-center items-center"
+          >
+            <Icon name="ion:ios-log-out" class="text-4xl text-[#FD3C4A]" />
+          </div>
+          <h1 class="text-[#292B2D] text-xl font-medium">Logout</h1>
         </div>
       </div>
     </div>
