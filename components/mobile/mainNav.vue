@@ -44,15 +44,17 @@
               />
             </span>
           </nuxt-link>
-          <span class="nav-link-item">
-            <Icon
-              name="ion:person"
-              :class="[
-                'text-3xl',
-                activeRoute('profile') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
-              ]"
-            />
-          </span>
+          <nuxt-link to="/profile">
+            <span class="nav-link-item">
+              <Icon
+                name="ion:person"
+                :class="[
+                  'text-3xl',
+                  activeRoute('profile') ? 'text-[#7F3DFF]' : 'text-[#C6C6C6]',
+                ]"
+              />
+            </span>
+          </nuxt-link>
         </div>
       </div>
       <!-- center icon  -->
