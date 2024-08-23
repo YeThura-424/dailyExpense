@@ -22,16 +22,18 @@
 
       <div class="profile-modules-wrapper bg-white rounded-[35px] mt-8">
         <!-- account  -->
-        <div
-          class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
-        >
+        <nuxt-link to="/account">
           <div
-            class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
           >
-            <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
+            <div
+              class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            >
+              <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
+            </div>
+            <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
-        </div>
+        </nuxt-link>
         <!-- setting  -->
         <div
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
