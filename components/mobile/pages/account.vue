@@ -79,7 +79,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const router = useRouter();
+const backAction = () => {
+  router.back();
+};
+</script>
 
 <style scoped>
 .account_info {
