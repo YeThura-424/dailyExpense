@@ -2,7 +2,7 @@
   <div class="bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
       <Carousel>
-        <Slide v-for="month in months" :key="slide">
+        <Slide v-for="month in months" :key="month">
           <div class="carousel__item text-lg">{{ month }}</div>
         </Slide>
 

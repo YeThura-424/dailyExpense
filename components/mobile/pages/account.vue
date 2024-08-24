@@ -72,7 +72,7 @@
                 name="ion:ios-create"
                 class="text-white text-2xl cursor-pointer"
               />
-              Create a budget
+              Create new Account
             </button>
           </nuxt-link>
         </div>

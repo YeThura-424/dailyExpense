@@ -10,7 +10,7 @@
     <Meta property="og:type" content="website" />
   </Head>
   <div class="bg-[#eee] min-h-screen">
-    <NuxtLoadingIndicator color="#801c1d" />
+    <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
     <!-- <MobileMainNav /> -->
   </div>
