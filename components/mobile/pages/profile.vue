@@ -46,16 +46,18 @@
           <h1 class="text-[#292B2D] text-xl font-medium">Setting</h1>
         </div>
         <!-- category  -->
-        <div
-          class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
-        >
+        <nuxt-link to="/category">
           <div
-            class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
           >
-            <Icon name="ion:ios-list-box" class="text-4xl text-[#7F3DFF]" />
+            <div
+              class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            >
+              <Icon name="ion:ios-list-box" class="text-4xl text-[#7F3DFF]" />
+            </div>
+            <h1 class="text-[#292B2D] text-xl font-medium">Category</h1>
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Category</h1>
-        </div>
+        </nuxt-link>
         <!-- export  -->
         <div
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
