@@ -53,7 +53,7 @@
         <div
           class="category-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
         >
-          <nuxt-link to="/account/add">
+          <nuxt-link to="/category/add">
             <button
               type="button"
               class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
