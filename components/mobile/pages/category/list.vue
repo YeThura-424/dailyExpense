@@ -13,36 +13,31 @@
         </div>
       </div>
       <div class="category-list-wrapper bg-white">
-        <!-- wallet account  -->
+        <!-- category listing  -->
         <div
+          v-for="category in categories"
+          :key="category.id"
           class="category-section flex items-center justify-between border-b border-[#eee] px-4 py-4"
         >
           <div class="flex items-center gap-x-3">
             <div
               class="category-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
             >
-              <Icon name="ion:md-wallet" class="text-4xl text-[#7F3DFF]" />
+              <img
+                class="w-12 h-12 object-cover"
+                :src="category.image"
+                alt=""
+              />
             </div>
-            <h1 class="text-[#292B2D] text-xl font-medium">Bank Account</h1>
+            <h1 class="text-[#292B2D] text-xl font-medium">
+              {{ category.name }}
+            </h1>
           </div>
-          <div class="amount">
-            <p class="text-xl text-[#212325]">$6000</p>
-          </div>
-        </div>
-        <!-- physical cash  -->
-        <div
-          class="account-section flex items-center justify-between border-b border-[#eee] px-4 py-4"
-        >
-          <div class="flex items-center gap-x-3">
-            <div
-              class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
-            >
-              <Icon name="ion:ios-cash" class="text-4xl text-[#7F3DFF]" />
-            </div>
-            <h1 class="text-[#292B2D] text-xl font-medium">In Hand Cash</h1>
-          </div>
-          <div class="amount">
-            <p class="text-xl text-[#212325]">$3400</p>
+          <div class="profile-info-edit">
+            <Icon
+              name="ion:edit"
+              class="text-3xl text-[#212325] cursor-pointer"
+            />
           </div>
         </div>
 
@@ -81,4 +76,12 @@ const router = useRouter();
 const backAction = () => {
   router.back();
 };
+
+const categories = [
+  { id: 1, name: "Food", image: "/images/food.png" },
+  { id: 2, name: "Grocery", image: "/images/grocery.png" },
+  { id: 3, name: "Medical", image: "/images/medical.png" },
+  { id: 4, name: "Salary", image: "/images/salary.png" },
+  { id: 5, name: "Transprotation", image: "/images/transportation.png" },
+];
 </script>
