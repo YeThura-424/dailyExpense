@@ -73,12 +73,7 @@
   </div>
 </template>
 
-<script setup>
-const router = useRouter();
-const backAction = () => {
-  router.back();
-};
-</script>
+<script setup></script>
 
 <style scoped>
 .account_info {
