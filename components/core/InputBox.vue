@@ -3,7 +3,7 @@
     <div class="input_label py-2" v-if="showLabel">
       <label class="text-xl font-medium">{{ label }}</label>
     </div>
-    <div class="input-box">
+    <div class="input-box relative">
       <input
         v-model="inputValue"
         :type="type"
@@ -11,6 +11,18 @@
         :class="inputClass"
         @input="updateValue"
       />
+
+      <div
+        class="show-password absolute right-4 top-1/2 -translate-y-1/2"
+        v-if="type == 'password'"
+      >
+        <Icon
+          @click="toggleShowPassword"
+          name="ion:eye-sharp"
+          size="26"
+          class="text-[#91919F] cursor-pointer"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -45,8 +57,13 @@ const props = defineProps({
 });
 const emit = defineEmits("update:v-model");
 const inputValue = ref(null);
-
 const updateValue = () => {
   emit("update:v-model", inputValue.value);
+};
+
+const toggleShowPassword = () => {
+  if (props.type == "password") {
+    //
+  }
 };
 </script>

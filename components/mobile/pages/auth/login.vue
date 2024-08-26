@@ -30,7 +30,7 @@
       </div>
 
       <div class="sign-up-link text-center">
-        <p class="text-sm text-[#91919F]">
+        <p class="text-base text-[#91919F]">
           Don't have an account yet?
           <span class="text-lg text-[#7F3DFF] font-medium">Sign Up</span>
         </p>
