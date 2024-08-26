@@ -18,18 +18,37 @@
       </div>
     </div>
     <div
-      class="attachment_input w-24 h-24 border border-dashed border-[#91919F] flex flex-col items-center justify-center rounded-xl"
+      v-if="previewUrl"
+      class="attachment_input relative w-24 h-24 border border-dashed border-[#91919F] flex flex-col items-center justify-center rounded-xl"
     >
       <Icon
         name="ion:ios-attach"
         size="30"
         class="text-[#91919F] -rotate-[135deg]"
       />
-      <span class="text-[#91919F] text-lg">Add attachment</span>
+      <span class="text-[#91919F] text-lg text-center">Add attachment</span>
       <input
         id="file-upload"
         type="file"
-        class="absolute opacity-0"
+        class="absolute opacity-0 w-full h-full"
+        @change="handleUpload"
+      />
+    </div>
+
+    <div
+      v-if="!previewUrl"
+      class="attachment_input relative w-32 h-32 border border-dashed border-[#91919F] flex flex-col items-center justify-center rounded-xl"
+    >
+      <Icon
+        name="ion:ios-attach"
+        size="30"
+        class="text-[#91919F] -rotate-[135deg]"
+      />
+      <span class="text-[#91919F] text-lg text-center">Add Attachment</span>
+      <input
+        id="file-upload"
+        type="file"
+        class="absolute opacity-0 w-full h-full"
         @change="handleUpload"
       />
     </div>
