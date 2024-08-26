@@ -1,16 +1,8 @@
 <template>
   <div class="">
     <div class="category_content py-4">
-      <div class="category_header flex px-6 pt-3 pb-6">
-        <div class="back_icon text-[#212325]" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="account w-full">
-          <p class="text-center text-xl font-bold">Category List</p>
-        </div>
+      <div class="category_header px-6 pt-3 pb-6">
+        <MobilePageHeader title="Category List" text-color="text-black" />
       </div>
       <div class="category-list-wrapper bg-white">
         <!-- category listing  -->
