@@ -14,6 +14,7 @@
           name="ion:ios-close-circle"
           class="text-[#666666] absolute top-0 right-0 cursor-pointer"
           size="24"
+          @click="handleRemove"
         />
       </div>
     </div>
@@ -21,12 +22,8 @@
       v-if="previewUrl"
       class="attachment_input relative w-24 h-24 border border-dashed border-[#91919F] flex flex-col items-center justify-center rounded-xl"
     >
-      <Icon
-        name="ion:ios-attach"
-        size="30"
-        class="text-[#91919F] -rotate-[135deg]"
-      />
-      <span class="text-[#91919F] text-lg text-center">Add attachment</span>
+      <Icon name="ion:ios-plus-outline" size="50" class="text-[#91919F]" />
+      <!-- <span class="text-[#91919F] text-lg text-center">Add More</span> -->
       <input
         id="file-upload"
         type="file"
@@ -62,12 +59,17 @@ const props = defineProps({
     default: true,
   },
 });
-const uploadFiles = ref(null);
+const uploadFiles = ref([]);
 const previewUrl = ref(null);
 const handleUpload = (e) => {
   console.log("uploaded", e.target.files);
   uploadFiles.value = e.target.files;
   previewUrl.value = URL.createObjectURL(uploadFiles.value[0]);
+};
+
+const handleRemove = () => {
+  previewUrl.value = null;
+  uploadFiles.value = null;
 };
 </script>
 
