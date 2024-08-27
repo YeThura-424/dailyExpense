@@ -3,6 +3,6 @@
 <template>
   <div>
     <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesAuthSignUp v-else />
+    <LazyMobilePagesAuthSignup v-else />
   </div>
 </template>

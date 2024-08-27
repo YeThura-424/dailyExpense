@@ -1,8 +1,12 @@
 <template>
   <div class="login-wrapper px-6 py-4">
-    <MobilePageHeader title="Login" text-color="text-black" />
+    <MobilePageHeader title="Sign Up" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
-      <div class="username py-3">
+      <div class="name py-3">
+        <CoreInputBox placeholder="Name" type="text" />
+      </div>
+
+      <div class="email py-3">
         <CoreInputBox placeholder="Email" type="email" />
       </div>
 
@@ -10,7 +14,7 @@
         <CoreInputBox placeholder="password" type="password" />
       </div>
 
-      <div class="budget-create py-3">
+      <div class="sign-up py-3">
         <nuxt-link to="/account/add">
           <button
             type="button"
@@ -20,19 +24,15 @@
               name="ion:ios-log-in"
               class="text-white text-2xl cursor-pointer"
             />
-            Login
+            Sign Up
           </button>
         </nuxt-link>
       </div>
 
-      <div class="forget-password text-center py-3">
-        <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
-      </div>
-
       <div class="sign-up-link text-center">
         <p class="text-base text-[#91919F]">
-          Don't have an account yet?
-          <span class="text-lg text-[#7F3DFF] font-medium">Sign Up</span>
+          Already have an account?
+          <span class="text-lg text-[#7F3DFF] font-medium">Login</span>
         </p>
       </div>
     </div>
