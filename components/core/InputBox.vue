@@ -6,7 +6,7 @@
     <div class="input-box relative">
       <input
         v-model="inputValue"
-        :type="type"
+        :type="inputType"
         :placeholder="placeholder"
         :class="inputClass"
         @input="updateValue"
@@ -57,6 +57,8 @@ const props = defineProps({
 });
 const emit = defineEmits("update:v-model");
 const inputValue = ref(null);
+const inputType = ref(props.type);
+
 const updateValue = () => {
   emit("update:v-model", inputValue.value);
 };
