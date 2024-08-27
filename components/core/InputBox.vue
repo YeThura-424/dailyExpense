@@ -18,7 +18,7 @@
       >
         <Icon
           @click="toggleShowPassword"
-          name="ion:eye-sharp"
+          :name="inputType == 'text' ? 'ion:eye-off-sharp' : 'ion:eye-sharp'"
           size="26"
           class="text-[#91919F] cursor-pointer"
         />
@@ -64,8 +64,6 @@ const updateValue = () => {
 };
 
 const toggleShowPassword = () => {
-  if (props.type == "password") {
-    //
-  }
+  inputType.value = inputType.value == "text" ? "password" : "text";
 };
 </script>
