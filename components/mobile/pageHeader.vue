@@ -1,12 +1,12 @@
 <template>
-  <div :class="['expense_header flex pt-3 relative', textColor]">
+  <div class="expense_header flex pt-3 relative">
     <div class="back_icon absolute" @click="backAction">
       <Icon
         name="ion:arrow-back-circle-sharp"
-        class="text-3xl cursor-pointer"
+        :class="['text-3xl cursor-pointer', iconColor]"
       />
     </div>
-    <div class="expense w-full">
+    <div :class="['expense w-full', textColor]">
       <p class="text-center text-xl font-bold">{{ title }}</p>
     </div>
   </div>
@@ -21,6 +21,10 @@ const props = defineProps({
   textColor: {
     type: String,
     default: "text-white",
+  },
+  iconColor: {
+    type: String,
+    default: "text-[#7F3DFF]",
   },
 });
 const router = useRouter();
