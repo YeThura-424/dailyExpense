@@ -9,6 +9,13 @@
     <div :class="['expense w-full', textColor]">
       <p class="text-center text-xl font-bold">{{ title }}</p>
     </div>
+
+    <div class="back_icon absolute right-0" v-if="showDelete">
+      <Icon
+        name="ion:trash-sharp"
+        :class="['text-3xl cursor-pointer', iconColor]"
+      />
+    </div>
   </div>
 </template>
 
@@ -25,6 +32,10 @@ const props = defineProps({
   iconColor: {
     type: String,
     default: "text-[#7F3DFF]",
+  },
+  showDelete: {
+    type: Boolean,
+    default: false,
   },
 });
 const router = useRouter();
