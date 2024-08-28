@@ -15,10 +15,16 @@
       </div>
 
       <div class="checkbox flex gap-x-2">
-        <input id="termsandcondition" type="checkbox" class="h-8 w-8" />
+        <input
+          id="termsandcondition"
+          type="checkbox"
+          class="h-8 w-8 border-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+        />
         <label for="termsandcondition" class="text-lg"
           >By signing up, you agree to the
-          <span class="">Terms of Service and Privacy Policy</span>
+          <span class="text-[#7F3DFF]"
+            >Terms of Service and Privacy Policy</span
+          >
         </label>
       </div>
       <div class="sign-up py-3">
