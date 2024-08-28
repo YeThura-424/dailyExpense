@@ -1,19 +1,13 @@
 <template>
   <div class="main-wrapper">
     <div class="p-3 relative">
-      <div class="main-header flex justify-between items-center">
-        <div class="back_icon" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="budget w-full">
-          <p class="text-center text-xl font-bold">Budget Detail</p>
-        </div>
-        <div class="back_icon" @click="deleteAction">
-          <Icon name="ion:trash-sharp" class="text-3xl cursor-pointer" />
-        </div>
+      <div class="main-header">
+        <MobilePageHeader
+          title="Budget Detail"
+          icon-color="text-[#7F3DFF]"
+          text-color="text-black"
+          showDelete="true"
+        />
       </div>
     </div>
 
