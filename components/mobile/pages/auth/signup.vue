@@ -14,12 +14,12 @@
         <CoreInputBox placeholder="password" type="password" />
       </div>
 
-      <div class="checkbox">
-        <input type="checkbox" />
-        <label for=""
-          >By signing up, you agree to the Terms of Service and Privacy
-          Policy</label
-        >
+      <div class="checkbox flex gap-x-2">
+        <input id="termsandcondition" type="checkbox" class="h-8 w-8" />
+        <label for="termsandcondition" class="text-lg"
+          >By signing up, you agree to the
+          <span class="">Terms of Service and Privacy Policy</span>
+        </label>
       </div>
       <div class="sign-up py-3">
         <nuxt-link to="/account/add">
