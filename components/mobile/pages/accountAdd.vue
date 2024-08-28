@@ -3,18 +3,8 @@
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
-      <div class="expense_header flex pt-3">
-        <div class="back_icon" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-white text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="expense w-full">
-          <p class="text-center text-white text-xl font-bold">
-            Add new account
-          </p>
-        </div>
+      <div class="account_header pt-3">
+        <MobilePageHeader title="Add new account" icon-color="text-white" />
       </div>
       <div class="expense_amount text-white">
         <span class="text-lg">Balance</span>

@@ -1,17 +1,13 @@
 <template>
   <div>
-    <div class="px-4 pt-5 pb-3">
+    <div class="px-4 pt-3 pb-3">
       <!-- see report section  -->
-      <div class="account_detail_header flex pt-3 pb-6">
-        <div class="back_icon text-[#212325]" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="account w-full">
-          <p class="text-center text-xl font-bold">Account Detail</p>
-        </div>
+      <div class="account_detail_header pb-3">
+        <MobilePageHeader
+          title="Account Detail"
+          icon-color="text-[#7F3DFF]"
+          text-color="text-black"
+        />
       </div>
 
       <div class="account_detail_in text-center flex flex-col items-center">
