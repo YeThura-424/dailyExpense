@@ -1,18 +1,10 @@
 <template>
   <div class="bg-[#00A86B]">
-    <div class="expense_main_content px-6 py-4">
-      <div class="expense_header flex pt-3">
-        <div class="back_icon" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-white text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="expense w-full">
-          <p class="text-center text-white text-xl font-bold">Income</p>
-        </div>
+    <div class="income_main_content px-6 py-4">
+      <div class="income_header">
+        <MobilePageHeader title="Income" icon-color="text-white" />
       </div>
-      <div class="expense_amount text-white pt-36">
+      <div class="income_amount text-white pt-36">
         <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">$</span>
@@ -24,7 +16,7 @@
         </div>
       </div>
     </div>
-    <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
+    <div class="income_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="time-input-box">
         <CoreInputBox
           placeholder="Date"
