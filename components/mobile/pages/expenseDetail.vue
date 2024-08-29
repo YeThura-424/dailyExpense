@@ -1,22 +1,12 @@
 <template>
   <div class="main-wrapper">
     <div class="bg-[#FD3C4A] p-3 rounded-b-[40px] relative">
-      <div class="main-header flex justify-between items-center">
-        <div class="back_icon" @click="backAction">
-          <Icon
-            name="ion:arrow-back-circle-sharp"
-            class="text-white text-3xl cursor-pointer"
-          />
-        </div>
-        <div class="expense w-full">
-          <p class="text-center text-white text-xl font-bold">Expense Detail</p>
-        </div>
-        <div class="back_icon" @click="deleteAction">
-          <Icon
-            name="ion:trash-sharp"
-            class="text-white text-3xl cursor-pointer"
-          />
-        </div>
+      <div class="main-header">
+        <MobilePageHeader
+          title="Expense Detail"
+          show-delete="true"
+          icon-color="text-white"
+        />
       </div>
       <div class="main-body text-center text-white pt-20 pb-8">
         <h1 class="amount font-extrabold text-5xl py-2">$120</h1>
