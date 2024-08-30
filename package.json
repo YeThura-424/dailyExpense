@@ -13,6 +13,7 @@
     "@headlessui/vue": "^1.7.22",
     "@heroicons/vue": "^2.1.5",
     "@nuxt/icon": "^1.4.5",
+    "@pinia/nuxt": "^0.5.4",
     "nuxt": "^3.12.4",
     "vue": "latest",
     "vue3-carousel-nuxt": "^1.1.2"
