@@ -3,7 +3,7 @@
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
-      <div class="account_header pt-3">
+      <div class="account_header">
         <MobilePageHeader title="Add new account" icon-color="text-white" />
       </div>
       <div class="expense_amount text-white">

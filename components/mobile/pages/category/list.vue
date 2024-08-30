@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="category_content py-4">
-      <div class="category_header px-6 pt-3 pb-6">
+      <div class="category_header px-4 pb-6">
         <MobilePageHeader title="Category List" text-color="text-black" />
       </div>
       <div class="category-list-wrapper bg-white">

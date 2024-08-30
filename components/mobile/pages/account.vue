@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-white">
     <div class="account_content py-4">
-      <div class="account_header px-6 pt-3 pb-6">
+      <div class="account_header px-6 pb-6">
         <MobilePageHeader title="Account" text-color="text-black" />
       </div>
       <div class="account_info text-center px-6 py-16">

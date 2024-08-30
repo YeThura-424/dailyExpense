@@ -3,7 +3,7 @@
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
-      <MobilePageHeader title="Add New Category" />
+      <MobilePageHeader title="Add New Category" icon-color="text-white" />
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="account_name">
