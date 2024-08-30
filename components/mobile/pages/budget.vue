@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
-      <Carousel>
+      <Carousel ref="budgetCarousel">
         <Slide v-for="month in months" :key="month">
           <div class="carousel__item text-lg">{{ month }}</div>
         </Slide>
@@ -36,6 +36,7 @@
         </nuxt-link>
       </div>
     </div>
+    {{ currentMonth }}
     <MobileMainNav />
   </div>
 </template>
@@ -72,6 +73,18 @@ const budgets = [
     spent: 1800,
   },
 ];
+
+const budgetCarousel = ref(null);
+onMounted(() => {
+  const date = new Date();
+  const currentMonth = date.getMonth();
+
+  if (budgetCarousel.value && budgetCarousel.value.slideTo) {
+    budgetCarousel.value.slideTo(currentMonth);
+  } else {
+    console.error("slideTo method not found on the carousel instance.");
+  }
+});
 </script>
 
 <style>
