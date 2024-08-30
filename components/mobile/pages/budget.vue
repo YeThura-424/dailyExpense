@@ -36,7 +36,6 @@
         </nuxt-link>
       </div>
     </div>
-    {{ currentMonth }}
     <MobileMainNav />
   </div>
 </template>
