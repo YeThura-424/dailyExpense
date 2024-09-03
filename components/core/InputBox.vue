@@ -5,7 +5,7 @@
     </div>
     <div class="input-box relative">
       <input
-        v-model="inputValue"
+        :value="modelValue"
         :type="inputType"
         :placeholder="placeholder"
         :class="inputClass"
@@ -54,13 +54,15 @@ const props = defineProps({
     type: String,
     default: "Please Type Something...",
   },
+  modelValue: {
+    type: String,
+  },
 });
-const emit = defineEmits("update:v-model");
-const inputValue = ref(null);
+const emit = defineEmits(["update:modelValue"]);
 const inputType = ref(props.type);
 
-const updateValue = () => {
-  emit("update:v-model", inputValue.value);
+const updateValue = (e) => {
+  emit("update:modelValue", e.target.value);
 };
 
 const toggleShowPassword = () => {
