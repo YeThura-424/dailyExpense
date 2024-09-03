@@ -1,7 +1,7 @@
 export const useauthUserStore = defineStore("authUser", {
   state: () => ({
     user: {},
-    token: "",
+    token: null,
   }),
   getters: {},
   actions: {
@@ -16,11 +16,20 @@ export const useauthUserStore = defineStore("authUser", {
         req.password == userinfo.password
       ) {
         this.user = "Logged in user";
-        this.token = req.password;
+        if (process.client) {
+          // Ensure this runs only on the client side
+          localStorage.setItem("token", req.password);
+          this.token = req.password; // Store the token in the state
+        }
       }
 
       console.log("token", this.token);
     },
-    setUser() {},
+    setUser() {
+      if (process.client) {
+        // Ensure this runs only on the client side
+        this.token = localStorage.getItem("token");
+      }
+    },
   },
 });

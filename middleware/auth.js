@@ -1,5 +1,6 @@
 export default defineNuxtRouteMiddleware((to, from) => {
   const user = useAuth();
+  // const token = localStorage.getItem("token");
   console.log(user, "auth middleware");
   // If the user is not logged in
   if (!user.token) {
