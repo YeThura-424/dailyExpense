@@ -55,7 +55,7 @@ const form = reactive({
 });
 
 const login = () => {
-  user.login(form);
-  navigateTo("/");
+  const data = user.login(form);
+  // navigateTo("/");
 };
 </script>

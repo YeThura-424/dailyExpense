@@ -1,29 +1,29 @@
 export const useauthUserStore = defineStore("authUser", {
   state: () => ({
     user: {},
-    token: null,
+    token: useCookie("token"),
   }),
   getters: {},
   actions: {
-    login(req) {
-      let userinfo = {
-        username: "test112",
-        password: "secret",
-      };
-      console.log(req);
-      if (
-        req.username == userinfo.username &&
-        req.password == userinfo.password
-      ) {
-        this.user = "Logged in user";
-        if (process.client) {
-          // Ensure this runs only on the client side
-          localStorage.setItem("token", req.password);
-          this.token = req.password; // Store the token in the state
-        }
+    async login(req) {
+      try {
+        let payload = {
+          email: req.email,
+          password: req.password,
+        };
+        const { data } = await useFetch("/api/login", {
+          body: {
+            payload,
+          },
+        });
+        console.log("login", data);
+        this.user = data.user;
+        const authToken = useCookie("token");
+        authToken.value = data.token;
+        return data;
+      } catch (error) {
+        console.log(error);
       }
-
-      console.log("token", this.token);
     },
     setUser() {
       if (process.client) {
