@@ -50,12 +50,18 @@
 const user = useAuth();
 
 const form = reactive({
-  username: "",
+  email: "",
   password: "",
 });
 
-const login = () => {
-  const data = user.login(form);
-  // navigateTo("/");
+const login = async () => {
+  const { data } = $fetch("http://localhost:8000/api/login", {
+    payload: {
+      form,
+    },
+    method: "POST",
+  });
+
+  console.log("res data", data);
 };
 </script>

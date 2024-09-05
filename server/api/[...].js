@@ -1,10 +1,12 @@
+import { useCookie } from "nuxt/app";
+
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  const token = localStorage.getItem("token");
-
+  const token = useCookie("token");
+  const method = event._method;
   const { data } = await $fetch("http://localhost:8000/api/", {
-    method: "post",
+    method: method,
     body: body,
     headers: {
       "Content-Type": "application/json",
