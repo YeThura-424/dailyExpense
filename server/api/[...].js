@@ -11,6 +11,10 @@ export default defineEventHandler(async (event) => {
     headers: {
       "Content-Type": "application/json",
       Authorization: "Bearer " + token,
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Credentials": "true",
+      "Access-Control-Allow-Headers": "*",
+      "Access-Control-Expose-Headers": "*",
       "x-api-token": "4fGh9Kj7Lm1Nq2RzXw8T",
     },
   });
