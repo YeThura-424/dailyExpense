@@ -33,7 +33,7 @@
       </div>
 
       <div class="forget-password text-center py-3">
-        <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
+        <p class="tesext-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
       </div>
 
       <div class="sign-up-link text-center">
@@ -50,15 +50,19 @@
 const user = useAuth();
 
 const form = reactive({
-  email: "",
-  password: "",
+  email: "test@email.com",
+  password: "secret",
 });
 
 const login = async () => {
-  const { data } = $fetch("http://localhost:8000/api/login", {
+  const { data } = useFetch("http://localhost:8000/api/login", {
+    headers: {
+      "Access-Control-Allow-Origin": "http://localhost:8000", // 'http://example:6006', has to be set to the requesting domain that you want to send the credentials back to
+    },
     payload: {
       form,
     },
+    withCredentials: true,
     method: "POST",
   });
 
