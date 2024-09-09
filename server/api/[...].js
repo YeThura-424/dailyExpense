@@ -3,7 +3,7 @@ import { useCookie } from "nuxt/app";
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
-  const token = useCookie("token");
+  // const token = useCookie("token");
   const method = event._method;
   const { data } = await $fetch("http://localhost:8000/api/", {
     method: method,
