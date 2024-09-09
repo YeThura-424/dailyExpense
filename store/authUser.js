@@ -13,7 +13,7 @@ export const useauthUserStore = defineStore("authUser", {
           email: req.email,
           password: req.password,
         };
-        const { data } = await useFetch("/api/login", {
+        const data = await useFetch("/api/login", {
           body: {
             payload,
           },
@@ -30,7 +30,7 @@ export const useauthUserStore = defineStore("authUser", {
     setUser() {
       if (process.client) {
         // Ensure this runs only on the client side
-        this.token = localStorage.getItem("token");
+        // this.token = localStorage.getItem("token");
       }
     },
   },
