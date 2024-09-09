@@ -56,15 +56,9 @@ const form = reactive({
 
 const login = async () => {
   const { data } = useFetch("http://localhost:8000/api/login", {
-    headers: {
-      "Access-Control-Allow-Origin": "http://localhost:8000", // 'http://example:6006', has to be set to the requesting domain that you want to send the credentials back to
-    },
-    payload: {
-      form,
-    },
-    withCredentials: true,
     method: "POST",
   });
+  // const data = user.login(form);
 
   console.log("res data", data);
 };
