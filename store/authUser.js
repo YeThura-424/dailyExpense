@@ -27,11 +27,5 @@ export const useauthUserStore = defineStore("authUser", {
         console.log(error);
       }
     },
-    setUser() {
-      if (process.client) {
-        // Ensure this runs only on the client side
-        // this.token = localStorage.getItem("token");
-      }
-    },
   },
 });
