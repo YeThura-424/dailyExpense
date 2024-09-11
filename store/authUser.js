@@ -1,6 +1,6 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
-export const useAuthStore = defineStore('auth', {
+export const useAuthStore = defineStore("auth", {
   state: () => ({
     authenticated: false,
     loading: false,
@@ -8,18 +8,21 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async authenticateUser({ email, password }) {
       // useFetch from nuxt 3
-      const { data, pending } = await useFetch('http://localhost:8000/api/login', {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: {
-          email,
-          password,
-        },
-      });
+      const { data, pending } = await useFetch(
+        "http://localhost:8000/api/login",
+        {
+          method: "post",
+          headers: { "Content-Type": "application/json" },
+          body: {
+            email,
+            password,
+          },
+        }
+      );
       this.loading = pending;
 
       if (data.value) {
-        const token = useCookie('token'); // useCookie new hook in nuxt 3
+        const token = useCookie("token"); // useCookie new hook in nuxt 3
         token.value = data?.value?.token; // set token to cookie
         this.authenticated = true; // set authenticated  state value to true
       }

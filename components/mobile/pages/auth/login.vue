@@ -3,11 +3,7 @@
     <MobilePageHeader title="Login" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
       <div class="username py-3">
-        <CoreInputBox
-          placeholder="Email"
-          type="email"
-          v-model="form.email"
-        />
+        <CoreInputBox placeholder="Email" type="email" v-model="form.email" />
       </div>
 
       <div class="password py-3">
@@ -47,8 +43,8 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue';
-import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
+import { reactive } from "vue";
+import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
 import { useAuthStore } from "~/store/authUser";
 
 const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
@@ -62,14 +58,13 @@ const form = reactive({
   password: "password",
 });
 
-
 const login = async () => {
   await authenticateUser(form); // call authenticateUser and pass the user object
   // redirect to homepage if user is authenticated
   console.log("nanda", authenticated.value);
-  
+
   if (authenticated.value) {
-    router.push('/');
+    router.push("/");
   }
 };
 </script>

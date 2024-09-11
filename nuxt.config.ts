@@ -15,4 +15,19 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+  // nitro: {
+  //   routeRules: {
+  //     "/api/**": {
+  //       headers: {
+  //         "Access-Control-Allow-Origin": "*",
+  //         "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+  //         "Access-Control-Allow-Headers":
+  //           "Origin, X-Requested-With, Content-Type, Accept, Authorization",
+  //       },
+  //     },
+  //   },
+  // },
+  // routeRules: {
+  //   "/api/**": { proxy: { to: "http://localhost:8000/**" } },
+  // },
 });
