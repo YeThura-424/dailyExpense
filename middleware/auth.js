@@ -1,15 +1,22 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const user = useAuth();
-  console.log(user, "auth middleware");
-  // If the user is not logged in
-  if (!user.token) {
-    if (to.name !== "login" && to.name !== "register") {
-      return navigateTo("/login");
-    }
-  } else {
-    // If the user is logged in and tries to access login or register
-    if (to.name === "login" || to.name === "register") {
-      return navigateTo("/");
-    }
+import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
+import { useAuthStore } from "~/store/authUser";
+export default defineNuxtRouteMiddleware((to) => {
+  const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive
+  const token = useCookie("token"); // get token from cookies
+
+  if (token.value) {
+    // check if value exists
+    authenticated.value = true; // update the state to authenticated
+  }
+
+  // if token exists and url is /login redirect to homepage
+  if (token.value && to?.name === "login") {
+    return navigateTo("/");
+  }
+
+  // if token doesn't exist redirect to log in
+  if (!token.value && to?.name !== "login") {
+    abortNavigation();
+    return navigateTo("/login");
   }
 });

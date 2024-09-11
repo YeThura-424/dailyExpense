@@ -3,11 +3,7 @@
     <MobilePageHeader title="Login" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
       <div class="username py-3">
-        <CoreInputBox
-          placeholder="Email"
-          type="email"
-          v-model="form.username"
-        />
+        <CoreInputBox placeholder="Email" type="email" v-model="form.email" />
       </div>
 
       <div class="password py-3">
@@ -33,7 +29,7 @@
       </div>
 
       <div class="forget-password text-center py-3">
-        <p class="tesext-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
+        <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
       </div>
 
       <div class="sign-up-link text-center">
@@ -47,19 +43,28 @@
 </template>
 
 <script setup>
-const user = useAuth();
+import { reactive } from "vue";
+import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
+import { useAuthStore } from "~/store/authUser";
+
+const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
+
+const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+
+const router = useRouter();
 
 const form = reactive({
-  email: "test@email.com",
-  password: "secret",
+  email: "test@example.com",
+  password: "password",
 });
 
 const login = async () => {
-  const { data } = useFetch("/api/login", {
-    method: "POST",
-  });
-  // const data = user.login(form);
+  await authenticateUser(form); // call authenticateUser and pass the user object
+  // redirect to homepage if user is authenticated
+  console.log("nanda", authenticated.value);
 
-  // console.log("res data", data);
+  if (authenticated.value) {
+    router.push("/");
+  }
 };
 </script>
