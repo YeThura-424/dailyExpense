@@ -55,11 +55,11 @@ const form = reactive({
 });
 
 const login = async () => {
-  const { data } = useFetch("http://localhost:8000/api/login", {
+  const { data } = useFetch("/api/login", {
     method: "POST",
   });
   // const data = user.login(form);
 
-  console.log("res data", data);
+  // console.log("res data", data);
 };
 </script>
