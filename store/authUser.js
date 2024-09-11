@@ -1,37 +1,33 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
-export const useauthUserStore = defineStore("authUser", {
+export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: {},
-    token: useCookie("token"),
+    authenticated: false,
+    loading: false,
   }),
-  getters: {},
   actions: {
-    async login(req) {
-      try {
-        let payload = {
-          email: req.email,
-          password: req.password,
-        };
-        const data = await useFetch("/api/login", {
-          body: {
-            payload,
-          },
-        });
-        console.log("login", data);
-        this.user = data.user;
-        const authToken = useCookie("token");
-        authToken.value = data.token;
-        return data;
-      } catch (error) {
-        console.log(error);
+    async authenticateUser({ email, password }) {
+      // useFetch from nuxt 3
+      const { data, pending } = await useFetch('http://localhost:8000/api/login', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: {
+          email,
+          password,
+        },
+      });
+      this.loading = pending;
+
+      if (data.value) {
+        const token = useCookie('token'); // useCookie new hook in nuxt 3
+        token.value = data?.value?.token; // set token to cookie
+        this.authenticated = true; // set authenticated  state value to true
       }
     },
-    setUser() {
-      if (process.client) {
-        // Ensure this runs only on the client side
-        // this.token = localStorage.getItem("token");
-      }
+    logUserOut() {
+      const token = useCookie('token'); // useCookie new hook in nuxt 3
+      this.authenticated = false; // set authenticated  state value to false
+      token.value = null; // clear the token cookie
     },
   },
 });

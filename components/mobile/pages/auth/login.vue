@@ -48,29 +48,28 @@
 
 <script setup>
 import { reactive } from 'vue';
+import { storeToRefs } from 'pinia'; // import storeToRefs helper hook from pinia
+import { useAuthStore } from "~/store/authUser";
+
+const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
+
+const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+
+const router = useRouter();
 
 const form = reactive({
   email: "test@example.com",
   password: "password",
 });
 
-const login = async () => {
-  try {
-    const { data, error } = await useFetch("http://localhost:8000/api/login", {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(form),
-    });
 
-    if (error.value) {
-      console.error("Login error:", error.value);
-    } else {
-      console.log("Login successful:", data.value);
-    }
-  } catch (err) {
-    console.error("Request failed", err);
+const login = async () => {
+  await authenticateUser(form); // call authenticateUser and pass the user object
+  // redirect to homepage if user is authenticated
+  console.log("nanda", authenticated.value);
+  
+  if (authenticated.value) {
+    router.push('/');
   }
 };
 </script>
