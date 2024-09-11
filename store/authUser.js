@@ -34,7 +34,7 @@ export const useAuthStore = defineStore("auth", {
         method: 'POST', 
         headers: {
           'Authorization': `Bearer ${token.value}`,
-          'x-api-token': 123456  //San Chin Loe Use Htar Tar 
+          'x-api-token': '4fGh9Kj7Lm1Nq2RzXw8T'  //San Chin Loe Use Htar Tar 
         }
       });
   
