@@ -6,7 +6,7 @@
         <CoreInputBox
           placeholder="Email"
           type="email"
-          v-model="form.username"
+          v-model="form.email"
         />
       </div>
 
@@ -33,7 +33,7 @@
       </div>
 
       <div class="forget-password text-center py-3">
-        <p class="tesext-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
+        <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
       </div>
 
       <div class="sign-up-link text-center">
@@ -47,19 +47,30 @@
 </template>
 
 <script setup>
-const user = useAuth();
+import { reactive } from 'vue';
 
 const form = reactive({
-  email: "test@email.com",
-  password: "secret",
+  email: "test@example.com",
+  password: "password",
 });
 
 const login = async () => {
-  const { data } = useFetch("http://localhost:8000/api/login", {
-    method: "POST",
-  });
-  // const data = user.login(form);
+  try {
+    const { data, error } = await useFetch("http://localhost:8000/api/login", {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(form),
+    });
 
-  console.log("res data", data);
+    if (error.value) {
+      console.error("Login error:", error.value);
+    } else {
+      console.log("Login successful:", data.value);
+    }
+  } catch (err) {
+    console.error("Request failed", err);
+  }
 };
 </script>
