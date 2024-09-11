@@ -70,7 +70,7 @@
           <h1 class="text-[#292B2D] text-xl font-medium">Export</h1>
         </div>
         <!-- logout  -->
-        <div
+        <div  @click.prevent="Logout"
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
         >
           <div
@@ -87,4 +87,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useAuthStore } from '~/store/authUser';
+
+const { logUserOut } = useAuthStore();
+
+const Logout = async () => {
+  await logUserOut();
+};
+</script>
