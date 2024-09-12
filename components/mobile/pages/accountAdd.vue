@@ -24,7 +24,7 @@
       </div>
       <div class="category_select py-3">
         <CoreSelectBox
-          :option="category"
+          :option="walletType.wallet"
           name="Category"
           v-model="form.category"
         />
@@ -53,11 +53,24 @@ const form = reactive({
   category: "",
   name: "",
 });
-
+const walletType = ref([]);
 const backAction = () => {
   router.back();
 };
+// wallet types
+const getWalletType = async () => {
+  const { data } = await useFetch("/api/wallet-type", {
+    method: "GET",
+    transform(response) {
+      console.log(response);
+      walletType.value = response.data;
+    },
+  });
+};
+// const walletType = useWalletType();
 
+// walletType.getWallet();
+getWalletType();
 const category = [
   { name: "Bank", value: 1 },
   { name: "Cash In Hand", value: 2 },
