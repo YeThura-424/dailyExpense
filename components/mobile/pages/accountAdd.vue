@@ -24,7 +24,7 @@
       </div>
       <div class="category_select py-3">
         <CoreSelectBox
-          :option="walletType.wallet"
+          :option="walletType"
           name="Category"
           v-model="form.category"
         />
@@ -57,12 +57,19 @@ const walletType = ref([]);
 const backAction = () => {
   router.back();
 };
+
+const token = useCookie("token");
 // wallet types
 const getWalletType = async () => {
-  const { data } = await useFetch("/api/wallet-type", {
-    method: "GET",
+  const { data } = await useFetch("http://localhost:8000/api/wallet-type", {
+    method: "get",
+    headers: {
+      Accept: "application/json",
+      Authorization: `Bearer ${token.value}`,
+      "x-api-token": "4fGh9Kj7Lm1Nq2RzXw8T",
+    },
     transform(response) {
-      console.log(response);
+      console.log(response.data);
       walletType.value = response.data;
     },
   });
