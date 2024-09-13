@@ -1,9 +1,13 @@
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const params = event.context.params._;
-  const method = event._method;
-  const { data } = await $fetch(`http://localhost:8000/api/${params}`, {
-    method: "GET",
+  const params = getRouterParams(event);
+
+  const paramPath = Array.isArray(params.slug)
+    ? params.slug.join("/")
+    : params.slug;
+  const method = event.node.req.method;
+  const { data } = await $fetch(`http://localhost:8000/api/${paramPath}`, {
+    method: method,
     body: body,
   });
 
