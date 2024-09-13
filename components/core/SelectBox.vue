@@ -9,11 +9,11 @@
       <option selected disabled>{{ placeholder }}</option>
       <option
         v-for="list in option"
-        :key="list.value"
-        :value="list.value"
+        :key="list.id"
+        :value="list.id"
         class="w-full"
       >
-        {{ list.name }}
+        {{ toTitleCase(list.name) }}
       </option>
     </select>
   </div>
