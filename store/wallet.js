@@ -9,9 +9,12 @@ export const useWalletStore = defineStore("wallet", {
   actions: {
     async getWallet() {
       try {
-        const { data } = await useFetch("/api/wallet-type", {
-          method: "GET",
-        });
+        const { data } = await useFetch(
+          "http://localhost:8000/api/wallet-type",
+          {
+            method: "get",
+          }
+        );
         console.log("data", data);
         this.wallet = data;
         return data;
