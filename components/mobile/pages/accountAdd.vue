@@ -61,13 +61,8 @@ const backAction = () => {
 const token = useCookie("token");
 // wallet types
 const getWalletType = async () => {
-  const { data } = await useFetch("http://localhost:8000/api/wallet-type", {
-    method: "get",
-    headers: {
-      Accept: "application/json",
-      Authorization: `Bearer ${token.value}`,
-      "x-api-token": "4fGh9Kj7Lm1Nq2RzXw8T",
-    },
+  const { data } = await useFetch("/api/wallettype", {
+    method: "GET",
     transform(response) {
       console.log(response.data);
       walletType.value = response.data;
