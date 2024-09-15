@@ -24,14 +24,15 @@
       </div>
       <div class="category_select py-3">
         <CoreSelectBox
-          :option="walletType"
+          :option="walletType.walletType"
           name="Category"
-          v-model="form.category"
+          v-model="form.wallet_type_id"
         />
       </div>
 
       <div class="save-button gap-x-5 py-3">
         <button
+          @click="saveWallet"
           type="button"
           class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
         >
@@ -47,34 +48,19 @@
 </template>
 
 <script setup>
-const router = useRouter();
 const form = reactive({
   amount: 0,
-  category: "",
+  wallet_type_id: "",
   name: "",
 });
-const walletType = ref([]);
-const backAction = () => {
-  router.back();
-};
 
-const token = useCookie("token");
-// wallet types
-const getWalletType = async () => {
-  const { data } = await useFetch("/api/wallet-type", {
-    method: "GET",
-    transform(response) {
-      console.log(response.data, "response");
-      walletType.value = response.data;
-    },
-  });
-};
-// const walletType = useWalletType();
+//wallet type
+const walletType = useWalletType();
+walletType.getWalletType();
 
-// walletType.getWallet();
-getWalletType();
-const category = [
-  { name: "Bank", value: 1 },
-  { name: "Cash In Hand", value: 2 },
-];
+const saveWallet = async () => {
+  const { data } = walletType.saveWallet(form);
+
+  console.log(data, "wallet save");
+};
 </script>
