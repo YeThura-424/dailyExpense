@@ -61,10 +61,10 @@ const backAction = () => {
 const token = useCookie("token");
 // wallet types
 const getWalletType = async () => {
-  const { data } = await useFetch("/api/wallettype", {
+  const { data } = await useFetch("/api/wallet-type", {
     method: "GET",
     transform(response) {
-      console.log(response.data);
+      console.log(response.data, "response");
       walletType.value = response.data;
     },
   });
