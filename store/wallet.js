@@ -3,21 +3,29 @@ import { defineStore } from "pinia";
 export const useWalletStore = defineStore("wallet", {
   state: () => {
     return {
-      wallet: [],
+      walletType: [],
     };
   },
   actions: {
-    async getWallet() {
+    async getWalletType() {
       try {
-        const { data } = await useFetch(
-          "http://localhost:8000/api/wallet-type",
-          {
-            method: "get",
-          }
-        );
-        console.log("data", data);
-        this.wallet = data;
+        const { data } = await useFetch("/api/wallet-type", {
+          method: "get",
+        });
+        this.walletType = data.value.data;
+        console.log(data.value.data);
         return data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async saveWallet(form) {
+      try {
+        const { data } = await useFetch("/api/wallet/create", {
+          method: "POST",
+          body: form,
+        });
       } catch (error) {
         console.error(error);
       }
