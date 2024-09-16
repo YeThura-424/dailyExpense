@@ -7,8 +7,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const token = getCookie(event, "token");
-  console.log(token, "token value");
-  const data = await $fetch(`http://localhost:8000/api/${paramPath}`, {
+  const { data } = await $fetch(`http://localhost:8000/api/${paramPath}`, {
     method: method,
     headers: {
       Accept: "application/json",

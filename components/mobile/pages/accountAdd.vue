@@ -59,7 +59,7 @@ const walletType = useWalletType();
 walletType.getWalletType();
 
 const saveWallet = async () => {
-  const { data } = walletType.saveWallet(form);
+  const data = walletType.saveWallet(form);
 
   console.log(data, "wallet save");
 };
