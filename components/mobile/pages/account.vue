@@ -10,6 +10,7 @@
       </div>
 
       <div class="profile-modules-wrapper bg-white">
+        {{ walletList }}
         <!-- wallet account  -->
         <div
           class="account-section flex items-center justify-between border-b border-[#eee] px-4 py-4"
@@ -73,7 +74,12 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+const wallet = useWalletType();
+
+wallet.getWalletList();
+const walletList = wallet.wallet;
+</script>
 
 <style scoped>
 .account_info {
