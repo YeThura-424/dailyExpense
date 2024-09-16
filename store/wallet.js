@@ -4,6 +4,7 @@ export const useWalletStore = defineStore("wallet", {
   state: () => {
     return {
       walletType: [],
+      walletList: {},
     };
   },
   actions: {
@@ -24,6 +25,23 @@ export const useWalletStore = defineStore("wallet", {
         const { data } = await useFetch("/api/wallet/create", {
           method: "POST",
           body: form,
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    },
+
+    async getWalletList() {
+      const user = useCookie("user");
+      try {
+        await useFetch("/api/wallet/user-wallet", {
+          method: "GET",
+          params: {
+            auth_user: user?.value?.id,
+          },
+          transform: (response) => {
+            this.walletList = response.value;
+          },
         });
       } catch (error) {
         console.error(error);
