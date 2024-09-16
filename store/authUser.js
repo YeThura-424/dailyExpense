@@ -23,28 +23,35 @@ export const useAuthStore = defineStore("auth", {
 
       if (data.value) {
         const token = useCookie("token"); // useCookie new hook in nuxt 3
+        const user = useCookie("user");
         token.value = data?.value?.token; // set token to cookie
+        user.value = data?.value?.user;
         this.authenticated = true; // set authenticated  state value to true
       }
     },
     async logUserOut() {
-      const token = useCookie('token'); // useCookie new hook in nuxt 3
+      const token = useCookie("token"); // useCookie new hook in nuxt 3
+      const user = useCookie("user");
 
-      const { data, pending, error } = await useFetch('http://localhost:8000/api/logout', {
-        method: 'POST', 
-        headers: {
-          'Authorization': `Bearer ${token.value}`,
-          'x-api-token': '4fGh9Kj7Lm1Nq2RzXw8T'  //San Chin Loe Use Htar Tar 
+      const { data, pending, error } = await useFetch(
+        "http://localhost:8000/api/logout",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token.value}`,
+            "x-api-token": "4fGh9Kj7Lm1Nq2RzXw8T", //San Chin Loe Use Htar Tar
+          },
         }
-      });
-  
+      );
+
       if (error.value) {
         console.error("Logout error:", error.value);
       } else {
         console.log("Logout successful:", data.value);
         this.authenticated = false; // set authenticated  state value to false
         token.value = null; // clear the token cookie
-        navigateTo('/')
+        user.value = null;
+        navigateTo("/");
       }
     },
   },
