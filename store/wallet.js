@@ -12,8 +12,7 @@ export const useWalletStore = defineStore("wallet", {
         const { data } = await useFetch("/api/wallet-type", {
           method: "get",
         });
-        this.walletType = data.value.data;
-        console.log(data.value.data);
+        this.walletType = data.value;
         return data;
       } catch (error) {
         console.error(error);
