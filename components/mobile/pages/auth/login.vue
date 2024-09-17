@@ -54,8 +54,8 @@ const { authenticated } = storeToRefs(useAuthStore()); // make authenticated sta
 const router = useRouter();
 
 const form = reactive({
-  email: "test@example.com",
-  password: "password",
+  email: "test@email.com",
+  password: "secret",
 });
 
 const login = async () => {

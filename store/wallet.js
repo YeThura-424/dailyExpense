@@ -13,7 +13,7 @@ export const useWalletStore = defineStore("wallet", {
         const { data } = await useFetch("/api/wallet-type", {
           method: "get",
         });
-        this.walletType = data.value;
+        this.walletType = data.data;
         return data;
       } catch (error) {
         console.error(error);
@@ -40,7 +40,8 @@ export const useWalletStore = defineStore("wallet", {
             auth_user: user?.value?.id,
           },
           transform: (response) => {
-            this.walletList = response.value;
+            console.log("wallet list ", response);
+            this.walletList = response.data;
           },
         });
       } catch (error) {
