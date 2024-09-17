@@ -11,7 +11,7 @@
         </p>
       </div>
       <div
-        v-if="walletList.user_wallet.length == 0"
+        v-if="walletList?.user_wallet?.length == 0"
         class="empty_account_state py-12"
       >
         <div class="text-center">
@@ -21,7 +21,6 @@
       </div>
 
       <div v-else class="account-modules-wrapper bg-white">
-        <p>hahahh</p>
         <!-- wallet account  -->
         <div
           v-for="wallet in walletList.user_wallet"
@@ -69,11 +68,8 @@
 
 <script setup>
 const wallet = useWalletType();
-
 wallet.getWalletList();
 const walletList = wallet.walletList;
-
-console.log(walletList, "wallet list in vue");
 </script>
 
 <style scoped>

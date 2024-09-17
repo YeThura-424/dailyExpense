@@ -57,10 +57,10 @@ const form = reactive({
 //wallet type
 const walletType = useWalletType();
 walletType.getWalletType();
-
+console.log(walletType.walletType);
 const saveWallet = async () => {
   const data = walletType.saveWallet(form);
-
+  navigateTo("/account");
   console.log(data, "wallet save");
 };
 </script>
