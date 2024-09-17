@@ -7,11 +7,11 @@
       <div class="account_info text-center px-6 py-16">
         <h1 class="text-sm text-p[#91919F] font-medium">Account Balance</h1>
         <p class="text-3xl font-bold text-[#161719]">
-          ${{ walletList.total_amount }}
+          ${{ walletLists.total_amount }}
         </p>
       </div>
       <div
-        v-if="walletList?.user_wallet?.length == 0"
+        v-if="walletLists?.user_wallet?.length == 0"
         class="empty_account_state py-12"
       >
         <div class="text-center">
@@ -20,10 +20,10 @@
         </div>
       </div>
 
-      <div v-else class="account-modules-wrapper bg-white">
+      <div v-else class="account-modules-wrapper bg-white overflow-auto">
         <!-- wallet account  -->
         <div
-          v-for="wallet in walletList.user_wallet"
+          v-for="wallet in walletLists.user_wallet"
           :key="wallet"
           class="account-section flex items-center justify-between border-b border-[#eee] px-4 py-4"
         >
@@ -68,8 +68,17 @@
 
 <script setup>
 const wallet = useWalletType();
-wallet.getWalletList();
-const walletList = wallet.walletList;
+const walletLists = ref([]);
+
+const pullWallet = () => {
+  wallet.getWalletList();
+  walletLists.value = wallet.walletList;
+  console.log(walletLists.value);
+};
+
+onMounted(() => {
+  pullWallet();
+});
 </script>
 
 <style scoped>

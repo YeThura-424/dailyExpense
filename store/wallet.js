@@ -13,7 +13,6 @@ export const useWalletStore = defineStore("wallet", {
         const { data } = await useFetch("/api/wallet-type", {
           method: "get",
           transform: (response) => {
-            console.log("wallet type in store", response);
             this.walletType = response.data.data;
           },
         });
@@ -43,7 +42,6 @@ export const useWalletStore = defineStore("wallet", {
             auth_user: user?.value?.id,
           },
           transform: (response) => {
-            console.log("wallet list ", response);
             this.walletList = response.data;
           },
         });
