@@ -33,22 +33,22 @@
 <script setup>
 const router = useRouter();
 const form = reactive({
-  amount: 0,
-  category: "",
+  type: "income",
   categoryImage: {},
   name: "",
 });
 
-const backAction = () => {
-  router.back();
-};
-
-const category = [
-  { name: "Bank", value: 1 },
-  { name: "Cash In Hand", value: 2 },
-];
-
-const saveCategory = () => {
-  console.log(form);
+const saveCategory = async () => {
+   try {
+    useFetch("/api/category/store", {
+      method: "POST",
+      body: form,
+      transform: (response) => {
+        console.log(response, 'category create')
+      }
+    })
+   } catch (error) {
+    console.log(error)
+   }
 };
 </script>
