@@ -13,5 +13,6 @@
     <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
     <!-- <MobileMainNav /> -->
+     <MobileFootNav />
   </div>
 </template>

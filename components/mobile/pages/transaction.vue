@@ -236,7 +236,7 @@
         </div>
       </div>
     </CoreModelBox>
-    <MobileMainNav />
+    <!-- <MobileMainNav /> -->
   </div>
 </template>
 

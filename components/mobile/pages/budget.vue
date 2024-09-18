@@ -36,7 +36,7 @@
         </nuxt-link>
       </div>
     </div>
-    <MobileMainNav />
+    <!-- <MobileMainNav /> -->
   </div>
 </template>
 <script setup>

@@ -112,7 +112,7 @@
       </div>
       <!-- recent transaction section ends here  -->
     </div>
-    <MobileMainNav />
+    <!-- <MobileMainNav /> -->
   </div>
 </template>
 
