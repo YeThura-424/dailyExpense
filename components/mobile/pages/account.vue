@@ -70,15 +70,11 @@
 const wallet = useWalletType();
 const walletLists = ref([]);
 
-const pullWallet = () => {
-  wallet.getWalletList();
+const pullWallet = async () => {
+  await wallet.getWalletList();
   walletLists.value = wallet.walletList;
-  console.log(walletLists.value);
 };
-
-onMounted(() => {
-  pullWallet();
-});
+pullWallet();
 </script>
 
 <style scoped>
