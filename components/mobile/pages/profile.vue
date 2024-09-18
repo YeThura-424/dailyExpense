@@ -4,7 +4,7 @@
       <div class="profile-info-wrapper flex items-center gap-x-3">
         <div class="profile-image rounded-full border-2 border-[#7F3DFF]">
           <img
-            :src="user?.image??'/images/userprofile.png'"
+            :src="user?.image ?? '/images/userprofile.png'"
             alt=""
             class="w-20 h-20 rounded-full p-1"
           />
@@ -12,7 +12,9 @@
         <div class="user-info flex justify-between items-center gap-x-20">
           <div class="profile-user-info">
             <p class="text-base text-[#91919F]">Username</p>
-            <h1 class="text-xl text-[#161719] capitalize font-semibold">{{user.name}}</h1>
+            <h1 class="text-xl text-[#161719] capitalize font-semibold">
+              {{ user.name }}
+            </h1>
           </div>
           <div class="profile-info-edit">
             <Icon name="ion:edit" class="text-3xl cursor-pointer" />
@@ -70,7 +72,8 @@
           <h1 class="text-[#292B2D] text-xl font-medium">Export</h1>
         </div>
         <!-- logout  -->
-        <div  @click.prevent="Logout"
+        <div
+          @click.prevent="Logout"
           class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
         >
           <div
@@ -88,11 +91,11 @@
 </template>
 
 <script setup>
-import { useAuthStore } from '~/store/authUser';
+import { useAuthStore } from "~/store/authUser";
 
 const { logUserOut } = useAuthStore();
 
-const user = useCookie('user').value;
+const user = useCookie("user").value;
 
 const Logout = async () => {
   await logUserOut();
