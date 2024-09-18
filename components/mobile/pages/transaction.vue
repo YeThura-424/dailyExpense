@@ -161,6 +161,23 @@
                 <span class="text-sm text-[#91919F]">10:00AM</span>
               </div>
             </div>
+            <div
+              class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
+            >
+              <div class="transaction_type flex gap-x-4">
+                <div class="transaction_list_icon">
+                  <img src="/images/transaction_list.svg" />
+                </div>
+                <div class="transaction_list_desctiption">
+                  <h1 class="font-semibold text-lg text-[#292B2D]">Shopping</h1>
+                  <span class="text-sm text-[#91919F]">Buy Some grocery</span>
+                </div>
+              </div>
+              <div class="transaction_list_amount text-right">
+                <h1 class="font-semibold text-lg text-[#FD3C4A]">$-120</h1>
+                <span class="text-sm text-[#91919F]">10:00AM</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
