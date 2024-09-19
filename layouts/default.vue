@@ -12,7 +12,6 @@
   <div class="bg-[#eee] min-h-screen">
     <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
-    <!-- <MobileMainNav /> -->
      <div class=" w-full h-[50px] bg-[#eee] fixed bottom-6">
       <MobileFootNav />
      </div>
