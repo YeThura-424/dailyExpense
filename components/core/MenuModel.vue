@@ -90,8 +90,20 @@ watch(
   }
 );
 
-function closeMenu() {
+function closeMenu(nextPath = false) {
   isOpen.value = false;
-  emit("dismiss", isOpen.value);
+  emit("dismiss", { isOpen: isOpen.value, nextPath });
 }
+
+const route = useRoute()
+
+watch(
+  () => route.fullPath,
+  () => {
+    console.log(route.path);
+    if(route.path == '/expense' || route.path == '/income'){
+      closeMenu(true)
+    }
+  }
+)
 </script>

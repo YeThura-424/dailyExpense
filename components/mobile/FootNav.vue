@@ -17,12 +17,12 @@
                     <span class="text">Transaction</span>
                 </nuxt-link>
             </li>
-            <li :class="{ list: true, active: isActive('/add') }">
-                <nuxt-link to="">
+            <li :class="{ list: true, active: isActive('/#add') }">
+                <nuxt-link to="/#add">
                     <span class="icon">
+                        <!-- <Icon name="ion:close-round" v-if="isActive('/#add')"/> -->
                         <Icon name="ion:plus-circled" />
                     </span>
-                    <span class="text">Add</span>
                 </nuxt-link>
             </li>
             <li :class="{ list: true, active: isActive('/budget') }">
@@ -44,33 +44,54 @@
             <div class="indicator"></div>
         </ul>
     </div>
+    <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router';
 import { ref, onMounted, watch } from 'vue';
 
-// Get the current route
+const router = useRouter()
 const route = useRoute();
 const activePath = ref(route.path);
+const openMenu = ref(false);
+
+const openMenuDialog = () => {
+    openMenu.value = true;
+};
+
+const closeMenu = ({ isOpen, nextPath }) => {
+    openMenu.value = isOpen;
+    if(!nextPath){
+        router.back()
+    }
+};
 
 // Watch for route changes and update activePath accordingly
 watch(route, (newRoute) => {
-    activePath.value = newRoute.path;
+    activePath.value = newRoute.fullPath;
+    addBtn(activePath.value)
 });
+
+const addBtn = (path) => {
+    if (path == '/#add') {
+        console.log("here");
+        openMenuDialog()
+    }
+}
 
 // Function to check if the current path matches the active one
 const isActive = (path) => activePath.value === path;
 
 onMounted(() => {
-    // Ensure the correct tab is marked as active on load
-    activePath.value = route.path;
+    activePath.value = route.fullPath;
+    addBtn(activePath.value)
 });
+
 </script>
 
 
 <style scoped>
-
 .navigation {
     position: fixed;
     bottom: 0;
