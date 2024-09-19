@@ -25,6 +25,7 @@
       <Icon name="ion:ios-plus-outline" size="50" class="text-[#91919F]" />
       <!-- <span class="text-[#91919F] text-lg text-center">Add More</span> -->
       <input
+        :value="modelValue"
         id="file-upload"
         type="file"
         class="absolute opacity-0 w-full h-full"
@@ -59,17 +60,21 @@ const props = defineProps({
     default: true,
   },
 });
+const emit = defineEmits(["update:modelValue"]);
+
 const uploadFiles = ref([]);
 const previewUrl = ref(null);
 const handleUpload = (e) => {
   console.log("uploaded", e.target.files);
   uploadFiles.value = e.target.files;
+  emit("update:modelValue", uploadFiles.value);
   previewUrl.value = URL.createObjectURL(uploadFiles.value[0]);
 };
 
 const handleRemove = () => {
   previewUrl.value = null;
   uploadFiles.value = null;
+  emit("update:modelValue", uploadFiles.value);
 };
 </script>
 

@@ -39,6 +39,7 @@ const form = reactive({
 });
 
 const saveCategory = async () => {
+  console.log('formdata', form)
    try {
     useFetch("/api/file-upload/category/store", {
       method: "POST",
