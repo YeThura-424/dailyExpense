@@ -9,6 +9,13 @@
       <div class="account_name">
         <CoreInputBox placeholder="Name" v-model="form.name" />
       </div>
+      <div class="category-type py-4">
+        <CoreSelectBox
+          :option="categoryTypes"
+          name="Category"
+          v-model="form.type"
+        />
+      </div>
       <div class="category_attachment py-3">
         <CoreFileUpload v-model="form.categoryImage" />
       </div>
@@ -33,17 +40,20 @@
 <script setup>
 const router = useRouter();
 const form = reactive({
-  type: "income",
-  categoryImage: {},
+  type: "",
+  categoryImage: [],
   name: "",
 });
-
+const categoryTypes = [
+  { id: 'income', name: 'income' },
+  { id: 'expense', name: 'expense' }
+]
 const saveCategory = async () => {
   console.log('formdata', form)
    try {
     useFetch("/api/file-upload/category/store", {
       method: "POST",
-      body: form,
+      body: transform(form),
       transform: (response) => {
         console.log(response, 'category create')
       }
@@ -52,4 +62,13 @@ const saveCategory = async () => {
     console.log(error)
    }
 };
+
+const transform = (form) => {
+  let formData = new FormData();
+  formData.append('name', form.name);
+  formData.append('type', form.type);
+  formData.append('icon', form.categoryImage);
+
+  return formData
+}
 </script>
