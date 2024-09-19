@@ -70,7 +70,7 @@
       <div
         class="rounded-b-full w-[70px] h-[35px] bg-[#eee] absolute left-1/2 -translate-x-1/2 bottom-[25px]"
       ></div>
-      <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" />
+      <!-- <CoreMenuModel :visible="openMenu" @dismiss="closeMenu" /> -->
     </div>
   </div>
 </template>

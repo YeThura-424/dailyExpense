@@ -60,9 +60,11 @@ const openMenuDialog = () => {
     openMenu.value = true;
 };
 
-const closeMenu = (value) => {
-    openMenu.value = value;
-    router.back()
+const closeMenu = ({ isOpen, nextPath }) => {
+    openMenu.value = isOpen;
+    if(!nextPath){
+        router.back()
+    }
 };
 
 // Watch for route changes and update activePath accordingly
