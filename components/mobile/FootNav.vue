@@ -4,7 +4,7 @@
             <li :class="{ list: true, active: isActive('/') }">
                 <nuxt-link to="/">
                     <span class="icon">
-                        <ion-icon name="home"></ion-icon>
+                        <Icon name="ion:md-home" />
                     </span>
                     <span class="text">Home</span>
                 </nuxt-link>
@@ -12,7 +12,7 @@
             <li :class="{ list: true, active: isActive('/transaction') }">
                 <nuxt-link to="/transaction">
                     <span class="icon">
-                        <ion-icon name="swap-horizontal"></ion-icon>
+                        <Icon name="ion:arrow-swap" />
                     </span>
                     <span class="text">Transaction</span>
                 </nuxt-link>
@@ -20,7 +20,7 @@
             <li :class="{ list: true, active: isActive('/add') }">
                 <nuxt-link to="">
                     <span class="icon">
-                        <ion-icon name="add" size="large"></ion-icon>
+                        <Icon name="ion:plus-circled" />
                     </span>
                     <span class="text">Add</span>
                 </nuxt-link>
@@ -28,7 +28,7 @@
             <li :class="{ list: true, active: isActive('/budget') }">
                 <nuxt-link to="/budget">
                     <span class="icon">
-                        <ion-icon name="pie-chart"></ion-icon>
+                        <Icon name="ion:pie-chart" />
                     </span>
                     <span class="text">Budget</span>
                 </nuxt-link>
@@ -36,7 +36,7 @@
             <li :class="{ list: true, active: isActive('/profile') }">
                 <nuxt-link to="profile">
                     <span class="icon">
-                        <ion-icon name="person"></ion-icon>
+                        <Icon name="ion:person" />
                     </span>
                     <span class="text">Profile</span>
                 </nuxt-link>
@@ -64,28 +64,12 @@ const isActive = (path) => activePath.value === path;
 
 onMounted(() => {
     // Ensure the correct tab is marked as active on load
-    activePath.value = route.path;    
+    activePath.value = route.path;
 });
 </script>
 
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: white;
-}
 
 .navigation {
     position: fixed;
