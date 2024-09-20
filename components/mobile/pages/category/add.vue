@@ -57,6 +57,7 @@ const saveCategory = async () => {
       body:data,
       transform: (response) => {
         console.log(response, 'category create')
+        navigateTo('/category');
       }
     })
    } catch (error) {
@@ -68,7 +69,7 @@ const transform = (form) => {
   let formData = new FormData();
   formData.append('name', form.name);
   formData.append('type', form.type);
-  formData.append('icon', form.categoryImage);
+  formData.append('icon', form.categoryImage[0]);
 
   return formData
 }
