@@ -50,10 +50,11 @@ const categoryTypes = [
 ]
 const saveCategory = async () => {
   console.log('formdata', form)
+  const data = transform(form);
    try {
     useFetch("/api/file-upload/category/store", {
       method: "POST",
-      body: transform(form),
+      body:data,
       transform: (response) => {
         console.log(response, 'category create')
       }
