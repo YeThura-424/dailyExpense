@@ -1,4 +1,5 @@
 <template>
+  <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
     <MobilePageHeader title="Login" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
@@ -51,6 +52,7 @@ const { authenticateUser } = useAuthStore(); // use authenticateUser action from
 
 const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
 
+const loading = ref(false);
 const router = useRouter();
 
 const form = reactive({
@@ -59,12 +61,14 @@ const form = reactive({
 });
 
 const login = async () => {
-  await authenticateUser(form); // call authenticateUser and pass the user object
-  // redirect to homepage if user is authenticated
-  console.log("nanda", authenticated.value);
-
-  if (authenticated.value) {
-    router.push("/");
+  loading.value = true;
+  try {
+    await authenticateUser(form); // call authenticateUser and pass the user object
+    if (authenticated.value) {
+      router.push("/");
+    }
+  } catch (error) {
+    console.log(error)
   }
 };
 </script>
