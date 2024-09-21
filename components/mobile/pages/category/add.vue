@@ -44,25 +44,20 @@ const form = reactive({
   categoryImage: [],
   name: "",
 });
+
+const categoryStore = useCategory();
 const categoryTypes = [
   { id: 'income', name: 'income' },
   { id: 'expense', name: 'expense' }
 ]
 const saveCategory = async () => {
-  console.log('formdata', form)
   const data = transform(form);
-   try {
-    useFetch("/api/file-upload/category/store", {
-      method: "POST",
-      body:data,
-      transform: (response) => {
-        console.log(response, 'category create')
-        navigateTo('/category');
-      }
-    })
-   } catch (error) {
+  try {
+    categoryStore.saveCategory(data);
+    navigateTo('/category');
+  } catch (error) {
     console.log(error)
-   }
+  }
 };
 
 const transform = (form) => {
