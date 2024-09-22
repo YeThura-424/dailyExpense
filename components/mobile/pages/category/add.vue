@@ -53,7 +53,7 @@ const categoryTypes = [
 const saveCategory = async () => {
   const data = transform(form);
   try {
-    categoryStore.saveCategory(data);
+    await categoryStore.createCategories(data);
     navigateTo('/category');
   } catch (error) {
     console.log(error)

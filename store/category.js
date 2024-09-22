@@ -1,4 +1,4 @@
-export default useCategoryStore = defineStore('category', {
+export const useCategoryStore = defineStore('category', {
   state: () => {
     return {
       categories: []
@@ -17,7 +17,7 @@ export default useCategoryStore = defineStore('category', {
         console.log(error)
       }
     },
-    
+
     async createCategories(form) {
       try {
         useFetch("/api/file-upload/category/store", {
