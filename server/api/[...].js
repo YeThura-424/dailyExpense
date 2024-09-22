@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig(event)
   const method = event.req.method;
   const paramPath = event.context.params._;
   let body = null;
@@ -15,13 +16,13 @@ export default defineEventHandler(async (event) => {
   }
   const token = getCookie(event, "token");
   const response = await $fetch(
-    `http://localhost:8000/api/${paramPath}?${query}`,
+    `${config.public.url}/api/${paramPath}?${query}`,
     {
       method: method,
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
-        "x-api-token": "4fGh9Kj7Lm1Nq2RzXw8T",
+        "x-api-token": config.apiSecret,
       },
       body: body,
     }

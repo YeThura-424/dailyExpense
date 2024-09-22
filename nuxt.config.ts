@@ -1,5 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
+  runtimeConfig: {
+    apiSecret: process.env.X_API_TOKEN,
+
+    public: {
+      url: process.env.API_URL || 'http://localhost:8000'
+    }
+  },
   compatibilityDate: "2024-04-03",
   devtools: { enabled: false },
   css: ["~/assets/css/main.css"],

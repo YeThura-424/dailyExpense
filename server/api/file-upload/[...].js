@@ -1,4 +1,5 @@
 export default defineEventHandler(async (event) => {
+  const config = useRuntimeConfig();
   const method = event.req.method;
   const paramPath = event.context.params._;
   const formData = await readFormData(event);
@@ -11,7 +12,7 @@ export default defineEventHandler(async (event) => {
     query = split[1];
   }
   const token = getCookie(event, "token");
-  const data = await $fetch(`http://localhost:8000/api/${paramPath}`, {
+  const data = await $fetch(`${config.public.url}/api/${paramPath}`, {
     method: method,
     headers: {
       Accept: "application/json",
