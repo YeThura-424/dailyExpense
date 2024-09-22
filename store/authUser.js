@@ -7,9 +7,10 @@ export const useAuthStore = defineStore("auth", {
   }),
   actions: {
     async authenticateUser({ email, password }) {
+      const config = useRuntimeConfig();
       // useFetch from nuxt 3
       const { data, pending } = await useFetch(
-        "http://localhost:8000/api/login",
+      `${config.public.url}/api/login`,
         {
           method: "post",
           headers: { "Content-Type": "application/json" },
@@ -28,11 +29,12 @@ export const useAuthStore = defineStore("auth", {
       }
     },
     async logUserOut() {
+      const config = useRuntimeConfig();
       const token = useCookie("token"); // useCookie new hook in nuxt 3
       const user = useCookie("user");
 
       const { data, pending, error } = await useFetch(
-        "http://localhost:8000/api/logout",
+        `${config.public.url}/api/logout`,
         {
           method: "POST",
           headers: {
