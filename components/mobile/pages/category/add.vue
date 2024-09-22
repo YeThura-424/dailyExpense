@@ -1,4 +1,7 @@
 <template>
+  <div class="loading-wrapper" v-if="loading">
+    <MobileLoadingDots />
+  </div>
   <div class="bg-[#7F3DFF] flex flex-col justify-between h-screen">
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
@@ -45,6 +48,7 @@ const form = reactive({
   name: "",
 });
 
+const loading = ref(false);
 const categoryStore = useCategory();
 const categoryTypes = [
   { id: 'income', name: 'income' },
@@ -52,6 +56,7 @@ const categoryTypes = [
 ]
 const saveCategory = async () => {
   const data = transform(form);
+  loading.value = true;
   try {
     await categoryStore.createCategories(data);
     navigateTo('/category');

@@ -64,10 +64,19 @@
 </template>
 
 <script setup>
-const router = useRouter();
-const backAction = () => {
-  router.back();
-};
+
+const category = useCategory();
+const loading = ref(true);
+const getCategory = async () => {
+  loading.value = true;
+  try {
+    await category.getCategories();
+    loading.value = false;
+  } catch (error) {
+    console.log(error)
+  }
+}
+getCategory();
 
 const categories = [
   { id: 1, name: "Food", image: "/images/food.png" },
