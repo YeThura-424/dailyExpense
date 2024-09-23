@@ -58,10 +58,12 @@ const saveCategory = async () => {
   const data = transform(form);
   loading.value = true;
   try {
-    await categoryStore.createCategories(data);
-    navigateTo('/category');
+    const response = await categoryStore.createCategories(data);
+    console.log(response)
   } catch (error) {
     console.log(error)
+  } finally {
+    navigateTo('/category');
   }
 };
 
