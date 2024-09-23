@@ -22,13 +22,11 @@ export const useCategoryStore = defineStore('category', {
 
     async createCategories(form) {
       try {
-        useFetch("/api/file-upload/category/store", {
+        const data  = useFetch("/api/file-upload/category/store", {
           method: "POST",
           body: form,
-          transform: (response) => {
-            console.log(response, "category create");
-          },
         });
+        console.log('category created in store', data)
       } catch (error) {
         console.log(error);
       }
