@@ -11,8 +11,7 @@ export const useCategoryStore = defineStore('category', {
         await useFetch("/api/category", {
           method: "GET",
           transform: (response) => {
-            console.log('category store', response)
-            this.categories = response.data
+            this.categories = response.data.data
           }
         })
       } catch (error) {

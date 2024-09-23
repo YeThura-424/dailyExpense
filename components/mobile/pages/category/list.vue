@@ -7,7 +7,7 @@
       <div class="category-list-wrapper bg-white">
         <!-- category listing  -->
         <div
-          v-for="category in categories"
+          v-for="category in category.categories.data"
           :key="category.id"
           class="category-section flex items-center justify-between border-b border-[#eee] px-4 py-4"
         >
@@ -17,13 +17,16 @@
             >
               <img
                 class="w-12 h-12 object-cover"
-                :src="category.image"
+                :src="category.icon ?? '/images/medical.png'"
                 alt=""
               />
             </div>
-            <h1 class="text-[#292B2D] text-xl font-medium">
+            <div>
+              <h1 class="text-[#292B2D] text-xl font-medium">
               {{ category.name }}
             </h1>
+            <p class=" capitalize font-normal text-sm text-[#464545]">{{ category.type }}</p>
+            </div>
           </div>
           <div class="profile-info-edit">
             <Icon
@@ -86,3 +89,10 @@ const categories = [
   { id: 5, name: "Transprotation", image: "/images/transportation.png" },
 ];
 </script>
+
+<style scoped>
+.category-list-wrapper.bg-white {
+    max-height: calc(100vh - 150px);
+    overflow-x: auto;
+}
+</style>
