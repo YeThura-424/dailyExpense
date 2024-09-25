@@ -13,11 +13,12 @@
         <CoreInputBox placeholder="Name" v-model="form.name" />
       </div>
       <div class="category-type py-4">
-        <CoreSelectBox
+        <!-- <CoreSelectBox
           :option="categoryTypes"
           name="Category"
           v-model="form.type"
-        />
+        /> -->
+        <CoreMultiSelectV2/>
       </div>
       <div class="category_attachment py-3">
         <CoreFileUpload v-model="form.categoryImage" />
