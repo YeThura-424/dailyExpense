@@ -1,7 +1,7 @@
 <template>
   <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
-    <MobilePageHeader title="Login" text-color="text-black" />
+    <MobilePageHeader title="Login" :show-back="false" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
       <div class="username py-3">
         <CoreInputBox placeholder="Email" type="email" v-model="form.email" />

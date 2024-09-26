@@ -1,6 +1,6 @@
 <template>
   <div class="expense_header flex pt-3 relative">
-    <div class="back_icon absolute" @click="backAction">
+    <div v-if="showBack" class="back_icon absolute" @click="backAction">
       <Icon
         name="ion:arrow-back-circle-sharp"
         :class="['text-3xl cursor-pointer', iconColor]"
@@ -37,6 +37,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  showBack:{
+    type:Boolean,
+    default: true,
+  }
 });
 const router = useRouter();
 
