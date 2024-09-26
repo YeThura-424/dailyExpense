@@ -2,7 +2,7 @@
   <div class="">
     <div class="category_content py-4">
       <div class="category_header px-4 pb-6">
-        <MobilePageHeader title="Category List" text-color="text-black" />
+        <MobilePageHeader title="Category List" text-color="text-black" @back="backAction"/>
       </div>
       <div class="category-list-wrapper bg-white">
         <!-- category listing  -->
@@ -54,6 +54,10 @@
 const category = useCategory();
 const categoryList = ref(null);
 const loading = ref(true);
+
+const backAction = () => {
+  navigateTo('/profile');
+}
 const getCategory = async () => {
   loading.value = true;
   try {

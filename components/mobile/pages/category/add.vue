@@ -6,7 +6,7 @@
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
-      <MobilePageHeader title="Add New Category" icon-color="text-white" />
+      <MobilePageHeader title="Add New Category" icon-color="text-white" @back="backAction" />
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="account_name">
@@ -42,7 +42,6 @@
 </template>
 
 <script setup>
-const router = useRouter();
 const form = reactive({
   type: "",
   categoryImage: [],
@@ -51,10 +50,11 @@ const form = reactive({
 
 const loading = ref(false);
 const categoryStore = useCategory();
-const categoryTypes = [
-  { id: 'income', name: 'income' },
-  { id: 'expense', name: 'expense' }
-]
+
+const backAction = () => {
+  navigateTo('/category');
+}
+
 const saveCategory = async () => {
   const data = transform(form);
   loading.value = true;
