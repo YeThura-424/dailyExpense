@@ -38,7 +38,8 @@
         />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
+        <!-- <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" /> -->
+         <CoreMultiSelectV2  />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">

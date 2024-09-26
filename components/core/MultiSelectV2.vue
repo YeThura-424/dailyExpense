@@ -6,7 +6,7 @@
       </option>
     </select> -->
 
-    <div>
+    <div v-if="multiple">
       <div class="relative">
         <!-- select input box -->
         <div class="select-input">
@@ -21,7 +21,7 @@
           <li v-for="option in selectedOptions" :key="option">
             <div class="flex items-center gap-x-2 bg-[#FF5200] px-2 py-1 rounded-md">
               <span class="text-white text-sm">{{ option.name }}</span>
-              <MobileIconRemove @click="removeSelectedOption(option.id)" />
+               <Icon name="ion:ios-close-circle-outline" class="text-white" @click="removeSelectedOption(option.id)" />
             </div>
           </li>
         </ul>
@@ -35,10 +35,24 @@
         <!-- select option list end here  -->
       </div>
     </div>
+    <div v-else>
+      <!-- for single select  -->
+    </div>
   </div>
 </template>
 <script setup>
 const showOptions = ref(false);
+
+const props = defineProps({
+  options: {
+    type: Array,
+    default: [] // [{id:1,name:'Name 1'}]
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  }
+})
 const options = [
   {
     name: "Category 1",
