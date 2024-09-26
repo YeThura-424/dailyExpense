@@ -42,9 +42,10 @@ const props = defineProps({
     default: true,
   }
 });
-const router = useRouter();
+
+const emit = defineEmits(['back']);
 
 const backAction = () => {
-  router.back();
+  emit('back');
 };
 </script>

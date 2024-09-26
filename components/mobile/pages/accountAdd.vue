@@ -4,7 +4,7 @@
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
       <div class="account_header">
-        <MobilePageHeader title="Add new account" icon-color="text-white" />
+        <MobilePageHeader title="Add new account" icon-color="text-white" @back="backAction" />
       </div>
       <div class="expense_amount text-white">
         <span class="text-lg">Balance</span>
@@ -57,7 +57,11 @@ const form = reactive({
 //wallet type
 const walletType = useWalletType();
 await walletType.getWalletType();
-console.log(walletType.walletType);
+
+const backAction = () => {
+  navigateTo('/account');
+}
+
 const saveWallet = async () => {
   try {
     const data = walletType.saveWallet(form);

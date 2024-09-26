@@ -2,7 +2,7 @@
   <div class="min-h-screen bg-white">
     <div class="account_content py-4">
       <div class="account_header px-6 pb-6">
-        <MobilePageHeader title="Account" text-color="text-black" />
+        <MobilePageHeader title="Account" text-color="text-black" @back="backAction"/>
       </div>
       <div class="account_info text-center px-6 py-16">
         <h1 class="text-sm text-p[#91919F] font-medium">Account Balance</h1>
@@ -69,6 +69,10 @@
 <script setup>
 const wallet = useWalletType();
 const walletLists = ref([]);
+
+const backAction = () => {
+  navigateTo('/profile');
+}
 
 const pullWallet = async () => {
   await wallet.getWalletList();

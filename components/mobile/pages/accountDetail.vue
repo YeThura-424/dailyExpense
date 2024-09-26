@@ -7,6 +7,7 @@
           title="Account Detail"
           icon-color="text-[#7F3DFF]"
           text-color="text-black"
+          @back="backAction"
         />
       </div>
 
@@ -142,6 +143,6 @@
 <script setup>
 const router = useRouter();
 const backAction = () => {
-  router.back();
-};
+  navigateTo('/account');
+}
 </script>
