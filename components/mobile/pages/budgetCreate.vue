@@ -4,7 +4,7 @@
       class="budget_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
       <div class="budget_header pt-3">
-        <MobilePageHeader title="Create Budget" icon-color="text-white" />
+        <MobilePageHeader title="Create Budget" icon-color="text-white" @back="backAction" />
       </div>
       <div class="budget_amount text-white">
         <span class="text-lg">How much do you want to spend ?</span>
@@ -79,8 +79,8 @@ const setDescription = (val) => {
 };
 
 const backAction = () => {
-  router.back();
-};
+  navigateTo('/budget');
+}
 
 const category = [
   { name: "Category1", value: 1 },

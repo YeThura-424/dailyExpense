@@ -7,6 +7,7 @@
           icon-color="text-[#7F3DFF]"
           text-color="text-black"
           showDelete="true"
+          @back="backAction"
         />
       </div>
     </div>
@@ -78,8 +79,8 @@ const router = useRouter();
 const route = useRoute();
 
 const backAction = () => {
-  router.back();
-};
+  navigateTo('/budget');
+}
 
 const deleteAction = () => {
   console.log("delete action");
