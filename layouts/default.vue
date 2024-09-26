@@ -14,6 +14,7 @@
     <slot />
      <div class=" w-full h-[50px] bg-[#eee] fixed bottom-6">
       <MobileFootNav />
+       <!-- <MobileMainNav /> -->
      </div>
   </div>
 </template>

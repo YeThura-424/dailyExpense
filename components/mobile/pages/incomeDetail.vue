@@ -6,6 +6,7 @@
           title="Income Detail"
           show-delete="true"
           icon-color="text-white"
+          @back="backAction"
         />
       </div>
       <div class="main-body text-center text-white pt-20 pb-8">

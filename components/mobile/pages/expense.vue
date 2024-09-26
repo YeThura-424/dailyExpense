@@ -2,7 +2,7 @@
   <div class="bg-[#FD3C4A]">
     <div class="expense_main_content px-6 py-4">
       <div class="expense_header">
-        <MobilePageHeader title="Expense" icon-color="text-white" />
+        <MobilePageHeader title="Expense" icon-color="text-white" @back="backAction" />
       </div>
       <div class="expense_amount text-white pt-40">
         <span class="text-lg">How Much ?</span>
@@ -93,7 +93,8 @@ const setDescription = (val) => {
 };
 
 const backAction = () => {
-  router.back();
+  // router.back();
+  navigateTo('/#add')
 };
 
 const category = [

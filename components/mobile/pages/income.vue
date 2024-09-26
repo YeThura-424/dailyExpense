@@ -2,7 +2,7 @@
   <div class="bg-[#00A86B]">
     <div class="income_main_content px-6 py-4">
       <div class="income_header">
-        <MobilePageHeader title="Income" icon-color="text-white" />
+        <MobilePageHeader title="Income" icon-color="text-white" @back="backAction" />
       </div>
       <div class="income_amount text-white pt-36">
         <span class="text-lg">How Much ?</span>
@@ -92,7 +92,7 @@ const setDescription = (val) => {
 };
 
 const backAction = () => {
-  router.back();
+  navigateTo('/#add')
 };
 
 const category = [
