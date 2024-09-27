@@ -7,7 +7,7 @@
       :id="name"
       class="text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]"
     >
-      <option selected disabled >{{ placeholder }}</option>
+      <option selected="selected" disabled >{{ placeholder }}</option>
       <option
         v-for="list in option"
         :key="list.id"

@@ -37,6 +37,20 @@
     </div>
     <div v-else>
       <!-- for single select  -->
+       <div class="relative">
+        <!-- select input box -->
+        <div class="select-input">
+          <input type="text" class="w-full p-3 focus:outline-none border border-[#FF5200] focus:ring-1 focus:ring-[#FF5200] rounded-md" placeholder="Select Category"
+            @click="selectAction" v-model="selectedOptions.name"/>
+        </div>
+        <!-- select input box end here  -->
+
+        <!-- select option list -->
+        <ul v-if="showOptions" :class="['rounded-md my-2 absolute bg-[#fdfdfd] select-shadow h-[200px] w-full overflow-x-scroll', selectedOptions.length > 0 ? '-bottom-[135px]' : '-bottom-[220px]']">
+          <li v-for="data in selectOptions" :key="data.name" @click="setSelectOption(data.id)" class="px-3 py-2 hover:bg-[#eee]"> {{ data.name }}</li>
+        </ul>
+        <!-- select option list end here  -->
+      </div>
     </div>
   </div>
 </template>
@@ -125,8 +139,12 @@ const getSelectOptions = (options) => {
 
 const setSelectOption = (id) => {
   showOptions.value = false;
-  selectedOptions.value = [...selectedOptions.value, options.find(option => option.id === id)];
-  selectOptions.value = selectOptions.value.filter(option => option.id !== id);
+  if (props.multiple) {
+    selectedOptions.value = [...selectedOptions.value, options.find(option => option.id === id)];
+    selectOptions.value = selectOptions.value.filter(option => option.id !== id);
+  } else {
+    selectedOptions.value = options.find((option) => option.id == id);
+  }
 }
 
 const removeSelectedOption = (id) => {
