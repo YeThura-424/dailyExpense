@@ -1,17 +1,16 @@
 <template>
   <div
     :class="[
-      'select-box-wrapper w-fit relative',
-      isSelectOptionOpen ? 'active' : '',
+      'select-box-wrapper w-full relative',
     ]"
   >
-    <div class="input-wrapper" @click="openSelectOption">
+    <div :class="['input-wrapper h-14',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
       <input
         v-model="selectedOption.value"
         id="select-box"
         type="text"
         readonly="readonly"
-        class="relative w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 inline-flex items-center text-left cursor-default rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 ring-1 ring-inset ring-gray-300 dark:ring-gray-700 pe-9 text-gray-400 dark:text-gray-500"
+        class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 inline-flex items-center text-left cursor-default rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 ring-1 ring-inset ring-gray-300 dark:ring-gray-700 pe-9 text-gray-400 dark:text-gray-500"
         placeholder="Select something..."
       />
     </div>
@@ -114,7 +113,7 @@ const options = ref([
 </script>
 
 <style scoped>
-.select-box-wrapper::before {
+.input-wrapper::before {
   content: "";
   display: block;
   width: 8px;
@@ -124,13 +123,14 @@ const options = ref([
   border-color: #9e9d9d;
   position: absolute;
   right: 10px;
-  top: 13px;
+  top: 50%;
+  transform: translateY(-50%);
   transform: rotate(45deg);
   transition: all 0.3s;
   z-index: 1;
 }
 
-.select-box-wrapper.active::before {
+.input-wrapper.active::before {
   content: "";
   display: block;
   width: 8px;
@@ -140,7 +140,8 @@ const options = ref([
   border-color: #9e9d9d;
   position: absolute;
   right: 10px;
-  top: 13px;
+  top: 50%;
+  transform: translateY(-50%);
   transform: rotate(225deg);
   z-index: 1;
 }
