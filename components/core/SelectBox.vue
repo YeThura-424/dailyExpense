@@ -10,7 +10,7 @@
         id="select-box"
         type="text"
         readonly="readonly"
-        class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 inline-flex items-center text-left cursor-default rounded-md text-sm gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white dark:bg-gray-900 ring-1 ring-inset ring-gray-300 dark:ring-gray-700 pe-9 text-gray-400 dark:text-gray-500"
+        class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border border-[#91919f] inline-flex items-center text-left text-xl cursor-default rounded-xl gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white pe-9"
         placeholder="Select something..."
       />
     </div>
@@ -27,10 +27,10 @@
     >
       <div class="">
         <ul
-          class="select-option-wrapper relative focus:outline-none overflow-y-auto scroll-py-1 ring-1 ring-gray-200 dark:ring-gray-700 rounded-md shadow-lg bg-white dark:bg-gray-800 p-1 max-h-60"
+          class="select-option-wrapper relative focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60"
         >
           <input
-            placeholder="Search a person..."
+            placeholder="Search something..."
             v-if="searchable"
             autocomplete="off"
             class="block w-[calc(100%+0.5rem)] focus:ring-transparent text-sm px-3 py-1.5 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-0 border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
@@ -124,8 +124,7 @@ const options = ref([
   position: absolute;
   right: 10px;
   top: 50%;
-  transform: translateY(-50%);
-  transform: rotate(45deg);
+  transform: translateY(-50%) rotate(45deg);
   transition: all 0.3s;
   z-index: 1;
 }
@@ -141,8 +140,7 @@ const options = ref([
   position: absolute;
   right: 10px;
   top: 50%;
-  transform: translateY(-50%);
-  transform: rotate(225deg);
+  transform: translateY(-50%) rotate(225deg);
   z-index: 1;
 }
 
