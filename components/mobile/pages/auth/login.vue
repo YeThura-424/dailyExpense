@@ -66,6 +66,8 @@ const login = async () => {
     await authenticateUser(form); // call authenticateUser and pass the user object
     if (authenticated.value) {
       router.push("/");
+    } else {
+      loading.value = false
     }
   } catch (error) {
     console.log(error)
