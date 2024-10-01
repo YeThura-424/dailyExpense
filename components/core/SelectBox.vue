@@ -16,18 +16,12 @@
     </div>
     <div
       v-if="isSelectOptionOpen"
+      ref="dropdownMenu"
       class="z-20 group w-full"
-      data-popper-placement="bottom-end"
-      style="
-        position: absolute;
-        inset: 0px 0px auto auto;
-        margin: 0px;
-        transform: translate(0px, 40px);
-      "
     >
       <div class="">
         <ul
-          class="select-option-wrapper relative focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60"
+          class="select-option-wrapper relative border border-[#91919f] focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60"
         >
           <input
             placeholder="Search something..."
@@ -39,7 +33,7 @@
             v-for="list in options"
             :key="list"
             @click="setOptionValue(list)"
-            class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-sm text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-900"
+            class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-900"
           >
             <div class="flex items-center gap-1.5 min-w-0">
               <span class="truncate">{{ list.name }}</span>
@@ -52,6 +46,8 @@
 </template>
 
 <script setup>
+import { createPopper } from "@popperjs/core";  // Import Popper.js
+
 const props = defineProps({
   searchable: {
     type: Boolean,
@@ -78,8 +74,38 @@ const selectedOption = reactive({
   value: [],
 });
 
+const dropdownMenu = ref(null);  // Reference to the dropdown
+let popperInstance = null;  // To store the Popper.js instance
+
 const openSelectOption = () => {
   isSelectOptionOpen.value = !isSelectOptionOpen.value;
+
+  // If opening the dropdown, create the popper instance
+  if (isSelectOptionOpen.value && selectTrigger.value && dropdownMenu.value) {
+    popperInstance = createPopper(selectTrigger.value, dropdownMenu.value, {
+      placement: "bottom-start",
+      modifiers: [
+        {
+          name: "flip",
+          options: {
+            fallbackPlacements: ["top-start"],  // Try placing it above if there's no space below
+          },
+        },
+        {
+          name: "preventOverflow",
+          options: {
+            boundary: "viewport",
+          },
+        },
+      ],
+    });
+  } else {
+    // If closing the dropdown, destroy the popper instance
+    if (popperInstance) {
+      popperInstance.destroy();
+      popperInstance = null;
+    }
+  }
 };
 
 watch(
