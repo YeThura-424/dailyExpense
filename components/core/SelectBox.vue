@@ -4,7 +4,7 @@
       'select-box-wrapper w-full relative',
     ]"
   >
-    <div :class="['input-wrapper h-14',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
+    <div ref="selectTrigger" :class="['input-wrapper h-14',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
       <input
         v-model="selectedOption.value"
         id="select-box"
@@ -68,6 +68,7 @@ const props = defineProps({
 const emit = defineEmits(["update:modelValue"]);
 
 const isSelectOptionOpen = ref(false);
+const selectTrigger = ref(null);  // Reference to the input
 
 const selectedOption = reactive({
   key: [],
@@ -83,21 +84,15 @@ const openSelectOption = () => {
   // If opening the dropdown, create the popper instance
   if (isSelectOptionOpen.value && selectTrigger.value && dropdownMenu.value) {
     popperInstance = createPopper(selectTrigger.value, dropdownMenu.value, {
-      placement: "bottom-start",
+      placement: 'bottom',
       modifiers: [
-        {
-          name: "flip",
-          options: {
-            fallbackPlacements: ["top-start"],  // Try placing it above if there's no space below
-          },
-        },
-        {
-          name: "preventOverflow",
-          options: {
-            boundary: "viewport",
-          },
-        },
-      ],
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8]
+        }
+      }
+    ]
     });
   } else {
     // If closing the dropdown, destroy the popper instance
@@ -136,6 +131,12 @@ const options = ref([
   { id: 6, name: "OptionSeven", value: "option_7" },
   { id: 6, name: "OptionEight", value: "option_8" },
 ]);
+
+onBeforeUnmount(() => {
+  if (popperInstance) {
+    popperInstance.destroy();
+  }
+});
 </script>
 
 <style scoped>
