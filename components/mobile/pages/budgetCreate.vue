@@ -82,21 +82,30 @@ const backAction = () => {
   navigateTo('/budget');
 }
 
-const category = [
-  { name: "Category1", value: 1 },
-  { name: "Category2", value: 2 },
-  { name: "Category3", value: 3 },
-  { name: "Category4", value: 4 },
-  { name: "Category5", value: 5 },
-  { name: "Category6", value: 6 },
-];
+const category = ref([]);
 
-const wallet = [
-  { name: "Wallet 1", value: 1 },
-  { name: "Wallet 2", value: 2 },
-  { name: "Wallet 3", value: 3 },
-  { name: "Wallet 4", value: 4 },
-  { name: "Wallet 5", value: 5 },
-  { name: "Wallet 6", value: 6 },
-];
+const fetchCategory = async() => {
+  try {
+    await useFetch("/api/category", {
+      method: "GET",
+      transform: (response) => {
+        console.log(response, 'budget category');
+        category.value = response.data?.data;
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+fetchCategory();
+// const category = [
+//   { name: "Category1", value: 1 },
+//   { name: "Category2", value: 2 },
+//   { name: "Category3", value: 3 },
+//   { name: "Category4", value: 4 },
+//   { name: "Category5", value: 5 },
+//   { name: "Category6", value: 6 },
+// ];
+
 </script>
