@@ -84,7 +84,7 @@ const openSelectOption = () => {
   // If opening the dropdown, create the popper instance
   if (isSelectOptionOpen.value && selectTrigger.value && dropdownMenu.value) {
     popperInstance = createPopper(selectTrigger.value, dropdownMenu.value, {
-      placement: 'bottom',
+      placement: 'top',
       modifiers: [
       {
         name: 'offset',
