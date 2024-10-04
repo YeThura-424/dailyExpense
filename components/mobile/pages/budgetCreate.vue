@@ -21,7 +21,7 @@
     <div class="budget_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="category_select py-3">
         <CoreSelectBox
-          :option="category"
+          :options="categories"
           name="Category"
           v-model="form.category"
         />
@@ -82,7 +82,7 @@ const backAction = () => {
   navigateTo('/budget');
 }
 
-const category = ref([]);
+const categories = ref([]);
 
 const fetchCategory = async() => {
   try {
@@ -90,7 +90,7 @@ const fetchCategory = async() => {
       method: "GET",
       transform: (response) => {
         console.log(response, 'budget category');
-        category.value = response.data?.data;
+        categories.value = response.data?.data;
       }
     })
   } catch (error) {
@@ -99,13 +99,5 @@ const fetchCategory = async() => {
 }
 
 fetchCategory();
-// const category = [
-//   { name: "Category1", value: 1 },
-//   { name: "Category2", value: 2 },
-//   { name: "Category3", value: 3 },
-//   { name: "Category4", value: 4 },
-//   { name: "Category5", value: 5 },
-//   { name: "Category6", value: 6 },
-// ];
 
 </script>

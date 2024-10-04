@@ -53,6 +53,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  options: {
+    type: Object,
+    require: true,
+  },
   // to emit the selected options
   optionKey: {
     type: String,
@@ -121,16 +125,16 @@ const setOptionValue = (list) => {
   }
 };
 
-const options = ref([
-  { id: 1, name: "OptionOne", value: "option_1" },
-  { id: 2, name: "OptionTwo", value: "option_2" },
-  { id: 3, name: "OptionThree", value: "option_3" },
-  { id: 4, name: "OptionFour", value: "option_4" },
-  { id: 5, name: "OptionFive", value: "option_5" },
-  { id: 6, name: "OptionSix", value: "option_6" },
-  { id: 6, name: "OptionSeven", value: "option_7" },
-  { id: 6, name: "OptionEight", value: "option_8" },
-]);
+// const options = ref([
+//   { id: 1, name: "OptionOne", value: "option_1" },
+//   { id: 2, name: "OptionTwo", value: "option_2" },
+//   { id: 3, name: "OptionThree", value: "option_3" },
+//   { id: 4, name: "OptionFour", value: "option_4" },
+//   { id: 5, name: "OptionFive", value: "option_5" },
+//   { id: 6, name: "OptionSix", value: "option_6" },
+//   { id: 6, name: "OptionSeven", value: "option_7" },
+//   { id: 6, name: "OptionEight", value: "option_8" },
+// ]);
 
 onBeforeUnmount(() => {
   if (popperInstance) {
