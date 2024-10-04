@@ -23,6 +23,7 @@
         <CoreSelectBox
           :options="categories"
           name="Category"
+          placeholder="Select Category"
           v-model="form.category"
         />
       </div>

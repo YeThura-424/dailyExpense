@@ -11,7 +11,7 @@
         type="text"
         readonly="readonly"
         class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border border-[#91919f] inline-flex items-center text-left text-xl cursor-default rounded-xl gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white pe-9"
-        placeholder="Select something..."
+        :placeholder="placeholder"
       />
     </div>
     <div
@@ -67,6 +67,10 @@ const props = defineProps({
     type: String,
     default: "name",
   },
+  placeholder: {
+    type: String,
+    default: "Select something..."
+  }
 });
 
 const emit = defineEmits(["update:modelValue"]);
