@@ -90,6 +90,7 @@ const form = reactive({
   repeat: false,
 });
 const wallet = ref([]);
+const category = ref([])
 const setDescription = (val) => {
   form.description = val;
 };
@@ -99,14 +100,19 @@ const backAction = () => {
   navigateTo('/#add')
 };
 
-const category = [
-  { name: "Category1", value: 1 },
-  { name: "Category2", value: 2 },
-  { name: "Category3", value: 3 },
-  { name: "Category4", value: 4 },
-  { name: "Category5", value: 5 },
-  { name: "Category6", value: 6 },
-];
+const fetchCategory = async() => {
+  try {
+    await useFetch("/api/category", {
+      method: "GET",
+      transform: (response) => {
+        console.log(response, 'budget category');
+        category.value = response.data?.data;
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const fetchWallet = async () => {
   try {
@@ -121,4 +127,5 @@ const fetchWallet = async () => {
   }
 }
 fetchWallet();
+fetchCategory();
 </script>
