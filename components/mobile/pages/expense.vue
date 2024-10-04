@@ -28,6 +28,7 @@
         <CoreSelectBox
           :options="category"
           name="Category"
+          placeholder="Select Category"
           v-model="form.category"
         />
       </div>
@@ -38,8 +39,7 @@
         />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :options="wallet" name="Wallet" v-model="form.wallet" />
-         <!-- <CoreMultiSelectV2 /> -->
+        <CoreSelectBox placeholder="Select Wallet" :options="wallet" name="Wallet" v-model="form.wallet" />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
