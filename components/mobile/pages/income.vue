@@ -27,19 +27,20 @@
       <div class="category_select py-2">
         <CoreSelectBox
           :options="category"
+          option-key="id"
           name="Category"
           placeholder="Select Category..."
-          v-model="form.category"
+          v-model="form.category_id"
         />
       </div>
       <div class="description_input py-2">
         <CoreInputBox
           placeholder="Description"
-          @update:v-model="setDescription"
+          v-model="form.description"
         />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :options="wallet" name="Wallet" v-model="form.wallet" placeholder="Select Category" />
+        <CoreSelectBox :options="wallet" option-key="id" name="Wallet" v-model="form.wallet_id" placeholder="Select Category" />
       </div>
       <div class="repeat-transaction flex justify-between items-center py-3">
         <div class="text">
@@ -61,9 +62,10 @@
           </Switch>
         </div>
       </div>
-      <div class="save-button flex justify-end gap-x-5">
+      <div v-if="!incomeLoading" class="save-button flex justify-end gap-x-5">
         <button
           type="button"
+          @click="saveIncome"
           class="w-fit flex items-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
         >
           <Icon
@@ -74,6 +76,7 @@
         </button>
       </div>
     </div>
+    <MobileLoadingDots v-if="incomeLoading"/>
   </div>
 </template>
 
@@ -83,18 +86,15 @@ import { Switch } from "@headlessui/vue";
 const form = reactive({
   amount: 0,
   description: "",
-  category: "",
-  wallet: "",
+  category_id: "",
+  wallet_id: "",
   repeat: false,
+  type: "income"
 });
 
 const category = ref([]);
 const wallet = ref([]);
-
-const setDescription = (val) => {
-  form.description = val;
-};
-
+const incomeLoading = ref(false);
 onMounted( async() => {
   await fetchCategory();
   await fetchWallet();
@@ -131,4 +131,23 @@ const fetchWallet = async () => {
   }
 }
 
+const saveIncome = async () => {
+  incomeLoading.value = true;
+  try {
+    useFetch("/api/income/create", {
+      method: "POST",
+      body: form
+    })
+    if (form.repeat) {
+      resetForm();
+      // push notification 
+    } else {
+      navigateTo('/transaction')
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    incomeLoading.value = false;
+  }
+}
 </script>
