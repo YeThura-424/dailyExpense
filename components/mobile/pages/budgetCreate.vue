@@ -22,6 +22,7 @@
       <div class="category_select py-3">
         <CoreSelectBox
           :options="categories"
+          option-key="id"
           name="Category"
           placeholder="Select Category"
           v-model="form.category"
