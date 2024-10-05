@@ -26,8 +26,9 @@
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
-          :option="category"
+          :options="category"
           name="Category"
+          placeholder="Select Category..."
           v-model="form.category"
         />
       </div>
@@ -38,7 +39,7 @@
         />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :option="wallet" name="Wallet" v-model="form.wallet" />
+        <CoreSelectBox :options="wallet" name="Wallet" v-model="form.wallet" placeholder="Select Category" />
       </div>
       <div class="repeat-transaction flex justify-between items-center py-3">
         <div class="text">
@@ -79,7 +80,6 @@
 <script setup>
 import { Switch } from "@headlessui/vue";
 
-const router = useRouter();
 const form = reactive({
   amount: 0,
   description: "",
@@ -87,29 +87,48 @@ const form = reactive({
   wallet: "",
   repeat: false,
 });
+
+const category = ref([]);
+const wallet = ref([]);
+
 const setDescription = (val) => {
   form.description = val;
 };
+
+onMounted( async() => {
+  await fetchCategory();
+  await fetchWallet();
+})
 
 const backAction = () => {
   navigateTo('/#add')
 };
 
-const category = [
-  { name: "Category1", value: 1 },
-  { name: "Category2", value: 2 },
-  { name: "Category3", value: 3 },
-  { name: "Category4", value: 4 },
-  { name: "Category5", value: 5 },
-  { name: "Category6", value: 6 },
-];
+const fetchCategory = async() => {
+  try {
+    await useFetch("/api/category", {
+      method: "GET",
+      transform: (response) => {
+        console.log(response, 'budget category');
+        category.value = response.data?.data;
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
 
-const wallet = [
-  { name: "Wallet 1", value: 1 },
-  { name: "Wallet 2", value: 2 },
-  { name: "Wallet 3", value: 3 },
-  { name: "Wallet 4", value: 4 },
-  { name: "Wallet 5", value: 5 },
-  { name: "Wallet 6", value: 6 },
-];
+const fetchWallet = async () => {
+  try {
+    await useFetch("/api/wallet-type", {
+      method: "GET",
+      transform: (response) => {
+        wallet.value = response.data?.data
+      }
+    })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
 </script>
