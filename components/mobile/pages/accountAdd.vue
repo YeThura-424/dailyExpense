@@ -24,7 +24,7 @@
       </div>
       <div class="category_select py-3">
         <CoreSelectBox
-          :option="walletType.walletType"
+          :options="walletType.walletType"
           name="Category"
           v-model="form.wallet_type_id"
         />
@@ -57,6 +57,8 @@ const form = reactive({
 //wallet type
 const walletType = useWalletType();
 await walletType.getWalletType();
+
+console.log('wallet type', walletType.walletType)
 
 const backAction = () => {
   navigateTo('/account');

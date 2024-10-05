@@ -120,10 +120,10 @@ const fetchCategory = async() => {
 
 const fetchWallet = async () => {
   try {
-    await useFetch("/api/wallet-type", {
+    await useFetch("/api/wallet/user-wallet", {
       method: "GET",
       transform: (response) => {
-        wallet.value = response.data?.data
+        wallet.value = response.data?.user_wallet
       }
     })
   } catch (error) {
