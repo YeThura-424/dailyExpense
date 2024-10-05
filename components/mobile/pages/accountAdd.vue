@@ -25,6 +25,7 @@
       <div class="category_select py-3">
         <CoreSelectBox
           :options="walletType.walletType"
+          option-key="id"
           name="Category"
           v-model="form.wallet_type_id"
         />
