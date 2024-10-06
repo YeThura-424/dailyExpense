@@ -11,7 +11,7 @@
             class="category-section flex items-center justify-between border-b border-[#eee] px-4 py-4">
             <div class="flex items-center gap-x-3">
               <div class="category-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center">
-                <img class="w-12 h-12 object-cover" :src="category.icon ?? '/images/medical.png'" alt="" />
+                <img class="w-12 h-12 object-cover mix-blend-multiply" :src="category.icon ?? '/images/placeholder.png'" alt="" />
               </div>
               <div>
                 <h1 class="text-[#292B2D] text-xl font-medium">
@@ -62,7 +62,7 @@ const getCategory = async () => {
   loading.value = true;
   try {
     await category.getCategories();
-    categoryList.value = category.categories.data;
+    categoryList.value = category.categories;
     loading.value = false;
   } catch (error) {
     console.log(error)
