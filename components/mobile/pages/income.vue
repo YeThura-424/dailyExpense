@@ -20,7 +20,7 @@
       <div class="time-input-box">
         <CoreInputBox
           placeholder="Date"
-          @update:v-model="setDescription"
+          v-model="form.date"
           type="date"
         />
       </div>
@@ -84,6 +84,7 @@
 import { Switch } from "@headlessui/vue";
 
 const form = reactive({
+  date:"",
   amount: 0,
   description: "",
   category_id: "",
