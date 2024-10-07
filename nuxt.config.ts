@@ -4,8 +4,11 @@ export default defineNuxtConfig({
     apiSecret: process.env.X_API_TOKEN,
 
     public: {
-      url: process.env.API_URL || 'http://localhost:8000'
-    }
+      url: process.env.API_URL || "http://localhost:8000",
+    },
+  },
+  build: {
+    transpile: ["@vuepic/vue-datepicker"],
   },
   compatibilityDate: "2024-04-03",
   devtools: { enabled: false },

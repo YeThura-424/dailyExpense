@@ -18,11 +18,12 @@
     </div>
     <div class="income_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="time-input-box">
-        <CoreInputBox
+        <!-- <CoreInputBox
           placeholder="Date"
           v-model="form.date"
           type="date"
-        />
+        /> -->
+        <CoreDatePicker />
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
@@ -82,6 +83,7 @@
 
 <script setup>
 import { Switch } from "@headlessui/vue";
+
 
 const form = reactive({
   date:"",
