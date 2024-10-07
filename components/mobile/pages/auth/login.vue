@@ -70,6 +70,7 @@ const login = async () => {
   try {
     await authenticateUser(form); // call authenticateUser and pass the user object
     if (authenticated.value) {
+      useNuxtApp().$toast.success('Login Successful');
       router.push("/");
     } else {
       loading.value = false
@@ -77,6 +78,7 @@ const login = async () => {
 
       setTimeout(() => {
         loginError.value = false;
+        useNuxtApp().$toast.error('Error logging in');
       }, 2000);
     }
   } catch (error) {
