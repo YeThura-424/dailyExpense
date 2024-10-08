@@ -135,7 +135,6 @@ const fetchWallet = async () => {
 }
 
 const saveIncome = async () => {
-  console.log(form);
   incomeLoading.value = true;
   try {
     useFetch("/api/income/create", {
