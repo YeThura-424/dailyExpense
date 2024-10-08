@@ -23,7 +23,7 @@
           v-model="form.date"
           type="date"
         /> -->
-        <CoreDatePicker />
+        <CoreDatePicker v-model="form.date" />
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
@@ -135,6 +135,7 @@ const fetchWallet = async () => {
 }
 
 const saveIncome = async () => {
+  console.log(form);
   incomeLoading.value = true;
   try {
     useFetch("/api/income/create", {

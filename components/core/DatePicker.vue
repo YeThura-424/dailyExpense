@@ -14,12 +14,19 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
+const emit = defineEmits(['update:modelValue']);
 const date = ref(new Date());
 const datepicker = ref(null);
 const dateClicked = (date) => {
   console.log('clicked', date)
   // datepicker.value.closeMenu();
 }
+
+watch(() => date.value, (newDate) => {
+  emit('update:modelValue', newDate);
+})
+
+emit('update:modelValue', date.value);
 </script>
 
 <style>
