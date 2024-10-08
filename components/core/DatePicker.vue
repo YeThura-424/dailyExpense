@@ -3,9 +3,12 @@
         <VueDatePicker 
           ref="datepicker"
           v-model="date" 
+          auto-apply
           :enable-time-picker="false" 
+          :format="format"
           :max-date="new Date()"
           @date-update="dateClicked"
+           placeholder="Select Date"
         />
   </div>
 </template>
@@ -15,18 +18,28 @@ import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const emit = defineEmits(['update:modelValue']);
-const date = ref(new Date());
+const date = ref();
 const datepicker = ref(null);
+
 const dateClicked = (date) => {
   console.log('clicked', date)
-  // datepicker.value.closeMenu();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
+
+  const formatDate = `${day}-${month}-${year}`;
+  emit('update:modelValue', formatDate);
+
 }
 
-watch(() => date.value, (newDate) => {
-  emit('update:modelValue', newDate);
-})
+const format = (date) => {
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear();
 
-emit('update:modelValue', date.value);
+  return `${day}-${month}-${year}`;
+}
+
 </script>
 
 <style>
