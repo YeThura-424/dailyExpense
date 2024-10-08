@@ -1,6 +1,12 @@
 <template>
   <div class="date-picker-wrapper">
-        <VueDatePicker v-model="date" />
+        <VueDatePicker 
+          ref="datepicker"
+          v-model="date" 
+          :enable-time-picker="false" 
+          :max-date="new Date()"
+          @date-update="dateClicked"
+        />
   </div>
 </template>
 
@@ -8,14 +14,19 @@
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
 
-const date = ref(null);
+const date = ref(new Date());
+const datepicker = ref(null);
+const dateClicked = (date) => {
+  console.log('clicked', date)
+  // datepicker.value.closeMenu();
+}
 </script>
 
 <style>
 .dp__input{
   height: 56px;
-  padding: 0;
-  margin: 0;
+  font-size: 20px;
+  color: #9ca3b7;
   border: 1px solid #91919f;
   border-radius: 0.75rem;
 }
