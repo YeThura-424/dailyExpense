@@ -46,9 +46,14 @@ const format = (date) => {
 .dp__input{
   height: 56px;
   font-size: 20px;
+  /* margin-left: 15px; */
   color: #9ca3b7;
   border: 1px solid #91919f;
   border-radius: 0.75rem;
+}
+
+.dp__input_icon_pad {
+  padding-inline-start: 45px;
 }
 
 .dp__input_icons{

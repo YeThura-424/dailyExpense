@@ -18,11 +18,6 @@
     </div>
     <div class="income_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="time-input-box">
-        <!-- <CoreInputBox
-          placeholder="Date"
-          v-model="form.date"
-          type="date"
-        /> -->
         <CoreDatePicker v-model="form.date" />
       </div>
       <div class="category_select py-2">
@@ -98,6 +93,7 @@ const form = reactive({
 const category = ref([]);
 const wallet = ref([]);
 const incomeLoading = ref(false);
+
 onMounted( async() => {
   await fetchCategory();
   await fetchWallet();
@@ -111,6 +107,9 @@ const fetchCategory = async() => {
   try {
     await useFetch("/api/category", {
       method: "GET",
+      params: {
+        type: 'income'
+      },
       transform: (response) => {
         console.log(response, 'budget category');
         category.value = response.data?.data;
@@ -143,7 +142,7 @@ const saveIncome = async () => {
     })
     if (form.repeat) {
       resetForm();
-      // push notification 
+      useNuxtApp().$toast.success("Income Record Created Successfully");
     } else {
       navigateTo('/transaction')
     }
@@ -153,4 +152,7 @@ const saveIncome = async () => {
     incomeLoading.value = false;
   }
 }
+
+fetchWallet();
+fetchCategory();
 </script>
