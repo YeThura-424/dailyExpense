@@ -99,6 +99,13 @@ onMounted( async() => {
   await fetchWallet();
 })
 
+const resetForm = () => {
+  form.date = "",
+  form.amount = 0,
+  form.description = "",
+  form.repeat = false
+}
+
 const backAction = () => {
   navigateTo('/#add')
 };
