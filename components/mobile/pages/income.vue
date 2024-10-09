@@ -79,7 +79,7 @@
 <script setup>
 import { Switch } from "@headlessui/vue";
 
-
+const router = useRouter();
 const form = reactive({
   date:"",
   amount: 0,
@@ -107,7 +107,7 @@ const resetForm = () => {
 }
 
 const backAction = () => {
-  navigateTo('/#add')
+  router.back();
 };
 
 const fetchCategory = async() => {

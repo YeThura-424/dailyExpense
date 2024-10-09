@@ -18,28 +18,25 @@
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="time-input-box">
-        <CoreInputBox
-          placeholder="Date"
-          @update:v-model="setDescription"
-          type="date"
-        />
+        <CoreDatePicker v-model="form.date" />
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
           :options="category"
+          option-key="id"
           name="Category"
           placeholder="Select Category"
-          v-model="form.category"
+          v-model="form.category_id"
         />
       </div>
       <div class="description_input py-2">
         <CoreInputBox
           placeholder="Description"
-          @update:v-model="setDescription"
+          v-model="form.description"
         />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox placeholder="Select Wallet" :options="wallet" name="Wallet" v-model="form.wallet" />
+        <CoreSelectBox placeholder="Select Wallet" :options="wallet" option-key="id" name="Wallet" v-model="form.wallet_id" />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
@@ -65,6 +62,7 @@
       <div class="save-button flex justify-end gap-x-5">
         <button
           type="button"
+          @click="saveExpense"
           class="w-fit flex items-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
         >
           <Icon
@@ -75,6 +73,7 @@
         </button>
       </div>
     </div>
+    <MobileLoadingDots v-if="expenseLoading"/>
   </div>
 </template>
 
@@ -83,29 +82,35 @@ import { Switch } from "@headlessui/vue";
 
 const router = useRouter();
 const form = reactive({
+  date: "",
   amount: 0,
   description: "",
-  category: "",
-  wallet: "",
+  category_id: "",
+  wallet_id: "",
   repeat: false,
+  type: "expend"
 });
+const expenseLoading = ref(false)
 const wallet = ref([]);
 const category = ref([])
-const setDescription = (val) => {
-  form.description = val;
-};
+
+onMounted(async() => {
+  await fetchCategory();
+  await fetchWallet();
+})
 
 const backAction = () => {
-  // router.back();
-  navigateTo('/#add')
+  router.back();
 };
 
 const fetchCategory = async() => {
   try {
     await useFetch("/api/category", {
       method: "GET",
+      params: {
+        type: "expend"
+      },
       transform: (response) => {
-        console.log(response, 'budget category');
         category.value = response.data?.data;
       }
     })
@@ -116,16 +121,37 @@ const fetchCategory = async() => {
 
 const fetchWallet = async () => {
   try {
-    await useFetch("/api/wallet-type", {
+    await useFetch("/api/wallet/user-wallet", {
       method: "GET",
       transform: (response) => {
-        wallet.value = response.data?.data
+        wallet.value = response.data?.user_wallet
       }
     })
   } catch (error) {
     console.error(error)
   }
 }
+
+const saveExpense = async () => {
+  expenseLoading.value = true;
+  try {
+    useFetch("/api/expend/create", {
+      method: "POST",
+      body: form
+    })
+    if (form.repeat) {
+      resetForm();
+      useNuxtApp().$toast.success("Expend Record Created Successfully");
+    } else {
+      navigateTo('/transaction')
+    }
+  } catch (error) {
+    console.log(error)
+  } finally {
+    expenseLoading.value = false;
+  }
+}
+
 fetchWallet();
 fetchCategory();
 </script>
