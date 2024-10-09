@@ -1,10 +1,10 @@
 <template>
   <div
     :class="[
-      'select-box-wrapper w-full relative',
+      'select-box-wrapper w-full',
     ]"
   >
-    <div ref="selectTrigger" :class="['input-wrapper h-14',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
+    <div ref="selectTrigger" :class="['input-wrapper h-14 relative',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
       <input
         v-model="selectedOption.value"
         id="select-box"
@@ -17,7 +17,7 @@
     <div
       v-if="isSelectOptionOpen"
       ref="dropdownMenu"
-      class="z-20 group w-full"
+      class="z-20 group w-full mt-1"
     >
       <div class="">
         <ul
@@ -88,27 +88,7 @@ let popperInstance = null;  // To store the Popper.js instance
 
 const openSelectOption = () => {
   isSelectOptionOpen.value = !isSelectOptionOpen.value;
-
-  // If opening the dropdown, create the popper instance
-  if (isSelectOptionOpen.value && selectTrigger.value && dropdownMenu.value) {
-    popperInstance = createPopper(selectTrigger.value, dropdownMenu.value, {
-      placement: 'top',
-      modifiers: [
-      {
-        name: 'offset',
-        options: {
-          offset: [0, 8]
-        }
-      }
-    ]
-    });
-  } else {
-    // If closing the dropdown, destroy the popper instance
-    if (popperInstance) {
-      popperInstance.destroy();
-      popperInstance = null;
-    }
-  }
+  
 };
 
 watch(
