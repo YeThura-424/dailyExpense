@@ -103,6 +103,14 @@ const backAction = () => {
   router.back();
 };
 
+const resetForm = () => {
+  form.date = "",
+  form.amount = 0,
+  form.description = "",
+  form.repeat = false
+}
+
+
 const fetchCategory = async() => {
   try {
     await useFetch("/api/category", {
