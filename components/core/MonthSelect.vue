@@ -28,13 +28,13 @@
               v-slot="{ active, selected }"
               v-for="month in months"
               :key="month.name"
-              :value="month.value"
+              :value="month"
               as="template"
             >
               <li
                 :class="[
                   active ? 'bg-amber-100 text-amber-900' : 'text-gray-900',
-                  'relative cursor-default select-none py-2 pl-10 pr-4',
+                  'relative cursor-default select-none py-2 pl-2 pr-4',
                 ]"
               >
                 <span
@@ -75,6 +75,5 @@ const props = defineProps({
     required: true,
   },
 });
-
 const selectedMonth = ref(props.months[0]);
 </script>
