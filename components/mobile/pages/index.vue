@@ -125,5 +125,16 @@ const rawYear = ref([
   { id: 1, name: 2024, value: 2024}
 ])
 const selectedMonth = ref(null);
+const selectedYear = ref(null);
 
+const getIncomeExpense = async () => {
+  await useFetch('api/income-expend', {
+    method: "GET",
+    params: {
+      month: 10,
+      year: 2024
+    }
+  })
+}
+getIncomeExpense();
 </script>
