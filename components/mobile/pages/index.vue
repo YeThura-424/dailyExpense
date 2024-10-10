@@ -11,8 +11,11 @@
               alt=""
             />
           </div>
+          <div class="year_select">
+            <CoreMonthSelect v-model="selectedYear" :months="rawYear"/>
+          </div>
           <div class="month_select">
-            <CoreMonthSelect :months="months" />
+            <CoreMonthSelect v-model="selectedMonth" :months="rawMonth"/>
           </div>
           <div class="notification">
             <svg
@@ -112,23 +115,15 @@
       </div>
       <!-- recent transaction section ends here  -->
     </div>
-    <!-- <MobileMainNav /> -->
   </div>
 </template>
 
 <script setup>
-const months = [
-  { name: "January", value: 1 },
-  { name: "Febuary", value: 2 },
-  { name: "March", value: 3 },
-  { name: "Apirl", value: 4 },
-  { name: "May", value: 5 },
-  { name: "June", value: 6 },
-  { name: "July", value: 7 },
-  { name: "Augest", value: 8 },
-  { name: "September", value: 9 },
-  { name: "October", value: 10 },
-  { name: "November", value: 11 },
-  { name: "December", value: 12 },
-];
+
+const rawMonth = computed(() => getPreviousMonth());
+const rawYear = ref([
+  { id: 1, name: 2024, value: 2024}
+])
+const selectedMonth = ref(null);
+
 </script>
