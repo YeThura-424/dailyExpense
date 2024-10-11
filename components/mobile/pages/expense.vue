@@ -18,7 +18,7 @@
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="time-input-box">
-        <CoreDatePicker v-model="form.date" />
+        <CoreDatePicker v-model="form.action_date" />
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
@@ -82,7 +82,7 @@ import { Switch } from "@headlessui/vue";
 
 const router = useRouter();
 const form = reactive({
-  date: "",
+  action_date: "",
   amount: 0,
   description: "",
   category_id: "",
@@ -104,7 +104,7 @@ const backAction = () => {
 };
 
 const resetForm = () => {
-  form.date = "",
+  form.action_date = "",
   form.amount = 0,
   form.description = "",
   form.repeat = false
