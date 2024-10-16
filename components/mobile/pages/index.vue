@@ -12,10 +12,10 @@
             />
           </div>
           <div class="year_select">
-            <CoreMonthSelect v-model="selectedYear" :months="rawYear"/>
+            <CoreMonthSelect v-model="selectedDate.year" :months="rawYear"/>
           </div>
           <div class="month_select">
-            <CoreMonthSelect v-model="selectedMonth" :months="rawMonth"/>
+            <CoreMonthSelect v-model="selectedDate.month" :months="rawMonth"/>
           </div>
           <div class="notification">
             <svg
@@ -124,8 +124,11 @@ const rawMonth = computed(() => getPreviousMonth());
 const rawYear = ref([
   { id: 1, name: 2024, value: 2024}
 ])
-const selectedMonth = ref(null);
-const selectedYear = ref(null);
+
+const selectedDate = reactive({
+  year: null,
+  month: null
+})
 
 const getIncomeExpense = async (year, month) => {
   await useFetch('api/income-expend', {
@@ -136,5 +139,9 @@ const getIncomeExpense = async (year, month) => {
     }
   })
 }
-getIncomeExpense(selectedYear.value, selectedMonth.value);
+
+watch(() => selectedDate, (updateDate) => {
+  console.log(updateDate);
+  getIncomeExpense(updateDate.year.value, updateDate.month.id);
+}, {deep: true})
 </script>

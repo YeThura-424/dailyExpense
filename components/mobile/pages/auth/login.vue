@@ -3,10 +3,6 @@
   <div class="login-wrapper px-6 py-4">
     <MobilePageHeader title="Login" :show-back="false" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
-      <div class="error-section text-center bg-red-100 p-1 rounded-md" v-if="loginError">
-        <p class="text-lg text-red-600 font-semibold">Error occured during logging in</p>
-        <h1 class="text-lg text-red-600 font-semibold">Please Try Again!!</h1>
-      </div>
       <div class="username py-3">
         <CoreInputBox placeholder="Email" type="email" v-model="form.email" />
       </div>
@@ -75,11 +71,7 @@ const login = async () => {
     } else {
       loading.value = false
       loginError.value = true;
-
-      setTimeout(() => {
-        loginError.value = false;
-        useNuxtApp().$toast.error('Error logging in');
-      }, 2000);
+      useNuxtApp().$toast.error('Error logging in');
     }
   } catch (error) {
     console.log(error)
