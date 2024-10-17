@@ -103,4 +103,23 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
 
 const title = ["Today", "Week", "Month", "Year"];
+
+const fetchTransaction = async (filters = {} ) => {
+  const { today, week, month, year } = filters;
+
+  await useFetch('/api/income/list', {
+    method: 'GET',
+    params: {
+      today: today || [],
+      week: week || [],
+      month: month || [],
+      year: year || [],
+    },
+    transform: (response) => {
+      transaction.value = response?.data?.data;
+    }
+  })
+}
+
+fetchTransaction();
 </script>

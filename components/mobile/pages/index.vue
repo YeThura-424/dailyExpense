@@ -44,18 +44,25 @@
         </div>
         <div class="income_expense flex justify-between gap-x-4">
           <div
-            v-for="data in accountData.transaction" :key="data"
-            :class="['income flex items-center gap-x-3 p-3 rounded-2xl w-full',
-              data.type == 'income' ? 'bg-[#00A86B]' : 'bg-[#FD3C4A]'
-            ]"
+            class="income flex items-center gap-x-3 bg-[#00A86B] p-3 rounded-2xl w-full"
           >
             <div class="income_icon">
-              <IconHomeIncome v-if="data.type == 'income'"/>
-              <IconHomeExpense v-else/>
+              <IconHomeIncome/>
             </div>
             <div class="income_text text-white">
-              <span class="text-lg"> {{ data.type == 'income' ? 'Income' : 'Expense' }}</span>
-              <h1 class="text-xl">{{ data.amount }} Ks</h1>
+              <span class="text-lg">Income</span>
+              <h1 class="text-xl">$ {{ accountData?.income?.amount ?? 0 }}</h1>
+            </div>
+          </div>
+          <div
+            class="expense flex items-center gap-x-3 bg-[#FD3C4A] p-3 rounded-2xl w-full"
+          >
+            <div class="expense_icon">
+              <IconHomeExpense/>
+            </div>
+            <div class="expense_text text-white">
+              <span class="text-lg">Expense</span>
+              <h1 class="text-xl">$ {{ accountData?.expend?.amount ?? 0 }}</h1>
             </div>
           </div>
         </div>
@@ -93,7 +100,6 @@ const getIncomeExpense = async (year, month) => {
       month: month
     },
     transform: (response) => {
-      console.log(response.data);
       accountData.value = response.data?.data;
     }
   })
