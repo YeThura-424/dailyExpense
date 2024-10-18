@@ -2,7 +2,11 @@
   <div class="bg-[#FD3C4A]">
     <div class="expense_main_content px-6 py-4">
       <div class="expense_header">
-        <MobilePageHeader title="Expense" icon-color="text-white" @back="backAction" />
+        <MobilePageHeader
+          title="Expense"
+          icon-color="text-white"
+          @back="backAction"
+        />
       </div>
       <div class="expense_amount text-white pt-40">
         <span class="text-lg">How Much ?</span>
@@ -17,7 +21,7 @@
       </div>
     </div>
     <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
-      <div class="time-input-box">
+      <div class="time-input-box py-2">
         <CoreDatePicker v-model="form.action_date" />
       </div>
       <div class="category_select py-2">
@@ -30,13 +34,16 @@
         />
       </div>
       <div class="description_input py-2">
-        <CoreInputBox
-          placeholder="Description"
-          v-model="form.description"
-        />
+        <CoreInputBox placeholder="Description" v-model="form.description" />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox placeholder="Select Wallet" :options="wallet" option-key="id" name="Wallet" v-model="form.wallet_id" />
+        <CoreSelectBox
+          placeholder="Select Wallet"
+          :options="wallet"
+          show-amount
+          name="Wallet"
+          v-model="selectedWallet"
+        />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
@@ -73,7 +80,7 @@
         </button>
       </div>
     </div>
-    <MobileLoadingDots v-if="expenseLoading"/>
+    <MobileLoadingDots v-if="expenseLoading" />
   </div>
 </template>
 
@@ -81,6 +88,7 @@
 import { Switch } from "@headlessui/vue";
 
 const router = useRouter();
+const selectedWallet = ref([]);
 const form = reactive({
   action_date: "",
   amount: 0,
@@ -88,77 +96,91 @@ const form = reactive({
   category_id: "",
   wallet_id: "",
   repeat: false,
-  type: "expend"
+  type: "expend",
 });
-const expenseLoading = ref(false)
+const expenseLoading = ref(false);
 const wallet = ref([]);
-const category = ref([])
+const category = ref([]);
 
-onMounted(async() => {
+onMounted(async () => {
   await fetchCategory();
   await fetchWallet();
-})
+});
+
+watch(
+  () => selectedWallet.value,
+  (newWallet) => {
+    form.wallet_id = newWallet.id;
+  }
+);
 
 const backAction = () => {
   router.back();
 };
 
 const resetForm = () => {
-  form.action_date = "",
-  form.amount = 0,
-  form.description = "",
-  form.repeat = false
-}
+  (form.action_date = ""),
+    (form.amount = 0),
+    (form.description = ""),
+    (form.repeat = false);
+};
 
-
-const fetchCategory = async() => {
+const fetchCategory = async () => {
   try {
     await useFetch("/api/category", {
       method: "GET",
       params: {
-        type: "expend"
+        type: "expend",
       },
       transform: (response) => {
         category.value = response.data?.data;
-      }
-    })
+      },
+    });
   } catch (error) {
     console.log(error);
   }
-}
+};
 
 const fetchWallet = async () => {
   try {
     await useFetch("/api/wallet/user-wallet", {
       method: "GET",
       transform: (response) => {
-        wallet.value = response.data?.user_wallet
-      }
-    })
+        wallet.value = response.data?.user_wallet;
+      },
+    });
   } catch (error) {
-    console.error(error)
+    console.error(error);
   }
-}
+};
 
 const saveExpense = async () => {
-  expenseLoading.value = true;
-  try {
-    useFetch("/api/expend/create", {
-      method: "POST",
-      body: form
-    })
-    if (form.repeat) {
-      resetForm();
-      useNuxtApp().$toast.success("Expend Record Created Successfully");
-    } else {
-      navigateTo('/transaction')
+  if (form.amount > selectedWallet.value.amount) {
+    useNuxtApp().$toast.error(
+      "Expense amount cannot be greater than wallet amount!", {
+        pauseOnFocusLoss: false
+      }
+    );
+  } else {
+    expenseLoading.value = true;
+    try {
+      useFetch("/api/expend/create", {
+        method: "POST",
+        body: form,
+      });
+      if (form.repeat) {
+        resetForm();
+        useNuxtApp().$toast.success("Expend Record Created Successfully");
+      } else {
+        navigateTo("/transaction");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      expenseLoading.value = false;
     }
-  } catch (error) {
-    console.log(error)
-  } finally {
-    expenseLoading.value = false;
   }
-}
+};
 
 fetchWallet();
 fetchCategory();

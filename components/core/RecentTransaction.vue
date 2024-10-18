@@ -1,27 +1,23 @@
 <template>
-  <div class="w-full max-w-md">
-    <TabGroup>
-      <TabList class="flex justify-between space-x-1 rounded-xl p-1">
-        <Tab
-          v-for="(data, index) in title"
-          :key="index"
-          as="template"
-          v-slot="{ selected }"
-          @click="changeTab(data)"
-        >
-          <button
+  <div class="transaction-wrapper">
+    <div class="transaction-tab-wrapper">
+      <div class="tabs-content flex justify-between space-x-1 rounded-xl p-1">
+        <button
+          v-for="tab in tabs" :key="tab.key"
+          @click="changeTab(tab.key)"
             :class="[
               'px-3 rounded-2xl py-2 text-base font-medium leading-5 ',
               'ring-white/60 ring-offset-2 ring-offset-none focus:outline-none',
-              selected
+              activeTab == tab.key
                 ? 'bg-[#FCEED4] text-[#FCAC12] shadow'
                 : 'text-[#91919F] hover:bg-white/[0.12] hover:text-white',
             ]"
           >
-            {{ data }}
+            {{ tab.name }}
           </button>
-        </Tab>
-      </TabList>
+      </div>
+    </div>
+    <div class="transaction-title-section">
       <div class="filter-head flex justify-between items-center pt-2">
         <h1 class="text-xl font-semibold text-[#292B2D]">Filter Transaction</h1>
         <NuxtLink to="/transaction">
@@ -32,14 +28,9 @@
           </button>
         </NuxtLink>
       </div>
-      <TabPanels class="mt-2">
-        <TabPanel
-          :class="[
-            'rounded-xl',
-            'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2',
-          ]"
-        >
-          <div v-if="transactions.length > 0" class="transaction_list pt-2">
+    </div>
+    <div class="transaction-tab-content">
+      <div v-if="transactions.length > 0" class="transaction_list pt-2">
             <div v-for="transaction in transactions" :key="transaction.id"
               class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
             >
@@ -68,40 +59,40 @@
           <div v-else class="empty-transactions">
             <h1 class="text-center py-8">No Transaction for selected criteria!</h1>
           </div>
-        </TabPanel>
-      </TabPanels>
-    </TabGroup>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from "@headlessui/vue";
-
-const title = ["Today", "Week", "Month", "Year"];
-
+const tabs = [
+  { name: 'Today', key: 'today' },
+  { name: 'Week', key: 'week' },
+  { name: 'Month', key: 'month' },
+  { name: 'Year', key: 'year' },
+]
 const transactions = ref([]);
+const activeTab = ref(tabs[0].key);
 
 const changeTab = (tab) => {
-  transactions.value = []
-  fetchTransaction({tab})
+  activeTab.value = tab
+  fetchTransaction()
 }
 
-const fetchTransaction = async (filters = {} ) => {
-  const { today, week, month, year } = filters;
-
+const fetchTransaction = async () => {
+  const filterParams = {
+    today: activeTab.value === 'today',
+    week: activeTab.value === 'week',
+    month: activeTab.value === 'month',
+    year: activeTab.value === 'year',
+  };
   await useFetch('/api/income/list', {
     method: 'GET',
-    params: {
-      today: today || [],
-      week: week || [],
-      month: month || [],
-      year: year || [],
-    },
+    params: filterParams,
     transform: (response) => {
       transactions.value = response?.data?.data;
     }
   })
 }
 
-fetchTransaction({today: 'today'});
+fetchTransaction();
 </script>
