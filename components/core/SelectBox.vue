@@ -4,6 +4,10 @@
       'select-box-wrapper w-full',
     ]"
   >
+    <div v-if="showAmount && amount" class="amount flex justify-between px-2 text-sm">
+      <p class="font-normal text-[#91919F]">Wallet Balance</p>
+      <p class="font-medium text-[#FD3C4A]">{{ amount }} Ks</p>
+    </div>
     <div ref="selectTrigger" :class="['input-wrapper h-14 relative',isSelectOptionOpen ? 'active' : '']" @click="openSelectOption">
       <input
         v-model="selectedOption.value"
@@ -70,6 +74,10 @@ const props = defineProps({
   placeholder: {
     type: String,
     default: "Select something..."
+  },
+  showAmount: {
+    type: Boolean,
+    default: false,
   }
 });
 
@@ -77,7 +85,7 @@ const emit = defineEmits(["update:modelValue"]);
 
 const isSelectOptionOpen = ref(false);
 const selectTrigger = ref(null);  // Reference to the input
-
+const amount = ref(null);
 const selectedOption = reactive({
   key: [],
   value: [],
@@ -106,6 +114,10 @@ const setOptionValue = (list) => {
     selectedOption.key = list[props.optionKey];
   } else {
     selectedOption.key = list;
+  }
+
+  if (props.showAmount) {
+    amount.value = list.amount
   }
 };
 
