@@ -276,10 +276,20 @@ const closeFilterDialog = (value) => {
   openFilter.value = value;
 };
 
-const category = [
-  { name: "Food", value: 1 },
-  { name: "Shopping", value: 2 },
-  { name: "Salary", value: 3 },
-  { name: "Cosmetic", value: 4 },
-];
+// fetch transaction (income expend)
+const fetchTransaction = async (page = 1) => {
+  await useFetch('/api/income/list', {
+    method: 'GET',
+    params: {
+      page: page,
+      perpage: 15
+    },
+    transform: (response) => {
+      transactions.value = response?.data?.data;
+    }
+  })
+}
+
+fetchTransaction();
+
 </script>
