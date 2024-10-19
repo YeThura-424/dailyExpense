@@ -266,7 +266,13 @@ const transaction_type = [
 
 const filterBy = ref("income");
 const sortBy = ref("highest");
-
+const transactions = ref([]);
+// const groupedTransactions = ref([]);
+const groupedTransactions = {
+    "Today": [],
+    "Yesterday": [],
+    // For other specific dates
+};
 const openFilter = ref(false);
 const openFilterDialog = () => {
   openFilter.value = true;
@@ -275,6 +281,11 @@ const openFilterDialog = () => {
 const closeFilterDialog = (value) => {
   openFilter.value = value;
 };
+
+// Get today's and yesterday's date
+const today = new Date();
+const yesterday = new Date();
+yesterday.setDate(today.getDate() - 1);
 
 // fetch transaction (income expend)
 const fetchTransaction = async (page = 1) => {
@@ -286,8 +297,30 @@ const fetchTransaction = async (page = 1) => {
     },
     transform: (response) => {
       transactions.value = response?.data?.data;
+      groupByDay(transactions.value);
+      // console.log(groupedTransactions.value)
+      console.log(transactions.value);
     }
   })
+}
+
+const groupByDay = (data) => {
+  data.map((list) => {
+    const transactionDate = formatDate(list.created_at);
+    if (isSameDate(transactionDate, today)) {
+        groupedTransactions["Today"].push(list);
+    } else if (isSameDate(transactionDate, yesterday)) {
+        groupedTransactions["Yesterday"].push(list);
+    } else {
+        const dateKey = list.created_at.split(" ")[0]; // get date part from created_at
+        if (!groupedTransactions[dateKey]) {
+            groupedTransactions[dateKey] = [];
+        }
+        groupedTransactions[dateKey].push(list);
+    }
+  })
+
+  console.log('groupedTransaction', groupTransactions);
 }
 
 fetchTransaction();
