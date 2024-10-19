@@ -19,3 +19,16 @@ export const getPreviousMonth = () => {
 
   return previousMonths;
 }
+
+export const formatDate = (dateString) => {
+  const parts = dateString.split(" ")[0].split("-");
+  return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+};
+
+export const isSameDate = (date1, date2) => {
+  return (
+    date1.getDate() === date2.getDate() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getFullYear() === date2.getFullYear()
+  );
+};
