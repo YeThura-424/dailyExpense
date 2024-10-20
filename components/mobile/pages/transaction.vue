@@ -51,63 +51,59 @@
       <!-- transaction list  -->
       <div v-if="!transactionLoading" class="transaction_list_warpper">
         <div
-          v-for="(transaction, key) in transactions"
-          :key="transaction"
+          v-for="(transactions, key) in transactions"
+          :key="key"
           class="py-2"
         >
           <h1 class="font-semibold text-lg">{{ dayToName(key) }}</h1>
           <div class="transaction_list pt-2">
             <div
-              class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
-            >
-              <div class="transaction_type flex gap-x-4">
-                <div class="transaction_list_icon">
-                  <img src="/images/transaction_list.svg" />
-                </div>
-                <div class="transaction_list_desctiption">
-                  <h1 class="font-semibold text-lg text-[#292B2D]">Shopping</h1>
-                  <span class="text-sm text-[#91919F]">Buy Some grocery</span>
-                </div>
-              </div>
-              <div class="transaction_list_amount text-right">
-                <h1 class="font-semibold text-lg text-[#FD3C4A]">$-120</h1>
-                <span class="text-sm text-[#91919F]">10:00AM</span>
-              </div>
-            </div>
+          v-for="transaction in transactions"
+          :key="transaction.id"
+          class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
+        >
+          <div class="transaction_type flex gap-x-4">
             <div
-              class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
+              :class="[
+                'transaction_list_icon w-14 h-14 flex justify-center items-center rounded-xl',
+                transaction.type == 'expend' ? 'bg-[#FDD5D7]' : 'bg-[#CFFAEA] ',
+              ]"
             >
-              <div class="transaction_type flex gap-x-4">
-                <div class="transaction_list_icon">
-                  <img src="/images/transaction_list.svg" />
-                </div>
-                <div class="transaction_list_desctiption">
-                  <h1 class="font-semibold text-lg text-[#292B2D]">Shopping</h1>
-                  <span class="text-sm text-[#91919F]">Buy Some grocery</span>
-                </div>
-              </div>
-              <div class="transaction_list_amount text-right">
-                <h1 class="font-semibold text-lg text-[#FD3C4A]">$-120</h1>
-                <span class="text-sm text-[#91919F]">10:00AM</span>
+              <img
+                v-if="transaction.category.icon"
+                :src="transaction.category.icon"
+                class="w-full h-full rounded-xl"
+              />
+              <div v-else class="default-icon">
+                <IconHomeExpense
+                  v-if="transaction.type == 'expend'"
+                  fill="#FDD5D7"
+                />
+                <IconHomeIncome v-else fill="#CFFAEA" />
               </div>
             </div>
-            <div
-              class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2"
-            >
-              <div class="transaction_type flex gap-x-4">
-                <div class="transaction_list_icon">
-                  <img src="/images/transaction_list.svg" />
-                </div>
-                <div class="transaction_list_desctiption">
-                  <h1 class="font-semibold text-lg text-[#292B2D]">Shopping</h1>
-                  <span class="text-sm text-[#91919F]">Buy Some grocery</span>
-                </div>
-              </div>
-              <div class="transaction_list_amount text-right">
-                <h1 class="font-semibold text-lg text-[#FD3C4A]">$-120</h1>
-                <span class="text-sm text-[#91919F]">10:00AM</span>
-              </div>
+            <div class="transaction_list_desctiption">
+              <h1 class="font-semibold text-lg text-[#292B2D]">
+                {{ transaction.category.name }}
+              </h1>
+              <span class="text-sm text-[#91919F]">{{
+                transaction.description
+              }}</span>
             </div>
+          </div>
+          <div class="transaction_list_amount text-right">
+            <h1
+              v-if="transaction.type == 'expend'"
+              class="font-semibold text-lg text-[#FD3C4A]"
+            >
+              $-{{ transaction.amount }}
+            </h1>
+            <h1 v-else class="font-semibold text-lg text-[#00A86B]">
+              $+{{ transaction.amount }}
+            </h1>
+            <span class="text-sm text-[#91919F]">{{ transaction.time }}</span>
+          </div>
+        </div>
           </div>
         </div>
       </div>
