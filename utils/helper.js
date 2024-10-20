@@ -21,6 +21,9 @@ export const getPreviousMonth = () => {
 }
 
 export const formatDate = (dateString) => {
+  if (!dateString) {
+    return;
+  }
   const parts = dateString.split(" ")[0].split("-");
   return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
 };
@@ -32,3 +35,15 @@ export const isSameDate = (date1, date2) => {
     date1.getFullYear() === date2.getFullYear()
   );
 };
+
+export const dayToName = (rawDate) => {
+  console.log(rawDate)
+  const date = formatDate(rawDate);
+  const today = new Date();
+  const yesterday = new Date();
+  yesterday.setDate(today.getDate() - 1);
+
+  if (isSameDate(date, today)) return 'Today'
+  if (isSameDate(date, yesterday)) return 'Yesterday'
+  return date;
+}
