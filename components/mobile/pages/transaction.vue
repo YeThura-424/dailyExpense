@@ -2,7 +2,8 @@
   <div>
     <div class="px-4">
       <div class="flex justify-between items-center py-2">
-        <CoreMonthSelect :months="transaction_type" />
+        <!-- <CoreMonthSelect :months="transaction_type" /> -->
+        <h1 class="text-[#212325] text-base font-medium">Filter</h1>
         <div class="filter-icon" @click="openFilterDialog">
           <IconFilter />
         </div>
