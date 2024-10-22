@@ -161,17 +161,13 @@ const fetchTransaction = async (page = 1) => {
 // to group transactions with date
 const groupTransaction = (transactions) => {
   const groupedData = transactions.reduce((acc, item) => {
-    const date = item.created_at.split(" ")[0];
-
+    const date = item.action_date.split(" ")[0];
     if (!acc[date]) {
       acc[date] = [];
     }
-
     acc[date].push(item);
-
     return acc;
   }, {});
-
   return groupedData;
 };
 

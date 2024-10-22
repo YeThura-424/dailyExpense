@@ -38,7 +38,6 @@ export const isSameDate = (date1, date2) => {
 
 export const dayToName = (rawDate) => {
   const date = formatDate(rawDate);
-  console.log(date)
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
