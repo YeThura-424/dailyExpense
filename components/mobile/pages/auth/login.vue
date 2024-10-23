@@ -8,23 +8,13 @@
       </div>
 
       <div class="password py-3">
-        <CoreInputBox
-          placeholder="password"
-          type="password"
-          v-model="form.password"
-        />
+        <CoreInputBox placeholder="password" type="password" v-model="form.password" />
       </div>
 
       <div class="login py-3">
-        <button
-          @click="login"
-          type="button"
-          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
-        >
-          <Icon
-            name="ion:ios-log-in"
-            class="text-white text-2xl cursor-pointer"
-          />
+        <button @click="login" type="button"
+          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
+          <Icon name="ion:ios-log-in" class="text-white text-2xl cursor-pointer" />
           Login
         </button>
       </div>
@@ -57,8 +47,8 @@ const router = useRouter();
 const loginError = ref(false);
 
 const form = reactive({
-  email: "test@email.com",
-  password: "secret",
+  email: "john.doe@example.com",
+  password: "password123",
 });
 
 const login = async () => {
