@@ -46,3 +46,31 @@ export const dayToName = (rawDate) => {
   if (isSameDate(date, yesterday)) return 'Yesterday'
   return rawDate 
 }
+
+export const dateLocalString = (rawDate) => {
+
+const [datePart, timePart, period] = rawDate.split(' ');
+const [day, month, year] = datePart.split('-');
+let [hour, minute, second] = timePart.split(':');
+
+if (period.toLowerCase() === 'pm' && hour !== '12') {
+  hour = parseInt(hour, 10) + 12;
+} else if (period.toLowerCase() === 'am' && hour === '12') {
+  hour = '00';
+}
+
+const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+
+const options = { 
+  weekday: 'long', 
+  day: 'numeric', 
+  month: 'long', 
+  year: 'numeric', 
+  hour: '2-digit', 
+  minute: '2-digit',
+  hour12: false 
+};
+
+// Format the date
+return date.toLocaleString('en-GB', options);
+}
