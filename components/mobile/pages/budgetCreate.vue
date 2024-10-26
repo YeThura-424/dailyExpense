@@ -8,7 +8,7 @@
         <span class="text-lg">How much do you want to spend ?</span>
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">$</span>
-          <input v-model="form.amount" type="text"
+          <input v-model="form.total" type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3" />
         </div>
       </div>
@@ -16,7 +16,7 @@
     <div class="budget_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="category_select py-3">
         <CoreSelectBox :options="categories" option-key="id" name="Category" placeholder="Select Category"
-          v-model="form.category" />
+          v-model="form.category_id" />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="save-button flex justify-end gap-x-5 py-3">
-        <button type="button"
+        <button type="button" @click="submit"
           class="w-full flex items-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
           <Icon name="ion:save-outline" class="text-white text-2xl cursor-pointer" />
           Continue
@@ -52,10 +52,11 @@
 import { Switch } from "@headlessui/vue";
 
 const form = reactive({
-  amount: 0,
-  category: "",
+  total: 0,
+  category_id: "",
   alert: false,
 });
+const budgetLoading = ref(false);
 
 const backAction = () => {
   navigateTo('/budget');
@@ -67,13 +68,28 @@ const fetchCategory = async () => {
   try {
     await useFetch("/api/category", {
       method: "GET",
+      params: {
+        type: 'expend'
+      },
       transform: (response) => {
-        console.log(response, 'budget category');
+        // console.log(response, 'budget category');
         categories.value = response.data?.data;
       }
     })
   } catch (error) {
     console.log(error);
+  }
+}
+
+const submit = async () => {
+  try {
+    const {data,error} = await $fetch('/api/budget/store', {
+      method: "POST",
+      body: form,
+    });
+
+  } catch (error) {
+    console.log(error.data.data.errors);
   }
 }
 
