@@ -57,6 +57,7 @@ const form = reactive({
   alert: false,
 });
 const budgetLoading = ref(false);
+const errors = ref(null);
 
 const backAction = () => {
   navigateTo('/budget');
@@ -83,15 +84,40 @@ const fetchCategory = async () => {
 
 const submit = async () => {
   try {
-    const {data,error} = await $fetch('/api/budget/store', {
+    const { data, error } = await $fetch('/api/budget/store', {
       method: "POST",
       body: form,
     });
+    
+    useNuxtApp().$toast.success('Budget Created Successful.');
+
+    setTimeout(() => {
+      navigateTo("/budget");
+    }, 2000);
 
   } catch (error) {
-    console.log(error.data.data.errors);
+
+    if (error.data && error.data.data && error.data.data.errors) {
+      errors.value = error.data.data.errors;
+      const errorMessages = Object.values(errors.value).flat();
+
+      if (Array.isArray(errorMessages) && errorMessages.length > 0) {
+        errorMessages.forEach((msg) => {
+          useNuxtApp().$toast.error(msg);
+        });
+      } else {
+        useNuxtApp().$toast.error('An unknown error occurred.');
+      }
+
+    }else if(error?.data?.data?.message){
+      useNuxtApp().$toast.error(error?.data?.data?.message);
+    } else {
+      useNuxtApp().$toast.error('An unexpected error occurred.');
+    }
+
   }
-}
+};
+
 
 fetchCategory();
 
