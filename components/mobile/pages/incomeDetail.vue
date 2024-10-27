@@ -9,23 +9,21 @@
         <p class="text-base py-2">{{ dateLocalString(incomeData.action_date) }}</p>
       </div>
       <div
-        class="expense-type-wrapper flex justify-between shadow-md bg-white rounded-lg py-4 px-6 absolute left-1/2 -translate-x-1/2 w-[90%] -bottom-12">
-        <div class="type text-center">
-          <p class="text-lg text-[#91919F]">Type</p>
+        class="expense-type-wrapper shadow-md bg-white flex items-center gap-x-4 rounded-lg py-4 px-6 absolute left-1/2 -translate-x-1/2 w-[90%] -bottom-[73px]">
+        <div class="type text-end w-1/3">
+          <p class="text-lg text-[#91919F]">Type : </p>
+          <p class="text-lg text-[#91919F]">Category : </p>
+          <p class="text-lg text-[#91919F]">Wallet : </p>
+        </div>
+        <div class="category text-start w-1/2">
           <h1 class="text-xl text-[#0D0E0F] font-semibold capitalize">{{ incomeData.type }}</h1>
-        </div>
-        <div class="category text-center">
-          <p class="text-lg text-[#91919F]">Category</p>
           <h1 class="text-xl text-[#0D0E0F] font-semibold">{{ incomeData.category.name }}</h1>
-        </div>
-        <div class="wallet text-center">
-          <p class="text-lg text-[#91919F]">Wallet</p>
           <h1 class="text-xl text-[#0D0E0F] font-semibold">{{ incomeData.wallet.name }}</h1>
         </div>
       </div>
     </div>
 
-    <div class="mx-3 pt-16 border-b-2 border-dashed border-slate-300"></div>
+    <div class="mx-3 pt-[85px] border-b-2 border-dashed border-slate-300"></div>
 
     <div class="main-info px-4">
       <div class="description py-3">
