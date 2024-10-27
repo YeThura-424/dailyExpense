@@ -3,15 +3,15 @@
     <MobilePageHeader title="Sign Up" text-color="text-black" :show-back="false" />
     <div class="login-form-wrapper pt-16">
       <div class="name py-3">
-        <CoreInputBox placeholder="Name" type="text" />
+        <CoreInputBox v-model="form.name" placeholder="Name" type="text" />
       </div>
 
       <div class="email py-3">
-        <CoreInputBox placeholder="Email" type="email" />
+        <CoreInputBox v-model="form.email" placeholder="Email" type="email" />
       </div>
 
       <div class="password py-3">
-        <CoreInputBox placeholder="Password" type="password" />
+        <CoreInputBox v-model="form.password" placeholder="Password" type="password" />
       </div>
 
       <div class="checkbox flex gap-x-2">
@@ -34,9 +34,20 @@
       <div class="sign-up-link text-center">
         <p class="text-base text-[#91919F]">
           Already have an account?
-          <span class="text-lg text-[#7F3DFF] font-medium">Login</span>
+          <NuxtLink to="/login">
+            <span class="text-lg text-[#7F3DFF] font-medium">Login</span>
+          </NuxtLink>
         </p>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+const form = reactive({
+  name: '',
+  email: '',
+  password: '',
+  currency: '',
+})
+</script>
