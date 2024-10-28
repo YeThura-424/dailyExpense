@@ -6,6 +6,10 @@
         <CoreInputBox v-model="form.name" placeholder="Name" type="text" />
       </div>
 
+      <div class="currency py-3">
+        <CoreSelectBox placeholder="Select Default Currency" :options="currency" show-icon />
+      </div>
+
       <div class="email py-3">
         <CoreInputBox v-model="form.email" placeholder="Email" type="email" />
       </div>
@@ -22,13 +26,11 @@
         </label>
       </div>
       <div class="sign-up py-3">
-        <nuxt-link to="/account/add">
-          <button type="button"
-            class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
-            <Icon name="ion:ios-log-in" class="text-white text-2xl cursor-pointer" />
-            Sign Up
-          </button>
-        </nuxt-link>
+        <button type="button"
+          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
+          <Icon name="ion:ios-log-in" class="text-white text-2xl cursor-pointer" />
+          Sign Up
+        </button>
       </div>
 
       <div class="sign-up-link text-center">
@@ -44,6 +46,12 @@
 </template>
 
 <script setup>
+
+const currency = ref([
+  { name: 'Ks', value: 'ks', icon: '/images/ks.png' },
+  { name: 'USD', value: 'usd', icon: '/images/dollar.png' },
+  { name: 'Baht', value: 'bhat', icon: '/images/baht.png' },
+])
 const form = reactive({
   name: '',
   email: '',
