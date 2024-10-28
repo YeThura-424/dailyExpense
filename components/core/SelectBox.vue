@@ -22,7 +22,7 @@
             class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-xl text-gray-900 dark:text-white hover:bg-gray-100 dark:bg-gray-900">
             <div class="flex items-center gap-1.5 min-w-0">
               <div v-if="showIcon && list?.icon"
-                class="w-12 h-12 bg-[#baa9da] rounded-full flex justify-center items-center ">
+                class="w-12 h-12 bg-[#eee5ff] rounded-full flex justify-center items-center ">
                 <img :src="list?.icon" alt="currency-icon" class="w-10 h-10">
               </div>
               <span class="truncate">{{ list.name }}</span>
