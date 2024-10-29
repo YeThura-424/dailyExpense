@@ -4,6 +4,7 @@
     <div class="login-form-wrapper pt-10">
       <div class="name py-3">
         <CoreInputBox v-model="form.name" placeholder="Name" type="text" />
+        <p v-if="validationError?.name" class="text-sm text-red-600 font-normal">{{ validationError.name[0] }}</p>
       </div>
 
       <div class="currency py-3">
@@ -12,10 +13,13 @@
 
       <div class="email py-3">
         <CoreInputBox v-model="form.email" placeholder="Email" type="email" />
+        <p v-if="validationError?.email" class="text-sm text-red-600 font-normal">{{ validationError.email[0] }}</p>
       </div>
 
       <div class="password py-3">
         <CoreInputBox v-model="form.password" placeholder="Password" type="password" />
+        <p v-if="validationError?.password" class="text-sm text-red-600 font-normal">{{ validationError.password[0] }}
+        </p>
       </div>
 
       <div class="password py-3">
@@ -64,18 +68,23 @@ const form = reactive({
   currency: '',
 })
 
+const validationError = ref(null)
+const token = useCookie("token");
+const user = useCookie("user");
+
 const signup = async () => {
-  const { data } = await useFetch("/api/register", {
+  const { data, status, error } = await useFetch("/api/register", {
     method: 'POST',
     body: form,
-    transform: (response) => {
-      return response
-    }
   });
-
-  if (data.success) {
-    console.log(data);
+  if (status.value == 'success') {
+    token.value = data?.value?.data?.token; // set token to cookie
+    user.value = data?.value?.data?.user;
+    navigateTo('/');
   }
 
+  if (error.value) {
+    validationError.value = error.value?.data?.data?.errors;
+  }
 }
 </script>
