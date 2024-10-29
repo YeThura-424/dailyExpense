@@ -1,7 +1,7 @@
 <template>
   <div class="login-wrapper px-6 py-4">
     <MobilePageHeader title="Sign Up" text-color="text-black" :show-back="false" />
-    <div class="login-form-wrapper pt-16">
+    <div class="login-form-wrapper pt-10">
       <div class="name py-3">
         <CoreInputBox v-model="form.name" placeholder="Name" type="text" />
       </div>
@@ -19,7 +19,7 @@
       </div>
 
       <div class="password py-3">
-        <CoreInputBox v-model="form.confirm_password" placeholder="Confirm Password" type="password" />
+        <CoreInputBox v-model="form.password_confirmation" placeholder="Confirm Password" type="password" />
       </div>
 
       <div class="checkbox flex gap-x-2">
@@ -60,7 +60,7 @@ const form = reactive({
   name: '',
   email: '',
   password: '',
-  confirm_password: '',
+  password_confirmation: '',
   currency: '',
 })
 
@@ -69,10 +69,13 @@ const signup = async () => {
     method: 'POST',
     body: form,
     transform: (response) => {
-      console.log(response);
+      return response
     }
   });
 
-  console.log(data);
+  if (data.success) {
+    console.log(data);
+  }
+
 }
 </script>
