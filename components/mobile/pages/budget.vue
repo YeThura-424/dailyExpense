@@ -15,6 +15,7 @@
       <MobileBudgetEmptyState v-if="false" />
       <!-- budget listing  -->
       <div class="budget-listing">
+        <pre>{{budgets}}</pre>
         <MobileBudgetListingCard :budgets="budgets" />
       </div>
       <div class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2">
@@ -69,7 +70,7 @@ const getBudgets = async () => {
       'per_page': 15
     },
     transform:(response)=>{
-      budgets.value = response.data.data.data;
+      budgets.value = response?.data?.data;
     }
   });
 }
