@@ -46,35 +46,35 @@ const months = [
   "December",
 ];
 
-const budgets = [
-  {
-    category: "Shopping",
-    limit: 1200,
-    spent: 550,
-  },
-  {
-    category: "Food",
-    limit: 800,
-    spent: 750,
-  },
-  {
-    category: "Cosmetic",
-    limit: 1500,
-    spent: 1800,
-  },
-];
+const budgets = ref([]);
 
 const budgetCarousel = ref(null);
+const date = new Date();
+const currentMonth = date.getMonth();
+const currentYear = date.getUTCFullYear();
 onMounted(() => {
-  const date = new Date();
-  const currentMonth = date.getMonth();
-
   if (budgetCarousel.value && budgetCarousel.value.slideTo) {
     budgetCarousel.value.slideTo(currentMonth);
   } else {
     console.error("slideTo method not found on the carousel instance.");
   }
 });
+
+const getBudgets = async () => {
+  await useFetch('/api/budget/user-budget',{
+    method:'GET',
+    params: {
+      'month':currentMonth+1,
+      'year': currentYear,
+      'per_page': 15
+    },
+    transform:(response)=>{
+      budgets.value = response.data.data.data;
+    }
+  });
+}
+
+getBudgets();
 </script>
 
 <style>
