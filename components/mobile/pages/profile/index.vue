@@ -73,6 +73,7 @@ const user = useCookie("user").value;
 
 const editProfile = (id) => {
   console.log(id);
+  navigateTo(`/profile/${id}`);
 }
 
 const Logout = async () => {
