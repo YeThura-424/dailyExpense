@@ -1,20 +1,14 @@
 <template>
-  <div class="expense_header flex pt-3 relative">
+  <div :class="['expense_header flex p-3 relative bg-slate-100', boxShadow ? 'shadow-md' : '']">
     <div v-if="showBack" class="back_icon absolute" @click="backAction">
-      <Icon
-        name="ion:arrow-back-circle-sharp"
-        :class="['text-3xl cursor-pointer', iconColor]"
-      />
+      <Icon name="ion:arrow-back-circle-sharp" :class="['text-3xl cursor-pointer', iconColor]" />
     </div>
     <div :class="['expense w-full', textColor]">
       <p class="text-center text-xl font-bold">{{ title }}</p>
     </div>
 
     <div class="back_icon absolute right-0" v-if="showDelete">
-      <Icon
-        name="ion:trash-sharp"
-        :class="['text-3xl cursor-pointer', iconColor]"
-      />
+      <Icon name="ion:trash-sharp" :class="['text-3xl cursor-pointer', iconColor]" />
     </div>
   </div>
 </template>
@@ -37,9 +31,13 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  showBack:{
-    type:Boolean,
+  showBack: {
+    type: Boolean,
     default: true,
+  },
+  boxShadow: {
+    type: Boolean,
+    default: false,
   }
 });
 
