@@ -11,18 +11,28 @@
         </template>
       </Carousel>
     </div>
-    <div class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto">
+    <div
+      class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
+    >
       <MobileBudgetEmptyState v-if="false" />
       <!-- budget listing  -->
       <div class="budget-listing">
-        <pre>{{budgets}}</pre>
-        <MobileBudgetListingCard :budgets="budgets" />
+        <ClientOnly>
+          <MobileBudgetListingCard :budgets="budgets" />
+        </ClientOnly>
       </div>
-      <div class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2">
+      <div
+        class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2"
+      >
         <nuxt-link to="/budget/create">
-          <button type="button"
-            class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
-            <Icon name="ion:ios-create" class="text-white text-2xl cursor-pointer" />
+          <button
+            type="button"
+            class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+          >
+            <Icon
+              name="ion:ios-create"
+              class="text-white text-2xl cursor-pointer"
+            />
             Create a budget
           </button>
         </nuxt-link>
@@ -62,18 +72,18 @@ onMounted(() => {
 });
 
 const getBudgets = async () => {
-  await useFetch('/api/budget/user-budget',{
-    method:'GET',
+  await useFetch("/api/budget/user-budget", {
+    method: "GET",
     params: {
-      'month':currentMonth+1,
-      'year': currentYear,
-      'per_page': 15
+      month: currentMonth + 1,
+      year: currentYear,
+      per_page: 15,
     },
-    transform:(response)=>{
+    transform: (response) => {
       budgets.value = response?.data?.data;
-    }
+    },
   });
-}
+};
 
 getBudgets();
 </script>
