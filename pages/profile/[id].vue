@@ -8,6 +8,6 @@ definePageMeta({
 <template>
   <div>
     <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesProfile v-else />
+    <LazyMobilePagesProfileDetail v-else />
   </div>
 </template>
