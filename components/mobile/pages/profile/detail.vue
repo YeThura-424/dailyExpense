@@ -65,7 +65,6 @@ const userInfo = reactive({
   email: user.value.email,
   currency: user.value.currency,
 })
-
 const userProfilePreview = ref(null);
 const tabs = [
   { name: 'Info', key: 'info' },

@@ -93,13 +93,14 @@ const openSelectOption = () => {
 };
 
 onMounted(() => {
-  if (props.modelValue) {
-    selectedOption.value = props.options.map((list) => {
-      console.log(list)
-      if (list.value === props.modelValue) {
-        return list[props.optionValue]
-      }
-    })
+  if (props.modelValue && props.optionKey) {
+    const selected = props.options.find(
+      (list) => list[props.optionKey] === props.modelValue
+    );
+    if (selected) {
+      selectedOption.value = selected[props.optionValue];
+      selectedOption.key = selected[props.optionKey];
+    }
   }
 })
 
