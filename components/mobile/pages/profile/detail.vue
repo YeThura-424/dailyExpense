@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="profile-tab-content">
-        <div v-if="activeTab == 'info'" class="profile-info flex flex-col justify-center items-center gap-y-4 py-4">
+        <div v-if="activeTab == 'info'" class="profile-info flex flex-col justify-center items-center gap-y-4 pt-4">
           <div
             class="user-prifile relative w-[200px] h-[200px] rounded-full border border-[#7f3dff] flex justify-center items-center">
             <img v-if="userProfilePreview" :src="userProfilePreview" />
@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <div class="user-profile-info w-full py-4 px-6">
+          <div class="user-profile-info w-full pt-4 px-6">
             <div class="username py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="username">Name</label>
               <CoreInputBox v-model="userInfo.name" type="text" />
@@ -38,7 +38,14 @@
             <div class="currency py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="currency">Currency</label>
               <CoreSelectBox v-model="userInfo.currency" placeholder="Select Default Currency" :options="currency"
-                show-icon />
+                show-icon option-key="value" />
+            </div>
+            <div class="update-button py-4">
+              <button @click="updateProfile" type="button"
+                class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
+                <Icon name="ion:arrow-up-right-box" class="text-white text-2xl cursor-pointer" />
+                Update
+              </button>
             </div>
           </div>
         </div>
@@ -85,4 +92,30 @@ const handleUpload = (e) => {
   userInfo.profile = e.target.files;
   userProfilePreview.value = URL.createObjectURL(e.target.files[0])
 };
+
+const updateProfile = async () => {
+  if (userProfilePreview.value) {
+    const formData = new FormData();
+    formData.append('name', userInfo.name);
+    formData.append('currency', userInfo.currency);
+    formData.append('image', userInfo.profile);
+
+    await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
+      method: "POST",
+      body: formData,
+      transform: (response) => {
+        console.log(response, 'updating with image');
+      }
+    })
+  } else {
+    console.log(userInfo);
+    await useFetch(`/api/profile-update/${user.value.id}`, {
+      method: "POST",
+      body: userInfo,
+      transform: (response) => {
+        console.log(response, 'normal updating');
+      }
+    })
+  }
+}
 </script>
