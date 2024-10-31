@@ -67,6 +67,10 @@ const props = defineProps({
   showIcon: {
     type: Boolean,
     default: false,
+  },
+  modelValue: {
+    type: String,
+    default: ''
   }
 });
 
@@ -87,6 +91,17 @@ const openSelectOption = () => {
   isSelectOptionOpen.value = !isSelectOptionOpen.value;
 
 };
+
+onMounted(() => {
+  if (props.modelValue) {
+    selectedOption.value = props.options.map((list) => {
+      console.log(list)
+      if (list.value === props.modelValue) {
+        return list[props.optionValue]
+      }
+    })
+  }
+})
 
 watch(
   () => selectedOption.key,
