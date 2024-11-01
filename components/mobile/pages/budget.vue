@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
-      <Carousel ref="budgetCarousel">
+      <Carousel ref="budgetCarousel" @slide-start="handleSlideStart">
         <Slide v-for="month in months" :key="month">
           <div class="carousel__item text-lg">{{ month }}</div>
         </Slide>
@@ -58,6 +58,7 @@ const months = [
 ];
 
 const budgets = ref([]);
+const currentSlideMonth = ref(null);
 
 const budgetCarousel = ref(null);
 const date = new Date();
@@ -71,11 +72,16 @@ onMounted(() => {
   }
 });
 
-const getBudgets = async () => {
+const handleSlideStart = (month) => {
+  currentSlideMonth.value = month.slidingToIndex;
+  getBudgets(currentSlideMonth.value);
+};
+
+const getBudgets = async (month) => {
   await useFetch("/api/budget/user-budget", {
     method: "GET",
     params: {
-      month: currentMonth + 1,
+      month: month + 1,
       year: currentYear,
       per_page: 15,
     },
@@ -85,7 +91,7 @@ const getBudgets = async () => {
   });
 };
 
-getBudgets();
+getBudgets(currentMonth);
 </script>
 
 <style>
