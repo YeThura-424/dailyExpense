@@ -50,7 +50,27 @@
           </div>
         </div>
         <div v-else class="profile-security">
-          Password Tabs
+          <div class="user-profile-info w-full pt-4 px-6">
+            <div class="oldpassword py-2">
+              <label class="text-lg text-[#3f4142] font-medium" for="oldpassword">Old Password</label>
+              <CoreInputBox v-model="userPassword.old_password" type="password" placeholder="Old Password" />
+            </div>
+            <div class="newpassword py-2">
+              <label class="text-lg text-[#3f4142] font-medium" for="newpassword">New Password</label>
+              <CoreInputBox v-model="userPassword.new_password" type="password" placeholder="Old Password" />
+            </div>
+            <div class="newpassword py-2">
+              <label class="text-lg text-[#3f4142] font-medium" for="confirmpassword">Confirm New Password</label>
+              <CoreInputBox v-model="userPassword.confirm_password" type="password" placeholder="Old Password" />
+            </div>
+            <div class="update-button py-4">
+              <button @click="updateProfile" type="button"
+                class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
+                <Icon name="ion:arrow-up-right-box" class="text-white text-2xl cursor-pointer" />
+                Update
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -64,6 +84,12 @@ const userInfo = reactive({
   profile: user.value.image,
   email: user.value.email,
   currency: user.value.currency,
+})
+
+const userPassword = reactive({
+  old_password: '',
+  new_password: '',
+  confirm_password: ''
 })
 const userProfilePreview = ref(null);
 const tabs = [
