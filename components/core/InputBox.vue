@@ -4,24 +4,12 @@
       <label class="text-xl font-medium">{{ label }}</label>
     </div>
     <div class="input-box relative">
-      <input
-        :value="modelValue"
-        :type="inputType"
-        :placeholder="placeholder"
-        :class="inputClass"
-        @input="updateValue"
-      />
+      <input :value="modelValue" :type="inputType" :placeholder="placeholder" :class="inputClass" @input="updateValue"
+        :disabled="disabled" />
 
-      <div
-        class="show-password absolute right-4 top-1/2 -translate-y-1/2"
-        v-if="type == 'password'"
-      >
-        <Icon
-          @click="toggleShowPassword"
-          :name="inputType == 'text' ? 'ion:eye-off-sharp' : 'ion:eye-sharp'"
-          size="26"
-          class="text-[#91919F] cursor-pointer"
-        />
+      <div class="show-password absolute right-4 top-1/2 -translate-y-1/2" v-if="type == 'password'">
+        <Icon @click="toggleShowPassword" :name="inputType == 'text' ? 'ion:eye-off-sharp' : 'ion:eye-sharp'" size="26"
+          class="text-[#91919F] cursor-pointer" />
       </div>
     </div>
   </div>
@@ -57,6 +45,10 @@ const props = defineProps({
   modelValue: {
     type: String,
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 });
 const emit = defineEmits(["update:modelValue"]);
 const inputType = ref(props.type);

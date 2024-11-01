@@ -47,7 +47,7 @@
                     </div>
                   </div>
                   <div class="transaction_list_amount text-right">
-                    <h1 v-if="transaction.type == 'expend'" class="font-semibold text-lg text-[#FD3C4A]">
+                    <h1 v-if="transaction.type == 'expense'" class="font-semibold text-lg text-[#FD3C4A]">
                       $-{{ transaction.amount }}
                     </h1>
                     <h1 v-else class="font-semibold text-lg text-[#00A86B]">
