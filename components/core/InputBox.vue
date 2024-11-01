@@ -4,7 +4,7 @@
       <label class="text-xl font-medium">{{ label }}</label>
     </div>
     <div class="input-box relative">
-      <input :type="inputType" :placeholder="placeholder" :class="inputClass" @input="updateValue"
+      <input :value="modelValue" :type="inputType" :placeholder="placeholder" :class="inputClass" @input="updateValue"
         :disabled="disabled" />
 
       <div class="show-password absolute right-4 top-1/2 -translate-y-1/2" v-if="type == 'password'">

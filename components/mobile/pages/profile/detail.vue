@@ -54,14 +54,26 @@
             <div class="oldpassword py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="oldpassword">Old Password</label>
               <CoreInputBox v-model="userPassword.old_password" type="password" placeholder="Old Password" />
+              <p v-if="passwordUpdate?.old_password && !userPassword.old_password"
+                class="text-sm text-red-600 font-normal">{{
+                  passwordUpdate.old_password[0] }}
+              </p>
             </div>
             <div class="newpassword py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="newpassword">New Password</label>
               <CoreInputBox v-model="userPassword.new_password" type="password" placeholder="Old Password" />
+              <p v-if="passwordUpdate?.new_password && !userPassword.new_password"
+                class="text-sm text-red-600 font-normal">{{
+                  passwordUpdate.new_password[0] }}
+              </p>
             </div>
             <div class="newpassword py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="confirmpassword">Confirm New Password</label>
               <CoreInputBox v-model="userPassword.confirm_password" type="password" placeholder="Old Password" />
+              <p v-if="passwordUpdate?.confirm_password && (!userPassword.confirm_password || userPassword.confirm_password.length < 6)"
+                class="text-sm text-red-600 font-normal">{{
+                  passwordUpdate.confirm_password[0] }}
+              </p>
             </div>
             <div class="update-button py-4">
               <button @click="updatePassword" type="button"
@@ -79,6 +91,7 @@
 
 <script setup>
 const user = useCookie('user');
+const passwordUpdate = ref([]);
 const userInfo = reactive({
   name: user.value.name,
   profile: user.value.image,
@@ -87,9 +100,9 @@ const userInfo = reactive({
 })
 
 const userPassword = reactive({
-  old_password: '',
-  new_password: '',
-  confirm_password: ''
+  old_password: null,
+  new_password: null,
+  confirm_password: null
 })
 const userProfilePreview = ref(null);
 const tabs = [
@@ -145,7 +158,7 @@ const updateProfile = async () => {
 }
 
 const updatePassword = async () => {
-  const { data } = await useFetch(`/api/change-password/${user.value.id}`, {
+  const { data, error } = await useFetch(`/api/change-password/${user.value.id}`, {
     method: "POST",
     body: userPassword,
     transform: (response) => {
@@ -153,5 +166,8 @@ const updatePassword = async () => {
     }
   })
   console.log('update password ', data)
+  if (error?.value) {
+    passwordUpdate.value = error.value?.data?.data?.errors;
+  }
 }
 </script>
