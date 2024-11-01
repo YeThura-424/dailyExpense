@@ -64,10 +64,10 @@
               <CoreInputBox v-model="userPassword.confirm_password" type="password" placeholder="Old Password" />
             </div>
             <div class="update-button py-4">
-              <button @click="updateProfile" type="button"
+              <button @click="updatePassword" type="button"
                 class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
                 <Icon name="ion:arrow-up-right-box" class="text-white text-2xl cursor-pointer" />
-                Update
+                Change
               </button>
             </div>
           </div>
@@ -142,5 +142,16 @@ const updateProfile = async () => {
       }
     })
   }
+}
+
+const updatePassword = async () => {
+  const { data } = await useFetch(`/api/change-password/${user.value.id}`, {
+    method: "POST",
+    body: userPassword,
+    transform: (response) => {
+      return response
+    }
+  })
+  console.log('update password ', data)
 }
 </script>
