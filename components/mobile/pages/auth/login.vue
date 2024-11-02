@@ -46,7 +46,6 @@ const { authenticated } = storeToRefs(useAuthStore()); // make authenticated sta
 
 const loading = ref(false);
 const router = useRouter();
-const loginError = ref(false);
 
 const form = reactive({
   email: "john.doe@example.com",
@@ -55,18 +54,12 @@ const form = reactive({
 
 const login = async () => {
   loading.value = true;
-  try {
-    await authenticateUser(form); // call authenticateUser and pass the user object
-    if (authenticated.value) {
-      useNuxtApp().$toast.success('Login Successful');
-      router.push("/");
-    } else {
-      loading.value = false
-      loginError.value = true;
-      useNuxtApp().$toast.error('Error logging in');
+  const { data, error } = await useFetch("/api/login", {
+    method: "POST",
+    body: form,
+    transform: (response) => {
+      return response;
     }
-  } catch (error) {
-    console.log(error)
-  }
+  });
 };
 </script>
