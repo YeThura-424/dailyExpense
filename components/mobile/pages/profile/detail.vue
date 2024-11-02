@@ -136,7 +136,7 @@ const updateProfile = async () => {
     const formData = new FormData();
     formData.append('name', userInfo.name);
     formData.append('currency', userInfo.currency);
-    formData.append('image', userInfo.profile);
+    formData.append('image', userInfo.profile[0]);
 
     await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
       method: "POST",
