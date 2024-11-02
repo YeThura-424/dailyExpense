@@ -61,5 +61,21 @@ const login = async () => {
       return response;
     }
   });
+
+  if (data?.value) {
+    console.log(data.value.data)
+    const token = useCookie("token"); // useCookie new hook in nuxt 3
+    const user = useCookie("user");
+    token.value = data?.value?.data?.token; // set token to cookie
+    user.value = data?.value?.data?.user;
+    loading.value = false
+    useNuxtApp().$toast.success('Login Successful');
+    router.push("/");
+  }
+
+  if (error?.value) {
+    loading.value = false;
+    useNuxtApp().$toast.error(error.value?.data?.data?.message);
+  }
 };
 </script>
