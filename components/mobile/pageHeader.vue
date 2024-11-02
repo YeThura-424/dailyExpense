@@ -1,5 +1,5 @@
 <template>
-  <div :class="['expense_header flex p-3 relative bg-slate-100', boxShadow ? 'shadow-md' : '']">
+  <div :class="['expense_header flex p-3 relative ', boxShadow ? 'shadow-md' : '', bgColor]">
     <div v-if="showBack" class="back_icon absolute" @click="backAction">
       <Icon name="ion:arrow-back-circle-sharp" :class="['text-3xl cursor-pointer', iconColor]" />
     </div>
@@ -38,6 +38,10 @@ const props = defineProps({
   boxShadow: {
     type: Boolean,
     default: false,
+  },
+  bgColor: {
+    type: String,
+    default: ''
   }
 });
 

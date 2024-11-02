@@ -1,7 +1,7 @@
 <template>
   <div class="profile-info-wrapper">
     <div class="profile_header">
-      <MobilePageHeader title="Edit Profile" text-color="text-black" @back="backAction" />
+      <MobilePageHeader title="Edit Profile" text-color="text-black" bg-color="bg-slate-100" @back="backAction" />
     </div>
     <div class="profile-info-section">
       <div class="profile-tabs flex justify-between items-center bg-white shadow-md">

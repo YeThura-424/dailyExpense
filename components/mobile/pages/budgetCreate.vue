@@ -1,7 +1,7 @@
 <template>
   <div class="bg-[#7F3DFF] flex flex-col justify-between h-screen">
     <div class="budget_main_content px-6 py-4 flex flex-col justify-between h-full">
-      <div class="budget_header pt-3">
+      <div class="budget_header">
         <MobilePageHeader title="Create Budget" icon-color="text-white" @back="backAction" />
       </div>
       <div class="budget_amount text-white">
@@ -88,7 +88,7 @@ const submit = async () => {
       method: "POST",
       body: form,
     });
-    
+
     useNuxtApp().$toast.success('Budget Created Successful.');
 
     setTimeout(() => {
@@ -109,7 +109,7 @@ const submit = async () => {
         useNuxtApp().$toast.error('An unknown error occurred.');
       }
 
-    }else if(error?.data?.data?.message){
+    } else if (error?.data?.data?.message) {
       useNuxtApp().$toast.error(error?.data?.data?.message);
     } else {
       useNuxtApp().$toast.error('An unexpected error occurred.');
