@@ -48,6 +48,9 @@
               </button>
             </div>
           </div>
+          <div v-if="userLoading" class="loading-container">
+            <MobileLoadingDots />
+          </div>
         </div>
         <div v-else class="profile-security">
           <div class="user-profile-info w-full pt-4 px-6">
@@ -99,6 +102,8 @@ const userInfo = reactive({
   currency: user.value.currency,
 })
 
+const userLoading = ref(false);
+
 const userPassword = reactive({
   old_password: null,
   new_password: null,
@@ -132,12 +137,12 @@ const handleUpload = (e) => {
 };
 
 const updateProfile = async () => {
+  userLoading.value = true;
   if (userProfilePreview.value) {
     const formData = new FormData();
     formData.append('name', userInfo.name);
     formData.append('currency', userInfo.currency);
     formData.append('image', userInfo.profile[0]);
-
     await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
       method: "POST",
       body: formData,
@@ -145,15 +150,16 @@ const updateProfile = async () => {
         console.log(response, 'updating with image');
       }
     })
+    userLoading.value = false;
   } else {
-    console.log(userInfo);
     await useFetch(`/api/profile-update/${user.value.id}`, {
       method: "POST",
       body: userInfo,
       transform: (response) => {
-        console.log(response, 'normal updating');
+        user.value = response.data?.data;
       }
     })
+    userLoading.value = false;
   }
 }
 
