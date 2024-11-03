@@ -15,7 +15,8 @@
         <div v-if="activeTab == 'info'" class="profile-info flex flex-col justify-center items-center gap-y-4 pt-4">
           <div
             class="user-prifile relative w-[200px] h-[200px] rounded-full border border-[#7f3dff] flex justify-center items-center">
-            <img v-if="userProfilePreview" :src="userProfilePreview" />
+            <img v-if="userProfilePreview" :src="userProfilePreview"
+              class="w-[190px] h-[190px] border border-[#ccbaf0] rounded-full" />
             <img v-else :src="user?.image ? user?.image : '/images/userprofile.png'" alt=""
               class="w-[190px] h-[190px] border border-[#ccbaf0] rounded-full" />
             <div class="upload-icon absolute bottom-9 right-1 bg-[#eee] h-6">
@@ -41,8 +42,10 @@
                 show-icon option-key="value" />
             </div>
             <div class="update-button py-4">
-              <button @click="updateProfile" type="button"
-                class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
+              <button @click="updateProfile" type="button" :disabled="!shouldUpdate" class="w-full flex items-center justify-center gap-x-2 rounded-md border 
+                border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg 
+                font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 
+                focus-visible:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50">
                 <Icon name="ion:arrow-up-right-box" class="text-white text-2xl cursor-pointer" />
                 Update
               </button>
@@ -103,7 +106,7 @@ const userInfo = reactive({
 })
 
 const userLoading = ref(false);
-
+const shouldUpdate = ref(false);
 const userPassword = reactive({
   old_password: null,
   new_password: null,
@@ -120,6 +123,20 @@ const currency = ref([
   { name: 'USD', value: 'usd', icon: '/images/dollar.png' },
   { name: 'Baht', value: 'bhat', icon: '/images/baht.png' },
 ])
+
+watch(() => userInfo, (newUserInfo) => {
+  console.log(newUserInfo)
+  console.log(user.value)
+  // to make sure update button is disabled for not updating data situation
+  if (
+    newUserInfo.name == user.value.name
+    && newUserInfo.profile == user.value.image
+    && newUserInfo.currency == user.value.currency) {
+    shouldUpdate.value = false;
+  } else {
+    shouldUpdate.value = true;
+  }
+}, { deep: true })
 
 const activeTab = ref(tabs[0].key);
 
@@ -161,6 +178,7 @@ const updateProfile = async () => {
     })
     userLoading.value = false;
   }
+  useNuxtApp().$toast.success('Profile Updated Successfully!!');
 }
 
 const updatePassword = async () => {
