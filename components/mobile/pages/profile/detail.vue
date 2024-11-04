@@ -189,7 +189,9 @@ const updatePassword = async () => {
       return response
     }
   })
-  console.log('update password ', data)
+  if (data?.value) {
+    useNuxtApp().$toast.success('Profile Updated Successfully!!');
+  }
   if (error?.value) {
     passwordUpdate.value = error.value?.data?.data?.errors;
   }
