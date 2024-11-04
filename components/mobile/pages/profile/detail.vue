@@ -68,7 +68,7 @@
             <div class="newpassword py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="newpassword">New Password</label>
               <CoreInputBox v-model="userPassword.new_password" type="password" placeholder="Old Password" />
-              <p v-if="passwordUpdate?.new_password && !userPassword.new_password"
+              <p v-if="passwordUpdate?.new_password && (!userPassword.new_password || userPassword.new_password.length < 6 || userPassword.new_password.length > 12)"
                 class="text-sm text-red-600 font-normal">{{
                   passwordUpdate.new_password[0] }}
               </p>
@@ -76,7 +76,7 @@
             <div class="newpassword py-2">
               <label class="text-lg text-[#3f4142] font-medium" for="confirmpassword">Confirm New Password</label>
               <CoreInputBox v-model="userPassword.confirm_password" type="password" placeholder="Old Password" />
-              <p v-if="passwordUpdate?.confirm_password && (!userPassword.confirm_password || userPassword.confirm_password.length < 6)"
+              <p v-if="passwordUpdate?.confirm_password && (!userPassword.confirm_password || userPassword.confirm_password.length < 6 || userPassword.confirm_password.length > 12)"
                 class="text-sm text-red-600 font-normal">{{
                   passwordUpdate.confirm_password[0] }}
               </p>
@@ -194,6 +194,9 @@ const updatePassword = async () => {
   }
   if (error?.value) {
     passwordUpdate.value = error.value?.data?.data?.errors;
+    if (error?.value?.data?.data?.message) {
+      useNuxtApp().$toast.error(error.value?.data?.data?.message);
+    }
   }
 }
 </script>
