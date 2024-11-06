@@ -18,7 +18,7 @@
         <CoreDatePicker v-model="form.action_date" />
       </div>
       <div class="category_select py-2">
-        <CoreSelectBox :options="category" option-key="id" name="Category" placeholder="Select Category"
+        <CoreSelectBox :options="category" show-budget option-key="id" name="Category" placeholder="Select Category"
           v-model="form.category_id" />
       </div>
       <div class="description_input py-2">
@@ -110,10 +110,6 @@ const fetchCategory = async () => {
         category.value = response.data?.data;
       },
     });
-
-    category.value.map((cate) => {
-      console.log(cate);
-    })
 
   } catch (error) {
     console.log(error);
