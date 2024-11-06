@@ -16,10 +16,24 @@
     >
       <MobileBudgetEmptyState v-if="false" />
       <!-- budget listing  -->
-      <div class="budget-listing">
+      <div class="budget-listing" v-if="budgets.length">
         <ClientOnly>
           <MobileBudgetListingCard :budgets="budgets" />
         </ClientOnly>
+      </div>
+      <div
+        v-else
+        class="flex flex-col gap-5 justify-center items-center w-full h-full overflow-hidden"
+      >
+        <div
+          class="w-[300px] h-[300px] overflow-hidden"
+          style="border-radius: 37% 52% 0% 38%; border: 2px solid transparent"
+        >
+          <IconNoBudget />
+        </div>
+        <h1 class="font-500 text-gray-600 text-xl capitalize">
+          no budget for this month
+        </h1>
       </div>
       <div
         class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2"
