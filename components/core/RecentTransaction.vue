@@ -24,42 +24,48 @@
       </div>
     </div>
     <div class="transaction-tab-content">
-      <div v-if="transactions.length > 0" class="transaction_list pt-2">
-        <div v-for="transaction in transactions" :key="transaction.id"
-          class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2">
-          <div class="transaction_type flex gap-x-4">
-            <div :class="[
-              'transaction_list_icon w-14 h-14 flex justify-center items-center rounded-xl',
-              transaction.type == 'expense' ? 'bg-[#FDD5D7]' : 'bg-[#CFFAEA] ',
-            ]">
-              <img v-if="transaction.category.icon" :src="transaction.category.icon" class="w-full h-full rounded-xl" />
-              <div v-else class="default-icon">
-                <IconHomeExpense v-if="transaction.type == 'expense'" fill="#FDD5D7" />
-                <IconHomeIncome v-else fill="#CFFAEA" />
+      <div v-if="transactionLoading">
+        <LazyMobileLoadingIncomeExpenseCard :cards="4" />
+      </div>
+      <div v-else>
+        <div v-if="transactions.length > 0" class="transaction_list pt-2">
+          <div v-for="transaction in transactions" :key="transaction.id"
+            class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2">
+            <div class="transaction_type flex gap-x-4">
+              <div :class="[
+                'transaction_list_icon w-14 h-14 flex justify-center items-center rounded-xl',
+                transaction.type == 'expense' ? 'bg-[#FDD5D7]' : 'bg-[#CFFAEA] ',
+              ]">
+                <img v-if="transaction.category.icon" :src="transaction.category.icon"
+                  class="w-full h-full rounded-xl" />
+                <div v-else class="default-icon">
+                  <IconHomeExpense v-if="transaction.type == 'expense'" fill="#FDD5D7" />
+                  <IconHomeIncome v-else fill="#CFFAEA" />
+                </div>
+              </div>
+              <div class="transaction_list_desctiption">
+                <h1 class="font-semibold text-lg text-[#292B2D]">
+                  {{ transaction.category.name }}
+                </h1>
+                <span class="text-sm text-[#91919F]">{{
+                  transaction.description
+                }}</span>
               </div>
             </div>
-            <div class="transaction_list_desctiption">
-              <h1 class="font-semibold text-lg text-[#292B2D]">
-                {{ transaction.category.name }}
+            <div class="transaction_list_amount text-right">
+              <h1 v-if="transaction.type == 'expense'" class="font-semibold text-lg text-[#FD3C4A]">
+                $-{{ transaction.amount }}
               </h1>
-              <span class="text-sm text-[#91919F]">{{
-                transaction.description
-              }}</span>
+              <h1 v-else class="font-semibold text-lg text-[#00A86B]">
+                $+{{ transaction.amount }}
+              </h1>
+              <span class="text-sm text-[#91919F]">{{ transaction.time }}</span>
             </div>
           </div>
-          <div class="transaction_list_amount text-right">
-            <h1 v-if="transaction.type == 'expense'" class="font-semibold text-lg text-[#FD3C4A]">
-              $-{{ transaction.amount }}
-            </h1>
-            <h1 v-else class="font-semibold text-lg text-[#00A86B]">
-              $+{{ transaction.amount }}
-            </h1>
-            <span class="text-sm text-[#91919F]">{{ transaction.time }}</span>
-          </div>
         </div>
-      </div>
-      <div v-else class="empty-transactions">
-        <h1 class="text-center py-8">No Transaction for selected criteria!</h1>
+        <div v-else class="empty-transactions">
+          <h1 class="text-center py-8">No Transaction for selected criteria!</h1>
+        </div>
       </div>
     </div>
   </div>
@@ -74,7 +80,7 @@ const tabs = [
 ];
 const transactions = ref([]);
 const activeTab = ref(tabs[0].key);
-
+const transactionLoading = ref(true);
 const changeTab = (tab) => {
   activeTab.value = tab;
   fetchTransaction();
@@ -87,6 +93,7 @@ const fetchTransaction = async () => {
     month: activeTab.value === "month",
     year: activeTab.value === "year",
   };
+  transactionLoading.value = true;
   await useFetch("/api/income/list", {
     method: "GET",
     params: filterParams,
@@ -94,6 +101,7 @@ const fetchTransaction = async () => {
       transactions.value = response?.data?.data;
     },
   });
+  transaction.value = false;
 };
 
 fetchTransaction();
