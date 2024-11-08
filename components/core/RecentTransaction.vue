@@ -93,15 +93,21 @@ const fetchTransaction = async () => {
     month: activeTab.value === "month",
     year: activeTab.value === "year",
   };
-  transactionLoading.value = true;
-  await useFetch("/api/income/list", {
-    method: "GET",
-    params: filterParams,
-    transform: (response) => {
-      transactions.value = response?.data?.data;
-    },
-  });
-  transaction.value = false;
+  try {
+    transactionLoading.value = true;
+    await useFetch("/api/income/list", {
+      method: "GET",
+      params: filterParams,
+      transform: (response) => {
+        transactions.value = response?.data?.data;
+      },
+    });
+  } catch (error) {
+    console.log(error)
+  } finally {
+    transactionLoading.value = false;
+  }
+
 };
 
 fetchTransaction();
