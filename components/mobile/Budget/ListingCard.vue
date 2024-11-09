@@ -50,7 +50,7 @@ const props = defineProps({
 });
 
 const remaining = (budget) => {
-  return budget.total ?? 0 - budget.spend_amount ?? 0;
+  return budget.remaining_amount;
 };
 
 const isExceed = (budget) => {
@@ -58,7 +58,7 @@ const isExceed = (budget) => {
 };
 
 const alertTheme = (budget) => {
-  const spentPercent = (budget.spend_amount ?? 0 / budget.total) * 100;
+  const spentPercent = (budget.spend_amount / budget.total) * 100;
 
   if (spentPercent < 51) return "text-blue-500";
   if (spentPercent > 100) return "text-red-500";
@@ -67,7 +67,7 @@ const alertTheme = (budget) => {
 };
 
 const alertBg = (budget) => {
-  const percent = (budget.spend_amount ?? 0 / budget.total) * 100;
+  const percent = (budget.spend_amount / budget.total) * 100;
 
   if (percent < 51) return "bg-blue-500";
   if (percent > 100) return "bg-red-500";
@@ -76,7 +76,7 @@ const alertBg = (budget) => {
 };
 
 const spentPercent = (budget) => {
-  const percent = Math.floor((budget.spend_amount ?? 0 / budget.total) * 100);
+  const percent = Math.floor((budget.spend_amount / budget.total) * 100);
 
   return `${percent}%`;
 };
