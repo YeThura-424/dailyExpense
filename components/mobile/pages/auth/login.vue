@@ -19,6 +19,15 @@
         </button>
       </div>
 
+
+      <p class=" text-center text-xl p-4">or</p>
+
+      <!-- social login button -->
+      <div class=" flex flex-col gap-4">
+        <CoreGithubLogin />
+        <CoreGoogleLogin />
+      </div>
+
       <div class="forget-password text-center py-3">
         <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
       </div>
@@ -36,13 +45,8 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
-import { storeToRefs } from "pinia"; // import storeToRefs helper hook from pinia
-import { useAuthStore } from "~/store/authUser";
 
-const { authenticateUser } = useAuthStore(); // use authenticateUser action from  auth store
-
-const { authenticated } = storeToRefs(useAuthStore()); // make authenticated state reactive with storeToRefs
+const { status, data } = useAuth();
 
 const loading = ref(false);
 const router = useRouter();
@@ -59,17 +63,17 @@ const login = async () => {
     body: form,
     transform: (response) => {
       return response;
-    }
+    },
   });
 
   if (data?.value) {
-    console.log(data.value.data)
+    console.log(data.value.data);
     const token = useCookie("token"); // useCookie new hook in nuxt 3
     const user = useCookie("user");
     token.value = data?.value?.data?.token; // set token to cookie
     user.value = data?.value?.data?.user;
-    loading.value = false
-    useNuxtApp().$toast.success('Login Successful');
+    loading.value = false;
+    useNuxtApp().$toast.success("Login Successful");
     router.push("/");
   }
 
@@ -78,4 +82,47 @@ const login = async () => {
     useNuxtApp().$toast.error(error.value?.data?.data?.message);
   }
 };
+
+const sendTokenToBackend = async () => {
+
+  let token = data.value?.access_token
+
+  let provider = data.value?.provider
+  console.log('nanda', provider)
+
+  if (token) {
+    const { data, error } = await useFetch(`/api/${provider}/login`, {
+      method: "POST",
+      body: {
+        access_token: token,
+      },
+      transform: (response) => {
+        console.log(response);
+        return response;
+      },
+    });
+
+    if (data?.value) {
+      console.log(data.value.data);
+      const token = useCookie("token");
+      const user = useCookie("user");
+      token.value = data?.value?.data?.token; // set token to cookie
+      user.value = data?.value?.data?.user;
+      loading.value = false;
+      useNuxtApp().$toast.success("Login Successful");
+      router.push("/");
+    }
+
+    if (error?.value) {
+      loading.value = false;
+      useNuxtApp().$toast.error(error.value?.data?.data?.message);
+    }
+  }
+};
+
+
+if (status.value === 'authenticated') {
+  sendTokenToBackend()
+}
+
 </script>
