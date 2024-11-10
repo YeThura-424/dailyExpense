@@ -12,6 +12,7 @@
       </div>
       <div v-if="walletLists?.user_wallet?.length == 0" class="empty_account_state py-12">
         <div class="text-center">
+          <!-- <IconAccount /> -->
           <p class="text-base font-medium">You don't any account</p>
           <p class="text-base font-medium">Let's make one so you in control</p>
         </div>
