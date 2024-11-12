@@ -29,7 +29,7 @@
         </div>
       </div>
     </div>
-    <CoreModelBox verticalAlign="items-end" :visible="openFilter" @dismiss="closeFilterDialog">
+    <CoreModelBox verticalAlign="items-end" :visible="openFilter" @dismiss="closeFilterDialog" @apply="applyFilter">
       <div class="filter_content">
         <div class="filter-head flex justify-between items-center py-4">
           <h1>Filter Transaction</h1>
@@ -39,10 +39,10 @@
         </div>
         <div class="filter-body">
           <!-- filter by section  -->
-          <RadioGroup v-model="filterBy">
+          <RadioGroup v-model="form.filterBy">
             <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
             <div class="grid grid-cols-3 gap-4 pt-3">
-              <RadioGroupOption as="template" v-for="value in ['income', 'expense', 'transfer']" :value="value"
+              <RadioGroupOption as="template" v-for="value in ['income', 'expend', 'transfer']" :value="value"
                 v-slot="{ active, checked }">
                 <div :class="[
                   active ? 'bg-[#EEE5FF] text-[#7F3DFF]' : '',
@@ -57,7 +57,7 @@
           </RadioGroup>
 
           <!-- sort by section  -->
-          <RadioGroup v-model="sortBy">
+          <RadioGroup v-model="form.sortBy">
             <RadioGroupLabel class="font-semibold">Sort By</RadioGroupLabel>
             <div class="grid grid-cols-3 gap-4 pt-3">
               <RadioGroupOption as="template" v-for="value in ['highest', 'lowest', 'newest', 'oldest']" :value="value"
@@ -77,7 +77,7 @@
           <!-- category selection here  -->
           <div>
             <h1>Category</h1>
-            <CoreSelectBox v-model="selectedCategory" :options="category" />
+            <CoreSelectBox v-model="form.category" :options="category" optionKey="id" />
           </div>
         </div>
       </div>
@@ -87,14 +87,13 @@
 
 <script setup>
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
-const transaction_type = [
-  { name: "Month", value: "month" },
-  { name: "Year", value: "year" },
-];
+
+const form = reactive({
+  filterBy: 'income',
+  sortBy: 'highest',
+  category: ''
+});
 const category = ref([]);
-const filterBy = ref("income");
-const sortBy = ref("highest");
-const selectedCategory = ref(null);
 const transactions = ref([]);
 const openFilter = ref(false);
 const transactionLoading = ref(true);
@@ -106,14 +105,24 @@ const closeFilterDialog = (value) => {
   openFilter.value = value;
 };
 
+const applyFilter = (value) => {
+  openFilter.value = value;
+  // console.log(form);
+  let page = 1
+  fetchTransaction(page, form);
+}
+
 // fetch transaction (income expend)
-const fetchTransaction = async (page = 1) => {
+const fetchTransaction = async (page = 1, form) => {
   transactionLoading.value = true;
   try {
     await useFetch("/api/income/list", {
       method: "GET",
       params: {
         page: page,
+        type: form?.filterBy,
+        sort: form?.sortBy,
+        category_id: form?.category,
         perpage: 15,
       },
       transform: (response) => {
