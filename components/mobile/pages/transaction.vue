@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-        <div v-else class="transaction-list-">
+        <div v-else class="transaction-loading-list">
           <MobileLoadingIncomeExpenseCard :cards="6" />
         </div>
       </div>
@@ -77,7 +77,7 @@
           <!-- category selection here  -->
           <div>
             <h1>Category</h1>
-            <CoreMultiSelect />
+            <CoreSelectBox v-model="selectedCategory" :options="category" />
           </div>
         </div>
       </div>
@@ -91,9 +91,10 @@ const transaction_type = [
   { name: "Month", value: "month" },
   { name: "Year", value: "year" },
 ];
-
+const category = ref([]);
 const filterBy = ref("income");
 const sortBy = ref("highest");
+const selectedCategory = ref(null);
 const transactions = ref([]);
 const openFilter = ref(false);
 const transactionLoading = ref(true);
@@ -138,5 +139,22 @@ const groupTransaction = (transactions) => {
   return groupedData;
 };
 
+const fetchCategory = async (type = []) => {
+  try {
+    await useFetch("/api/category", {
+      method: "GET",
+      params: {
+        type: type
+      },
+      transform: (response) => {
+        category.value = response.data?.data;
+      }
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 fetchTransaction();
+fetchCategory();
 </script>
