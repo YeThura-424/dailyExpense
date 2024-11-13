@@ -120,9 +120,9 @@ const fetchTransaction = async (page = 1, form) => {
       method: "GET",
       params: {
         page: page,
-        type: form?.filterBy,
-        sort: form?.sortBy,
-        category_id: form?.category,
+        type: form?.filterBy ?? [],
+        sort: form?.sortBy ?? [],
+        category_id: form?.category ?? [],
         perpage: 15,
       },
       transform: (response) => {
