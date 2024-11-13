@@ -33,7 +33,7 @@
       <div class="filter_content">
         <div class="filter-head flex justify-between items-center py-4">
           <h1>Filter Transaction</h1>
-          <button class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-2 rounded-[22px]">
+          <button @click="resetFilter" class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-2 rounded-[22px]">
             Reset
           </button>
         </div>
@@ -112,8 +112,15 @@ const applyFilter = (value) => {
   fetchTransaction(page, form);
 }
 
+const resetFilter = () => {
+  form.filterBy = 'income',
+    form.sortBy = 'highest',
+    form.category = ''
+  fetchTransaction();
+}
+
 // fetch transaction (income expend)
-const fetchTransaction = async (page = 1, form) => {
+const fetchTransaction = async (page = 1, form = {}) => {
   transactionLoading.value = true;
   try {
     await useFetch("/api/income/list", {
