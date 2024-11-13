@@ -2,7 +2,7 @@
   <div class="">
     <div class="category_content py-4">
       <div class="category_header px-4 pb-6">
-        <MobilePageHeader title="Category List" text-color="text-black" @back="backAction"/>
+        <MobilePageHeader title="Category List" text-color="text-black" @back="backAction" />
       </div>
       <div class="category-list-wrapper bg-white">
         <!-- category listing  -->
@@ -11,7 +11,8 @@
             class="category-section flex items-center justify-between border-b border-[#eee] px-4 py-4">
             <div class="flex items-center gap-x-3">
               <div class="category-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center">
-                <img class="w-12 h-12 object-cover mix-blend-multiply" :src="category.icon ?? '/images/placeholder.png'" alt="" />
+                <img class="w-12 h-12 object-cover mix-blend-multiply" :src="category.icon ?? '/images/placeholder.png'"
+                  alt="" />
               </div>
               <div>
                 <h1 class="text-[#292B2D] text-xl font-medium">
@@ -21,7 +22,9 @@
               </div>
             </div>
             <div class="profile-info-edit">
-              <Icon name="ion:edit" class="text-3xl text-[#212325] cursor-pointer" />
+              <NuxtLink :to="`/category/${category.id}`">
+                <Icon name="ion:edit" class="text-3xl text-[#212325] cursor-pointer" />
+              </NuxtLink>
             </div>
           </div>
         </div>
