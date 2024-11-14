@@ -6,7 +6,7 @@
     <div class="expense_main_content px-6 py-4 flex flex-col justify-between h-full">
       <MobilePageHeader title="Add New Category" icon-color="text-white" @back="backAction" />
     </div>
-    <div class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
+    <div v-if="!categoryDetailLoading" class="expense_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="account_name">
         <CoreInputBox placeholder="Name" v-model="form.name" />
       </div>
@@ -41,6 +41,8 @@ const categoryTypes = ref([
     value: 'expend'
   }
 ])
+const categoryDetailLoading = ref(true);
+const type = ref(categoryTypes.value[0].value);
 const form = reactive({
   type: "",
   categoryImage: [],
@@ -58,12 +60,18 @@ const backAction = () => {
 }
 
 const getCategoryDetail = async () => {
-  useFetch(`/api/category/${categoryId}`, {
+  categoryDetailLoading.value = true;
+  await useFetch(`/api/category/${categoryId}`, {
     method: "GET",
     transform: (response) => {
-      console.log(response);
+      form.name = response?.data?.name;
+      // type.value = categoryTypes.value.find((cate) => cate.value == response.data.type)
+      form.type = (categoryTypes.value.find((cate) => cate.value == response?.data?.type)).value;
+      form.categoryImage = response?.data?.icon;
     }
   })
+  categoryDetailLoading.value = false;
+  console.log(form);
 }
 
 const saveCategory = async () => {
