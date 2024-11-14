@@ -42,10 +42,10 @@ const categoryTypes = ref([
   }
 ])
 const categoryDetailLoading = ref(true);
-const type = ref(categoryTypes.value[0].value);
+// const type = ref(categoryTypes.value[0].value);
 const form = reactive({
   type: "",
-  categoryImage: [],
+  categoryImage: "",
   name: "",
 });
 
@@ -64,10 +64,11 @@ const getCategoryDetail = async () => {
   await useFetch(`/api/category/${categoryId}`, {
     method: "GET",
     transform: (response) => {
-      form.name = response?.data?.name;
+      console.log(response.data)
+      form.name = response?.data?.data?.name;
       // type.value = categoryTypes.value.find((cate) => cate.value == response.data.type)
-      form.type = (categoryTypes.value.find((cate) => cate.value == response?.data?.type)).value;
-      form.categoryImage = response?.data?.icon;
+      form.type = (categoryTypes.value.find((cate) => cate.value == response?.data?.data?.type)).value;
+      form.categoryImage = response?.data?.data?.icon;
     }
   })
   categoryDetailLoading.value = false;
