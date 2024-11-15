@@ -60,6 +60,7 @@
         </div>
       </div>
     </div>
+    <MobileLoadingDots v-if="loading" />
 
   </div>
 </template>
@@ -68,6 +69,7 @@
 import { useAuthStore } from "~/store/authUser";
 
 const { logUserOut } = useAuthStore();
+const loading = ref(false);
 
 const user = useCookie("user").value;
 
@@ -77,6 +79,7 @@ const editProfile = (id) => {
 }
 
 const Logout = async () => {
+  loading.value = true;
   await logUserOut();
 };
 </script>

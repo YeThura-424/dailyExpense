@@ -121,7 +121,7 @@ const tabs = [
 const currency = ref([
   { name: 'Ks', value: 'ks', icon: '/images/ks.png' },
   { name: 'USD', value: 'usd', icon: '/images/dollar.png' },
-  { name: 'Baht', value: 'bhat', icon: '/images/baht.png' },
+  { name: 'Baht', value: 'baht', icon: '/images/baht.png' },
 ])
 
 watch(() => userInfo, (newUserInfo) => {

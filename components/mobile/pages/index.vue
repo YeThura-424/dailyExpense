@@ -5,7 +5,10 @@
       <div class="py-4 px-4 bg-[#FFF6E5] rounded-b-3xl">
         <div class="flex justify-between items-center">
           <div class="profile">
-            <img src="/images/user.jpg" class="w-8 h-8 rounded-full border-2 border-[#7F3DFF] p-1" alt="" />
+            <NuxtLink :to="`/profile/${user?.id}`">
+              <img :src="user?.image ?? '/images/user.jpg'" class="w-8 h-8 rounded-full border-2 border-[#7F3DFF] p-1"
+                alt="" />
+            </NuxtLink>
           </div>
           <div class="year_select">
             <CoreMonthSelect v-model="selectedDate.year" :months="rawYear" />
@@ -32,25 +35,27 @@
             <h1 class="text-[#91919F] text-base font-bold pb-2">
               Account Balance
             </h1>
-            <span class="text-2xl font-semibold text-[#161719]">{{ accountData.walletBalance }} Ks </span>
+            <!-- <span class="text-2xl font-semibold text-[#161719]">{{ accountData.walletBalance }} Ks </span> -->
+            <span class="text-2xl font-semibold text-[#161719]"> {{ formatAmount(accountData.walletBalance) }}</span>
+
           </div>
           <div class="income_expense flex justify-between gap-x-4">
-            <div class="income flex items-center gap-x-3 bg-[#00A86B] p-3 rounded-2xl w-full">
+            <div class="income flex items-center gap-x-1 bg-[#00A86B] p-3 rounded-2xl w-full">
               <div class="income_icon">
                 <IconHomeIncome />
               </div>
               <div class="income_text text-white">
                 <span class="text-lg">Income</span>
-                <h1 class="text-lg">$ {{ accountData?.income?.amount ?? 0 }}</h1>
+                <h1 class="text-lg"> {{ formatAmount(accountData?.income?.amount) }}</h1>
               </div>
             </div>
-            <div class="expense flex items-center gap-x-3 bg-[#FD3C4A] p-3 rounded-2xl w-full">
+            <div class="expense flex items-center gap-x-1 bg-[#FD3C4A] p-3 rounded-2xl w-full">
               <div class="expense_icon">
                 <IconHomeExpense />
               </div>
               <div class="expense_text text-white">
                 <span class="text-lg">Expense</span>
-                <h1 class="text-lg">$ {{ accountData?.expend?.amount ?? 0 }}</h1>
+                <h1 class="text-lg"> {{ formatAmount(accountData?.expend?.amount) }}</h1>
               </div>
             </div>
           </div>
@@ -71,6 +76,7 @@
 <script setup>
 
 const rawMonth = computed(() => getPreviousMonth());
+const user = useCookie('user');
 const rawYear = ref([
   { id: 1, name: 2024, value: 2024 }
 ])
