@@ -30,5 +30,16 @@ export const useCategoryStore = defineStore('category', {
         console.log(error);
       }
     },
+    async updateCategory(form) {
+      try {
+        const data = useFetch(`/api/file-upload/category/${form.id}`, {
+          method: "POST",
+          body: form
+        })
+        return data;
+      } catch (error) {
+        console.error(error);
+      }
+    }
   }
 })

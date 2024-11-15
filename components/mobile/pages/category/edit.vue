@@ -19,7 +19,7 @@
       </div>
 
       <div class="save-button gap-x-5 py-3">
-        <button type="button" @click="saveCategory"
+        <button type="button" @click="updateCategory"
           class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer">
           <Icon name="ion:save-outline" class="text-white text-2xl cursor-pointer" />
           Continue
@@ -44,6 +44,7 @@ const categoryTypes = ref([
 const categoryDetailLoading = ref(true);
 // const type = ref(categoryTypes.value[0].value);
 const form = reactive({
+  id: "",
   type: "",
   categoryImage: "",
   name: "",
@@ -53,7 +54,6 @@ const route = useRoute();
 const categoryId = route.params.id;
 
 const loading = ref(false);
-const categoryStore = useCategory();
 
 const backAction = () => {
   navigateTo('/category');
@@ -69,20 +69,24 @@ const getCategoryDetail = async () => {
       // type.value = categoryTypes.value.find((cate) => cate.value == response.data.type)
       form.type = (categoryTypes.value.find((cate) => cate.value == response?.data?.data?.type)).value;
       form.categoryImage = response?.data?.data?.icon;
+      form.id = response?.data?.data?.id;
     }
   })
   categoryDetailLoading.value = false;
   console.log(form);
 }
 
-const saveCategory = async () => {
+const updateCategory = async () => {
   const data = transform(form);
   loading.value = true;
   try {
-    const response = await categoryStore.createCategories(data);
-    console.log(response)
+    useFetch(`/api/file-upload/category/${form.id}`, {
+      method: "POST",
+      body: data
+    })
+    loading.value = false;
   } catch (error) {
-    console.log(error)
+    console.error(error)
   } finally {
     navigateTo('/category');
   }
@@ -92,7 +96,7 @@ const transform = (form) => {
   let formData = new FormData();
   formData.append('name', form.name);
   formData.append('type', form.type);
-  formData.append('icon', form.categoryImage[0]);
+  formData.append('updated_icon', form.categoryImage[0]);
 
   return formData
 }

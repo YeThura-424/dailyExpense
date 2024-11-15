@@ -41,7 +41,7 @@
               </div>
               <div class="income_text text-white">
                 <span class="text-lg">Income</span>
-                <h1 class="text-xl">$ {{ accountData?.income?.amount ?? 0 }}</h1>
+                <h1 class="text-lg">$ {{ accountData?.income?.amount ?? 0 }}</h1>
               </div>
             </div>
             <div class="expense flex items-center gap-x-3 bg-[#FD3C4A] p-3 rounded-2xl w-full">
@@ -50,7 +50,7 @@
               </div>
               <div class="expense_text text-white">
                 <span class="text-lg">Expense</span>
-                <h1 class="text-xl">$ {{ accountData?.expend?.amount ?? 0 }}</h1>
+                <h1 class="text-lg">$ {{ accountData?.expend?.amount ?? 0 }}</h1>
               </div>
             </div>
           </div>

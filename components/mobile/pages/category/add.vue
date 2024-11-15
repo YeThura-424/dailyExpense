@@ -43,7 +43,7 @@ const categoryTypes = ref([
 ])
 const form = reactive({
   type: "",
-  categoryImage: [],
+  categoryImage: null,
   name: "",
 });
 
