@@ -74,3 +74,21 @@ const options = {
 // Format the date
 return date.toLocaleString('en-GB', options);
 }
+
+export const getCurrency = () => {
+  const user = useCookie('user');
+  let userCurrency = user?.value?.currency ?? 'ks';
+  const currency = {
+    ks: 'Ks',
+    usd: '$',
+    baht: 'B'
+  }
+
+  return currency[userCurrency] ?? 'Ks';
+}
+
+export const formatAmount = (amount) => {
+  let currency = new Intl.NumberFormat();
+
+  return `${getCurrency()} ${currency.format(amount)}`;
+}
