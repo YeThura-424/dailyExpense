@@ -1,3 +1,34 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.hide-text {
+  background-color: #f1f5f9;
+  color: transparent;
+  overflow: hidden;
+  position: relative
+}
+
+.hide-text:before {
+  animation-duration: 1.5s;
+  animation-iteration-count: infinite;
+  animation-name: skeleton-animation;
+  background: linear-gradient(90deg, #f7f7f7 25%, #f3f3f3 50%, #f7f7f7);
+  content: "";
+  filter: blur(1px);
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 50px
+}
+
+@keyframes skeleton-animation {
+  0% {
+    left: 0
+  }
+
+  to {
+    left: 100%
+  }
+}

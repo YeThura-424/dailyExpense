@@ -1,12 +1,17 @@
 <template>
   <div class="">
-    <div class="category_content py-4">
-      <div class="category_header px-4 pb-6">
+    <div class="category_content pb-4">
+      <div class="category_header px-4">
         <MobilePageHeader title="Category List" text-color="text-black" @back="backAction" />
       </div>
-      <div class="category-list-wrapper bg-white">
+      <div v-if="loading" class="category-loading px-2">
+        <div v-for="data in 6" :key="data" class="bg-white my-2">
+          <MobileLoadingCategoryListing />
+        </div>
+      </div>
+      <div v-else class="category-list-wrapper bg-white">
         <!-- category listing  -->
-        <div v-if="categoryList && !loading">
+        <div v-if="categoryList.length > 0">
           <div v-for="category in categoryList" :key="category.id"
             class="category-section flex items-center justify-between border-b border-[#eee] px-4 py-4">
             <div class="flex items-center gap-x-3">
@@ -55,7 +60,7 @@
 <script setup>
 
 const category = useCategory();
-const categoryList = ref(null);
+const categoryList = ref([]);
 const loading = ref(true);
 
 const backAction = () => {
@@ -75,7 +80,7 @@ getCategory();
 
 </script>
 
-<style scoped>
+<style>
 .category-list-wrapper.bg-white {
   max-height: calc(100vh - 150px);
   overflow-x: auto;
