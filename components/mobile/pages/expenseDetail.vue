@@ -5,7 +5,7 @@
         <MobilePageHeader title="Expense Detail" show-delete="true" icon-color="text-white" @back="backAction" />
       </div>
       <div class="main-body text-center text-white pt-20 pb-8">
-        <h1 class="amount font-extrabold text-5xl py-2">$ {{ expenseData.amount }}</h1>
+        <h1 class="amount font-extrabold text-5xl py-2"> {{ formatAmount(expenseData.amount) }}</h1>
         <p class="text-base py-2">{{ dateLocalString(expenseData.action_date) }}</p>
       </div>
       <div
