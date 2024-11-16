@@ -7,7 +7,7 @@
       <div class="account_info text-center px-6 py-16">
         <h1 class="text-sm text-p[#91919F] font-medium">Account Balance</h1>
         <p class="text-3xl font-bold text-[#161719]">
-          ${{ walletLists.total_amount }}
+          {{ formatAmount(walletLists.total_amount) }}
         </p>
       </div>
       <div v-if="walletLoading">
@@ -39,7 +39,7 @@
               </div>
             </div>
             <div class="amount">
-              <p class="text-xl text-[#212325]">${{ wallet.amount }}</p>
+              <p class="text-xl text-[#212325]">{{ formatAmount(wallet.amount) }}</p>
             </div>
           </div>
         </div>

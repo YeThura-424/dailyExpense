@@ -7,7 +7,7 @@
       <div class="budget_amount text-white">
         <span class="text-lg">How much do you want to spend ?</span>
         <div class="flex items-center">
-          <span class="font-extrabold text-5xl">$</span>
+          <span class="font-extrabold text-5xl">{{ getCurrency() }}</span>
           <input v-model="form.total" type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3" />
         </div>
