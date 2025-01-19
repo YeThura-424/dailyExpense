@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "supabase:init": "supabase init",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref eszqsoixyvrokeacwzcn"
+    "supabase:link": "supabase link --project-ref eszqsoixyvrokeacwzcn",
+    "make:migration": "supabase migration new"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
