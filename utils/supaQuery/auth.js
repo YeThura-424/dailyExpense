@@ -8,15 +8,15 @@ export const register = async (form) => {
 
   if (error) return console.log(error);
 
-  // if (data.user) {
-  //   const { error } = await supabase.from("profiles").insert({
-  //     id: data.user.id,
-  //     username: formData.username,
-  //     full_name: formData.firstname.concat(" ", formData.lastname),
-  //   });
+  if (data.user) {
+    const { error } = await supabase.from("profiles").insert({
+      id: data.user.id,
+      username: form.username,
+      currency: form.currency,
+    });
 
-  //   if (error) return console.log("Profile err: ", error);
-  // }
+    if (error) return console.log("Profile err: ", error);
+  }
 
   return data;
 };
