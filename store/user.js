@@ -36,8 +36,19 @@ export const useuserStore = defineStore(
       return true;
     };
 
-    const login = async () => {
-      // login logic
+    const login = async (formData) => {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (data) {
+        user.value = data.user;
+        token.value = data.session;
+        return true;
+      }
+
+      return false;
     };
 
     const logout = async () => {};
@@ -46,6 +57,7 @@ export const useuserStore = defineStore(
       user,
       token,
       signup,
+      login,
     };
   },
   { persist: true }

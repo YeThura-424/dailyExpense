@@ -72,7 +72,7 @@
       <div class="sign-up py-3">
         <button
           type="button"
-          @click="signup"
+          @click="registerUser"
           class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
         >
           <Icon
@@ -96,24 +96,28 @@
 </template>
 
 <script setup>
-import { register } from "~/utils/supaQuery/auth";
+import { useuserStore } from "~/store/user";
 
 const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
   { name: "USD", value: "usd", icon: "/images/dollar.png" },
   { name: "Baht", value: "bhat", icon: "/images/baht.png" },
 ]);
+
+const router = useRouter();
 const form = reactive({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
-  currency: "",
+  name: "test_user",
+  email: "testuser@gmail.com",
+  password: "123456",
+  password_confirmation: "123456",
+  currency: "ks",
 });
 
 const validationError = ref(null);
 const token = useCookie("token");
 const user = useCookie("user");
+
+const { signup } = useuserStore();
 
 // const signup = async () => {
 //   const { data, status, error } = await useFetch("/api/register", {
@@ -131,10 +135,13 @@ const user = useCookie("user");
 //   }
 // }
 
-const signup = async () => {
-  const isRegistered = await register(form);
+const registerUser = async (e) => {
+  if (e.isTrusted) {
+    const data = await signup(form);
 
-  console.log(isRegistered, "register data");
-  // if (isRegistered) router.push('/')
+    if (data) {
+      router.push("/");
+    }
+  }
 };
 </script>
