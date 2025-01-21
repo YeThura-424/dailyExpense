@@ -41,14 +41,17 @@ export const useUserStore = defineStore(
         password: formData.password,
       });
 
+      if (error) {
+        return { success: false, error: error.message };
+      }
+
       if (data) {
         user.value = data.user;
         token.value = data.session;
-
-        return true;
+        return { success: true };
       }
 
-      return false;
+      return { success: false, error: "Unknown error occurred." };
     };
 
     const logout = async () => {
