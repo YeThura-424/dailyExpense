@@ -70,13 +70,25 @@ const form = reactive({
 });
 
 const loginUser = async () => {
-  loading.value = true;
-  const data = await login(form);
+  if (!form.email || !form.password) {
+    useNuxtApp().$toast.error("Please enter both email and password.");
+    return;
+  }
 
-  if (data) {
+  loading.value = true;
+
+  const result = await login(form);
+
+  if (result.success) {
     useNuxtApp().$toast.success("Login Successful");
     router.push("/");
+  } else {
+    useNuxtApp().$toast.error(
+      result.error || "Login failed. Please try again."
+    );
   }
+
+  loading.value = false;
 };
 
 // const login = async () => {

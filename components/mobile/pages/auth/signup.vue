@@ -96,7 +96,7 @@
 </template>
 
 <script setup>
-import { useuserStore } from "~/store/user";
+import { useUserStore } from "~/store/user";
 
 const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
@@ -117,7 +117,7 @@ const validationError = ref(null);
 const token = useCookie("token");
 const user = useCookie("user");
 
-const { signup } = useuserStore();
+const { signup } = useUserStore();
 
 // const signup = async () => {
 //   const { data, status, error } = await useFetch("/api/register", {
