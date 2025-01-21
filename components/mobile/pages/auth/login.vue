@@ -58,9 +58,9 @@
 </template>
 
 <script setup>
-import { useuserStore } from "~/store/user";
-const { status, data } = useAuth();
-const { login } = useuserStore();
+import { useUserStore } from "~/store/user";
+
+const { login } = useUserStore();
 const loading = ref(false);
 const router = useRouter();
 
@@ -70,9 +70,13 @@ const form = reactive({
 });
 
 const loginUser = async () => {
+  loading.value = true;
   const data = await login(form);
 
-  if (data) router.push("/");
+  if (data) {
+    useNuxtApp().$toast.success("Login Successful");
+    router.push("/");
+  }
 };
 
 // const login = async () => {

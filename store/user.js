@@ -1,14 +1,13 @@
 import { defineStore } from "pinia";
 import { supabase } from "../lib/supabaseClient";
 
-export const useuserStore = defineStore(
+export const useUserStore = defineStore(
   "user",
   () => {
-    const user = ref({});
-    const token = ref(null);
+    const user = useCookie("user");
+    const token = useCookie("token");
 
     const signup = async (form) => {
-      console.log(form, "formdata");
       const { data, error } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
@@ -29,10 +28,10 @@ export const useuserStore = defineStore(
           console.log("profile data adding error");
         }
       }
-
+      token.value = data.session; // set token to cookie
       user.value = data.user;
-      token.value = data.session;
-
+      // user.value = data.user;
+      // token.value = data.session;
       return true;
     };
 
@@ -45,19 +44,30 @@ export const useuserStore = defineStore(
       if (data) {
         user.value = data.user;
         token.value = data.session;
+
         return true;
       }
 
       return false;
     };
 
-    const logout = async () => {};
+    const logout = async () => {
+      const { error } = await supabase.auth.signOut();
+
+      if (error) return false;
+
+      user.value = null;
+      token.value = null;
+
+      return true;
+    };
 
     return {
       user,
       token,
       signup,
       login,
+      logout,
     };
   },
   { persist: true }
