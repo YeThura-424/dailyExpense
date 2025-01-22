@@ -1,45 +1,38 @@
-export const useCategoryStore = defineStore('category', {
-  state: () => {
-    return {
-      categories: [],
-      message: "",
-    }
-  },
-  actions: {
-    async getCategories() {
-      try {
-        await useFetch("/api/category", {
-          method: "GET",
-          transform: (response) => {
-            this.categories = response.data.data
-          }
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    },
+import { defineStore } from "pinia";
+import { supabase } from "~/lib/supabaseClient";
 
-    async createCategories(form) {
-      try {
-        const data  = useFetch("/api/file-upload/category/store", {
-          method: "POST",
-          body: form,
-        });
-        console.log('category created in store', data)
-      } catch (error) {
-        console.log(error);
-      }
-    },
-    async updateCategory(form) {
-      try {
-        const data = useFetch(`/api/file-upload/category/${form.id}`, {
-          method: "POST",
-          body: form
-        })
-        return data;
-      } catch (error) {
-        console.error(error);
-      }
+export const useCategoryStore = defineStore("category", () => {
+  const categories = ref([]);
+  const category = ref(null);
+
+  const getCateogry = async () => {
+    // logic for getting category
+  };
+
+  const storeCategory = async (formData) => {
+    const categoryIcon = ref(null);
+    if (formData.icon) {
+      // create bucket
+      const { data, error } = await supabase.storage.createBucket(
+        "categories",
+        {
+          public: false,
+          allowedMimeTypes: ["image/png"],
+          fileSizeLimit: 1024,
+        }
+      );
     }
-  }
-})
+
+    const { data, error } = supabase.from("categories").insert({
+      name: formData.namem,
+      category_type: formData.type,
+      icon: categoryIcon.value ?? null,
+    }); //
+  };
+
+  return {
+    category,
+    categories,
+    storeCategory,
+  };
+});

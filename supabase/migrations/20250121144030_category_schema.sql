@@ -10,5 +10,5 @@ create table
     name text unique not null,
     type category_type default 'income' not null,
     icon text default null,
-    created_at timestamptz default now() not null,
-  )
+    created_at timestamptz default now() not null
+  );
