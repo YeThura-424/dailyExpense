@@ -1,4 +1,5 @@
 <template>
+  <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
     <MobilePageHeader
       title="Sign Up"
@@ -7,13 +8,7 @@
     />
     <div class="login-form-wrapper pt-10">
       <div class="name py-3">
-        <CoreInputBox v-model="form.name" placeholder="Name" type="text" />
-        <p
-          v-if="validationError?.name"
-          class="text-sm text-red-600 font-normal"
-        >
-          {{ validationError.name[0] }}
-        </p>
+        <CoreInputBox v-model="form.username" placeholder="Name" type="text" />
       </div>
 
       <div class="currency py-3">
@@ -26,12 +21,6 @@
 
       <div class="email py-3">
         <CoreInputBox v-model="form.email" placeholder="Email" type="email" />
-        <p
-          v-if="validationError?.email"
-          class="text-sm text-red-600 font-normal"
-        >
-          {{ validationError.email[0] }}
-        </p>
       </div>
 
       <div class="password py-3">
@@ -40,12 +29,6 @@
           placeholder="Password"
           type="password"
         />
-        <p
-          v-if="validationError?.password"
-          class="text-sm text-red-600 font-normal"
-        >
-          {{ validationError.password[0] }}
-        </p>
       </div>
 
       <div class="password py-3">
@@ -60,6 +43,7 @@
         <input
           id="termsandcondition"
           type="checkbox"
+          v-model="form.terms"
           class="h-8 w-8 border-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
         />
         <label for="termsandcondition" class="text-lg"
@@ -73,7 +57,8 @@
         <button
           type="button"
           @click="registerUser"
-          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+          :disabled="isReadySignUp ? true : false"
+          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
         >
           <Icon
             name="ion:ios-log-in"
@@ -97,6 +82,8 @@
 
 <script setup>
 import { useUserStore } from "~/store/user";
+const loading = ref(false);
+const isReadySignUp = ref(false);
 
 const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
@@ -106,19 +93,23 @@ const currency = ref([
 
 const router = useRouter();
 const form = reactive({
-  name: "test_user",
+  username: "test_user",
   email: "testuser@gmail.com",
   password: "123456",
   password_confirmation: "123456",
   currency: "ks",
+  terms: false,
 });
-
-const validationError = ref(null);
-const token = useCookie("token");
-const user = useCookie("user");
 
 const { signup } = useUserStore();
 
+watch(form, (newValue) => {
+  if (newValue.password !== newValue.password_confirmation) {
+    isReadySignUp.value = false;
+  } else {
+    isReadySignUp.value = true;
+  }
+});
 // const signup = async () => {
 //   const { data, status, error } = await useFetch("/api/register", {
 //     method: 'POST',
@@ -136,12 +127,22 @@ const { signup } = useUserStore();
 // }
 
 const registerUser = async (e) => {
-  if (e.isTrusted) {
-    const data = await signup(form);
+  loading.value = true;
 
-    if (data) {
+  if (e.isTrusted) {
+    // to ensure that the click event is from user
+    const result = await signup(form);
+
+    if (result.success) {
+      useNuxtApp().$toast.success("Register Successful");
       router.push("/");
+    } else {
+      useNuxtApp().$toast.error(
+        result.error || "Register failed. Please try again."
+      );
     }
+
+    loading.value = false;
   }
 };
 </script>
