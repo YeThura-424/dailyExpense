@@ -11,23 +11,21 @@ export const useCategoryStore = defineStore("category", () => {
 
   const storeCategory = async (formData) => {
     const categoryIcon = ref(null);
+    console.log("form data", formData);
     if (formData.icon) {
-      // create bucket
-      const { data, error } = await supabase.storage.createBucket(
-        "categories",
-        {
-          public: false,
-          allowedMimeTypes: ["image/png"],
-          fileSizeLimit: 1024,
-        }
-      );
-    }
+      const fileName = `${Date.now()}-${formData.icon.name}`;
+      const { data, error } = await supabase.storage
+        .from("category")
+        .upload(fileName, formData.icon);
 
-    const { data, error } = supabase.from("categories").insert({
-      name: formData.namem,
-      category_type: formData.type,
-      icon: categoryIcon.value ?? null,
-    }); //
+      console.log(data, error);
+
+      // const { data, error } = supabase.from("categories").insert({
+      //   name: formData.namem,
+      //   category_type: formData.type,
+      //   icon: categoryIcon.value ?? null,
+      // }); //
+    }
   };
 
   return {
