@@ -15,7 +15,7 @@ export const useCategoryStore = defineStore("category", () => {
     if (formData.icon) {
       const fileName = `${Date.now()}-${formData.icon.name}`;
       const { data, error } = await supabase.storage
-        .from("category")
+        .from("category_icon")
         .upload(fileName, formData.icon);
 
       console.log(data, error);

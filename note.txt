@@ -1,36 +1,13 @@
-<template>
-  <div>
-    <Head>
-      <Title>{{ title }}</Title>
-      <Meta name="description" content="Expence Tracker" />
-      <Meta
-        property="og:description"
-        content="Track your daily expense easily here"
-      />
-      <Meta property="og:title" content="Expence Tracker" />
-      <Meta property="og:type" content="website" />
-     
-      
-    </Head>
+ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
 
-    <section>
-      <div v-if="$device.isDesktopOrTablet">
-        <DesktopLayout>
-          <NuxtLoadingIndicator color="#801c1d" />
-          <slot />
-        </DesktopLayout>
-      </div>
-      <div v-else>
-        <MobileLayout>
-          <NuxtLoadingIndicator color="#801c1d" />
-          <slot />
-        </MobileLayout>
-      </div>
-    </section>
-  </div>
-</template>
-<style>
-</style>
-<script setup>
+CREATE POLICY objects_select_policy ON storage.objects FOR SELECT 
+  USING (auth.role() = 'authenticated');
 
-</script>
+CREATE POLICY objects_insert_policy ON storage.objects FOR INSERT 
+  WITH CHECK(auth.role() = 'authenticated');
+
+CREATE POLICY objects_update_policy ON storage.objects FOR UPDATE 
+  USING (auth.role() = 'authenticated');
+
+CREATE POLICY objects_delete_policy ON storage.objects FOR DELETE 
+  USING (auth.role() = 'authenticated');
