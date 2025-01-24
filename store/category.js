@@ -11,21 +11,40 @@ export const useCategoryStore = defineStore("category", () => {
 
   const storeCategory = async (formData) => {
     const categoryIcon = ref(null);
-    console.log("form data", formData);
+
     if (formData.icon) {
-      const fileName = `${Date.now()}-${formData.icon.name}`;
-      const { data, error } = await supabase.storage
+      const file = formData.icon[0];
+      const fileName = `${Date.now()}-${file.name}`;
+
+      const { data: uploadData, error: uploadError } = await supabase.storage
         .from("category_icon")
-        .upload(fileName, formData.icon);
+        .upload(fileName, file, {
+          cacheControl: "3600",
+          upsert: false,
+        });
 
-      console.log(data, error);
+      if (uploadError) return { success: false, message: uploadError.message };
 
-      // const { data, error } = supabase.from("categories").insert({
-      //   name: formData.namem,
-      //   category_type: formData.type,
-      //   icon: categoryIcon.value ?? null,
-      // }); //
+      if (uploadData) {
+        categoryIcon.value = uploadData.id;
+      }
     }
+
+    const { data: categoryData, error: categoryError } = await supabase
+      .from("categories")
+      .insert({
+        name: formData.name,
+        type: formData.type,
+        icon: categoryIcon.value ?? null,
+      });
+
+    if (categoryError) {
+      return { success: false, message: categoryError.message };
+    }
+
+    console.log(categoryData);
+
+    return { success: true };
   };
 
   return {
