@@ -55,8 +55,8 @@ const categoryTypes = ref([
     value: "income",
   },
   {
-    name: "Expend",
-    value: "expend",
+    name: "Expense",
+    value: "expense",
   },
 ]);
 
@@ -76,22 +76,16 @@ const backAction = () => {
 };
 
 const saveCategory = async () => {
+  loading.value = true;
+
   const result = await storeCategory(form);
-  console.log(result);
+
   if (result.success) {
     useNuxtApp().$toast.success("Category Created Successfully");
     router.push("/category");
   } else {
+    loading.value = false;
     useNuxtApp().$toast.error(result.error);
   }
-};
-
-const transform = (form) => {
-  let formData = new FormData();
-  formData.append("name", form.name);
-  formData.append("type", form.type);
-  formData.append("icon", form.categoryImage[0]);
-
-  return formData;
 };
 </script>

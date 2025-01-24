@@ -30,19 +30,15 @@ export const useCategoryStore = defineStore("category", () => {
       }
     }
 
-    const { data: categoryData, error: categoryError } = await supabase
-      .from("categories")
-      .insert({
-        name: formData.name,
-        type: formData.type,
-        icon: categoryIcon.value ?? null,
-      });
+    const { error: categoryError } = await supabase.from("categories").insert({
+      name: formData.name,
+      type: formData.type,
+      icon: categoryIcon.value ?? null,
+    });
 
     if (categoryError) {
       return { success: false, message: categoryError.message };
     }
-
-    console.log(categoryData);
 
     return { success: true };
   };
