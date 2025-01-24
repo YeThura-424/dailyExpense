@@ -61,6 +61,7 @@ const categoryTypes = ref([
 ]);
 
 const { storeCategory } = useCategoryStore();
+const router = useRouter();
 
 const form = reactive({
   type: "",
@@ -75,7 +76,14 @@ const backAction = () => {
 };
 
 const saveCategory = async () => {
-  await storeCategory(form);
+  const result = await storeCategory(form);
+  console.log(result);
+  if (result.success) {
+    useNuxtApp().$toast.success("Category Created Successfully");
+    router.push("/category");
+  } else {
+    useNuxtApp().$toast.error(result.error);
+  }
 };
 
 const transform = (form) => {
