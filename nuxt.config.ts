@@ -19,7 +19,6 @@ export default defineNuxtConfig({
     "vue3-carousel-nuxt",
     "@pinia/nuxt",
     "@vueuse/nuxt",
-    "@sidebase/nuxt-auth",
   ],
   postcss: {
     plugins: {
