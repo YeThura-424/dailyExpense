@@ -5,8 +5,29 @@ export const useCategoryStore = defineStore("category", () => {
   const categories = ref([]);
   const category = ref(null);
 
-  const getCateogry = async () => {
-    // logic for getting category
+  const fetchCategories = async () => {
+    const { data, error } = await supabase.from("categories").select();
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+    console.log(data, "category retrived data");
+    categories.value = data.map((item) => {
+      return {
+        name: item.name,
+        icon: getCategoryIcon(item.icon),
+        type: item.type,
+      };
+    });
+    // categories.value = data;
+  };
+
+  const getCategoryIcon = (id) => {
+    const { data } = supabase.storage.from("category_icon").getPublicUrl(id);
+
+    if (data) return data.publicUrl;
+
+    return null;
   };
 
   const storeCategory = async (formData) => {
@@ -26,7 +47,7 @@ export const useCategoryStore = defineStore("category", () => {
       if (uploadError) return { success: false, message: uploadError.message };
 
       if (uploadData) {
-        categoryIcon.value = uploadData.id;
+        categoryIcon.value = uploadData.path;
       }
     }
 
@@ -46,6 +67,7 @@ export const useCategoryStore = defineStore("category", () => {
   return {
     category,
     categories,
+    fetchCategories,
     storeCategory,
   };
 });
