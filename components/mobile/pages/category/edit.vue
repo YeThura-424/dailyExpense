@@ -65,20 +65,14 @@ const categoryTypes = ref([
 const categoryDetailLoading = ref(true);
 const { categoryDetail } = useCategoryStore();
 
-// const type = ref(categoryTypes.value[0].value);
 const form = reactive({
   id: "",
   type: "",
-  icon: "",
+  icon: null,
+  oldIcon: null,
   name: "",
 });
-
-watch(form.icon, (newval, oldval) => {
-  form.oldIcon = oldval;
-
-  console.log(form);
-});
-
+const oldIcon = ref(null);
 const route = useRoute();
 const categoryId = route.params.id;
 
@@ -88,21 +82,20 @@ const backAction = () => {
   navigateTo("/category");
 };
 
+watch(
+  () => form.icon,
+  (newVal, oldVal) => {
+    console.log("form icon update", newVal, oldVal);
+    if (oldVal) {
+      form.oldIcon = oldIcon.value;
+    }
+
+    console.log(form, "logging the form");
+  }
+);
+
 const getCategoryDetail = async () => {
   categoryDetailLoading.value = true;
-  // await useFetch(`/api/category/${categoryId}`, {
-  //   method: "GET",
-  //   transform: (response) => {
-  //     console.log(response.data);
-  //     form.name = response?.data?.data?.name;
-  //     // type.value = categoryTypes.value.find((cate) => cate.value == response.data.type)
-  //     form.type = categoryTypes.value.find(
-  //       (cate) => cate.value == response?.data?.data?.type
-  //     ).value;
-  //     form.categoryImage = response?.data?.data?.icon;
-  //     form.id = response?.data?.data?.id;
-  //   },
-  // });
 
   const result = await categoryDetail(categoryId);
 
@@ -111,6 +104,8 @@ const getCategoryDetail = async () => {
     form.type = result.data.type;
     form.icon = result.data.icon;
     form.id = result.data.id;
+
+    oldIcon.value = result.data.oldIcon;
 
     categoryDetailLoading.value = false;
   } else {

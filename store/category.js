@@ -39,6 +39,7 @@ export const useCategoryStore = defineStore("category", () => {
         name: data.name,
         type: data.type,
         icon: getCategoryIcon(data.icon),
+        oldIcon: data.icon,
       },
     };
   };

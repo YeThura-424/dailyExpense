@@ -23,7 +23,6 @@
       class="attachment_input relative w-24 h-24 border border-dashed border-[#91919F] flex flex-col items-center justify-center rounded-xl"
     >
       <Icon name="ion:ios-plus-outline" size="50" class="text-[#91919F]" />
-      <!-- <span class="text-[#91919F] text-lg text-center">Add More</span> -->
       <input
         id="file-upload"
         type="file"
