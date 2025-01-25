@@ -19,7 +19,6 @@ export const useCategoryStore = defineStore("category", () => {
         type: item.type,
       };
     });
-    // categories.value = data;
   };
 
   const getCategoryIcon = (id) => {
@@ -34,20 +33,12 @@ export const useCategoryStore = defineStore("category", () => {
     const categoryIcon = ref(null);
 
     if (formData.icon) {
-      const file = formData.icon[0];
-      const fileName = `${Date.now()}-${file.name}`;
+      const uploadResult = await storeIcon(formData.icon);
 
-      const { data: uploadData, error: uploadError } = await supabase.storage
-        .from("category_icon")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-
-      if (uploadError) return { success: false, message: uploadError.message };
-
-      if (uploadData) {
-        categoryIcon.value = uploadData.path;
+      if (uploadResult.success) {
+        categoryIcon.value = uploadResult.data;
+      } else {
+        return { success: false, message: uploadResult.message };
       }
     }
 
@@ -62,6 +53,63 @@ export const useCategoryStore = defineStore("category", () => {
     }
 
     return { success: true };
+  };
+
+  const updateCategory = async (formData) => {
+    const categoryIcon = ref(null);
+
+    if (formData.icon) {
+      const oldIcon = formData.oldIcon;
+      if (oldIcon) {
+        // update old one with new one
+        const uploadResult = await updateIcon(formData.icon, formData.oldIcon);
+        if (uploadResult.success) {
+          categoryIcon.value = uploadResult.data;
+        } else {
+          return { success: false, message: uploadResult.message };
+        }
+      } else {
+        // add new one if old does not exist
+        const uploadResult = await storeIcon(formData.icon);
+
+        if (uploadResult.success) {
+          categoryIcon.value = uploadResult.data;
+        } else {
+          return { success: false, message: uploadResult.message };
+        }
+      }
+    }
+  };
+
+  const storeIcon = async (fileData) => {
+    const file = fileData.icon[0];
+    const fileName = `${Date.now()}-${file.name}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("category_icon")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) return { success: false, message: uploadError.message };
+
+    if (uploadData) return { success: true, data: uploadData.path };
+  };
+
+  const updateIcon = async (newFile, oldFile) => {
+    const file = newFile.icon[0];
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("category_icon")
+      .update(oldFile, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (uploadError) return { success: false, message: uploadError.message };
+
+    if (uploadData) return { success: true, data: uploadData.path };
   };
 
   return {
