@@ -21,6 +21,19 @@ export const useCategoryStore = defineStore("category", () => {
     });
   };
 
+  const categoryDetail = async (id) => {
+    console.log("d nar mar");
+    const { data, error } = await supabase
+      .from("categories")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error) return { success: false, message: error.message };
+
+    return { success: true, message: data };
+  };
+
   const getCategoryIcon = (id) => {
     const { data } = supabase.storage.from("category_icon").getPublicUrl(id);
 
@@ -79,6 +92,21 @@ export const useCategoryStore = defineStore("category", () => {
         }
       }
     }
+
+    const { error } = supabase
+      .from("categories")
+      .update({
+        name: formData.name,
+        type: formData.type,
+        icon: categoryIcon.value ?? null,
+      })
+      .eq("id", formData.id);
+
+    if (error) {
+      return { success: false, message: error.message };
+    }
+
+    return { success: true };
   };
 
   const storeIcon = async (fileData) => {
@@ -116,6 +144,8 @@ export const useCategoryStore = defineStore("category", () => {
     category,
     categories,
     fetchCategories,
+    categoryDetail,
     storeCategory,
+    updateCategory,
   };
 });
