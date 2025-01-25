@@ -14,6 +14,7 @@ export const useCategoryStore = defineStore("category", () => {
     console.log(data, "category retrived data");
     categories.value = data.map((item) => {
       return {
+        id: item.id,
         name: item.name,
         icon: getCategoryIcon(item.icon),
         type: item.type,
@@ -31,7 +32,15 @@ export const useCategoryStore = defineStore("category", () => {
 
     if (error) return { success: false, message: error.message };
 
-    return { success: true, message: data };
+    return {
+      success: true,
+      data: {
+        id: data.id,
+        name: data.name,
+        type: data.type,
+        icon: getCategoryIcon(data.icon),
+      },
+    };
   };
 
   const getCategoryIcon = (id) => {

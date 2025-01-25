@@ -58,8 +58,8 @@ const categoryTypes = ref([
     value: "income",
   },
   {
-    name: "Expend",
-    value: "expend",
+    name: "Expense",
+    value: "expense",
   },
 ]);
 const categoryDetailLoading = ref(true);
@@ -105,10 +105,13 @@ const getCategoryDetail = async () => {
   // });
 
   const result = await categoryDetail(categoryId);
-  console.log(categoryId, "right here");
 
   if (result.success) {
-    // form.name = result.data.name;
+    form.name = result.data.name;
+    form.type = result.data.type;
+    form.icon = result.data.icon;
+    form.id = result.data.id;
+
     categoryDetailLoading.value = false;
   } else {
     categoryDetailLoading.value = false;
