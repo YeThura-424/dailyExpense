@@ -11,6 +11,7 @@
       >
         <img :src="previewUrl" alt="" class="w-24 h-24 rounded-xl p-1" />
         <Icon
+          v-if="multiple"
           name="ion:ios-close-circle"
           class="text-[#666666] absolute top-0 right-0 cursor-pointer"
           size="24"
@@ -60,6 +61,10 @@ const props = defineProps({
   modelValue: {
     type: String || Object,
     default: null,
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
   },
 });
 const emit = defineEmits(["update:modelValue"]);

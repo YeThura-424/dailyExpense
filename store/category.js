@@ -11,7 +11,7 @@ export const useCategoryStore = defineStore("category", () => {
     if (error) {
       return { success: false, error: error.message };
     }
-    console.log(data, "category retrived data");
+
     categories.value = data.map((item) => {
       return {
         id: item.id,
@@ -23,7 +23,6 @@ export const useCategoryStore = defineStore("category", () => {
   };
 
   const categoryDetail = async (id) => {
-    console.log("d nar mar");
     const { data, error } = await supabase
       .from("categories")
       .select()
@@ -81,11 +80,14 @@ export const useCategoryStore = defineStore("category", () => {
   const updateCategory = async (formData) => {
     const categoryIcon = ref(null);
 
-    if (formData.icon) {
+    if (formData.newIcon) {
       const oldIcon = formData.oldIcon;
       if (oldIcon) {
         // update old one with new one
-        const uploadResult = await updateIcon(formData.icon, formData.oldIcon);
+        const uploadResult = await updateIcon(
+          formData.newIcon,
+          formData.oldIcon
+        );
         if (uploadResult.success) {
           categoryIcon.value = uploadResult.data;
         } else {
@@ -93,7 +95,7 @@ export const useCategoryStore = defineStore("category", () => {
         }
       } else {
         // add new one if old does not exist
-        const uploadResult = await storeIcon(formData.icon);
+        const uploadResult = await storeIcon(formData.newIcon);
 
         if (uploadResult.success) {
           categoryIcon.value = uploadResult.data;
@@ -120,7 +122,7 @@ export const useCategoryStore = defineStore("category", () => {
   };
 
   const storeIcon = async (fileData) => {
-    const file = fileData.icon[0];
+    const file = fileData[0];
     const fileName = `${Date.now()}-${file.name}`;
 
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -136,7 +138,7 @@ export const useCategoryStore = defineStore("category", () => {
   };
 
   const updateIcon = async (newFile, oldFile) => {
-    const file = newFile.icon[0];
+    const file = newFile[0];
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from("category_icon")

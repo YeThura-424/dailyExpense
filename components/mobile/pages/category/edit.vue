@@ -69,6 +69,7 @@ const form = reactive({
   id: "",
   type: "",
   icon: null,
+  newIcon: null,
   oldIcon: null,
   name: "",
 });
@@ -87,6 +88,7 @@ watch(
   (newVal, oldVal) => {
     console.log("form icon update", newVal, oldVal);
     if (oldVal) {
+      form.newIcon = newVal;
       form.oldIcon = oldIcon.value;
     }
 
@@ -114,8 +116,6 @@ const getCategoryDetail = async () => {
       result.message || "Error Fetching Category Detial..."
     );
   }
-
-  console.log(form);
 };
 
 const updateCategory = async () => {
