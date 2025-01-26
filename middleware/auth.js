@@ -1,11 +1,12 @@
 import { useUserStore } from "~/store/user";
 
-export default defineNuxtRouteMiddleware((to) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const token = useCookie("token"); // get token from cookies
-  const { trackAuthChange, getSession } = useUserStore();
+  const { getSession } = useUserStore();
 
-  trackAuthChange();
-  getSession();
+  await getSession();
+
+  console.log(token.value);
   // if token exists and url is /login redirect to homepage
   if (token.value && to?.name === "login") {
     return navigateTo("/");

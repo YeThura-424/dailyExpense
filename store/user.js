@@ -67,8 +67,9 @@ export const useUserStore = defineStore("user", () => {
 
   const getSession = async () => {
     const { data } = await supabase.auth.getSession();
-    if (data.session?.user) {
+    if (data.session) {
       token.value = data.session.access_token;
+      user.value = data.session.user;
     } else {
       user.value = null;
       token.value = null;
@@ -81,6 +82,7 @@ export const useUserStore = defineStore("user", () => {
       setTimeout(async () => {
         if (session) {
           token.value = session.access_token;
+          user.value = session.user;
         } else {
           user.value = null;
           token.value = null;
