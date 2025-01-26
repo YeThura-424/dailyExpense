@@ -2,7 +2,11 @@
   <div class="bg-[#00A86B]">
     <div class="income_main_content px-6 py-4">
       <div class="income_header">
-        <MobilePageHeader title="Income" icon-color="text-white" @back="backAction" />
+        <MobilePageHeader
+          title="Income"
+          icon-color="text-white"
+          @back="backAction"
+        />
       </div>
       <div class="income_amount text-white pt-36">
         <span class="text-lg">How Much ?</span>
@@ -22,7 +26,7 @@
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
-          :options="category"
+          :options="categories"
           option-key="id"
           name="Category"
           placeholder="Select Category..."
@@ -30,13 +34,16 @@
         />
       </div>
       <div class="description_input py-2">
-        <CoreInputBox
-          placeholder="Description"
-          v-model="form.description"
-        />
+        <CoreInputBox placeholder="Description" v-model="form.description" />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :options="wallet" option-key="id" name="Wallet" v-model="form.wallet_id" placeholder="Select Category" />
+        <CoreSelectBox
+          :options="wallet"
+          option-key="id"
+          name="Wallet"
+          v-model="form.wallet_id"
+          placeholder="Select Wallet"
+        />
       </div>
       <div class="repeat-transaction flex justify-between items-center py-3">
         <div class="text">
@@ -72,93 +79,73 @@
         </button>
       </div>
     </div>
-    <MobileLoadingDots v-if="incomeLoading"/>
+    <MobileLoadingDots v-if="incomeLoading" />
   </div>
 </template>
 
 <script setup>
 import { Switch } from "@headlessui/vue";
+import { useCategoryStore } from "~/store/category";
 
 const router = useRouter();
 const form = reactive({
-  action_date:"",
+  action_date: "",
   amount: 0,
   description: "",
   category_id: "",
   wallet_id: "",
   repeat: false,
-  type: "income"
+  type: "income",
 });
 
-const category = ref([]);
 const wallet = ref([]);
+const categoryStore = useCategoryStore();
+const { categories } = storeToRefs(categoryStore);
 const incomeLoading = ref(false);
 
-onMounted( async() => {
+onMounted(async () => {
   await fetchCategory();
   await fetchWallet();
-})
+});
 
 const resetForm = () => {
-  form.action_date = "",
-  form.amount = 0,
-  form.description = "",
-  form.repeat = false
-}
+  (form.action_date = ""),
+    (form.amount = 0),
+    (form.description = ""),
+    (form.repeat = false);
+};
 
 const backAction = () => {
   router.back();
 };
 
-const fetchCategory = async() => {
-  try {
-    await useFetch("/api/category", {
-      method: "GET",
-      params: {
-        type: 'income'
-      },
-      transform: (response) => {
-        console.log(response, 'budget category');
-        category.value = response.data?.data;
-      }
-    })
-  } catch (error) {
-    console.log(error);
-  }
-}
+const fetchCategory = async () => {
+  await categoryStore.fetchCategories();
+};
 
 const fetchWallet = async () => {
-  try {
-    await useFetch("/api/wallet/user-wallet", {
-      method: "GET",
-      transform: (response) => {
-        wallet.value = response.data?.user_wallet
-      }
-    })
-  } catch (error) {
-    console.error(error)
-  }
-}
+  //
+};
 
 const saveIncome = async () => {
   incomeLoading.value = true;
   try {
     useFetch("/api/income/create", {
       method: "POST",
-      body: form
-    })
+      body: form,
+    });
     if (form.repeat) {
       resetForm();
       useNuxtApp().$toast.success("Income Record Created Successfully");
     } else {
-      navigateTo('/transaction')
+      navigateTo("/transaction");
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
   } finally {
     incomeLoading.value = false;
   }
-}
+};
 
 fetchWallet();
 fetchCategory();
