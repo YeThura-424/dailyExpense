@@ -11,13 +11,10 @@ export const useUserStore = defineStore("user", () => {
       email: form.email,
       password: form.password,
     });
-    console.log("d nar mar", data);
     if (error) {
       return { success: false, error: error.message };
     }
-
     if (data.user) {
-      console.log(data, "loggin from profile creation");
       const { error, data: profile } = await supabase.from("profiles").insert({
         id: data.user.id,
         username: form.username,
@@ -28,7 +25,7 @@ export const useUserStore = defineStore("user", () => {
         return { success: false, error: error.message };
       }
 
-      token.value = data.session; // set token to cookie
+      token.value = data.session.access_token; // set token to cookie
       user.value = data.user;
       userProfile.value = profile;
 
@@ -49,7 +46,7 @@ export const useUserStore = defineStore("user", () => {
 
     if (data) {
       user.value = data.user;
-      token.value = data.session;
+      token.value = data.session.access_token;
       return { success: true };
     }
 
@@ -68,11 +65,38 @@ export const useUserStore = defineStore("user", () => {
     return true;
   };
 
+  const getSession = async () => {
+    const { data } = await supabase.auth.getSession();
+    if (data.session?.user) {
+      token.value = data.session.access_token;
+    } else {
+      user.value = null;
+      token.value = null;
+      userProfile.value = null;
+    }
+  };
+
+  const trackAuthChange = () => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      setTimeout(async () => {
+        if (session) {
+          token.value = session.access_token;
+        } else {
+          user.value = null;
+          token.value = null;
+          userProfile.value = null;
+        }
+      }, 0);
+    });
+  };
+
   return {
     user,
     token,
     signup,
     login,
     logout,
+    trackAuthChange,
+    getSession,
   };
 });
