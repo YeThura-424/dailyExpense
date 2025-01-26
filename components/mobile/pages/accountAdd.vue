@@ -1,10 +1,17 @@
 <template>
+  <div class="loading-wrapper" v-if="loading">
+    <MobileLoadingDots />
+  </div>
   <div class="bg-[#7F3DFF] flex flex-col justify-between h-screen">
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
       <div class="account_header">
-        <MobilePageHeader title="Add new account" icon-color="text-white" @back="backAction" />
+        <MobilePageHeader
+          title="Add new account"
+          icon-color="text-white"
+          @back="backAction"
+        />
       </div>
       <div class="expense_amount text-white">
         <span class="text-lg">Balance</span>
@@ -22,14 +29,7 @@
       <div class="account_name">
         <CoreInputBox placeholder="Name" v-model="form.name" />
       </div>
-      <div class="category_select py-3">
-        <CoreSelectBox
-          :options="walletType.walletType"
-          option-key="id"
-          name="Category"
-          v-model="form.wallet_type_id"
-        />
-      </div>
+      <div class="category_select py-3"></div>
 
       <div class="save-button gap-x-5 py-3">
         <button
@@ -49,30 +49,42 @@
 </template>
 
 <script setup>
+import { useWalletStore } from "~/store/wallet";
+
+const authUser = useCookie("user");
+const loading = ref(false);
 const form = reactive({
   amount: 0,
-  wallet_type_id: "",
   name: "",
 });
+const router = useRouter();
 
-//wallet type
-const walletType = useWalletType();
-await walletType.getWalletType();
-
-console.log('wallet type', walletType.walletType)
+const { storeWallet } = useWalletStore();
 
 const backAction = () => {
-  navigateTo('/account');
-}
+  navigateTo("/account");
+};
 
 const saveWallet = async () => {
-  try {
-    const data = walletType.saveWallet(form);
-    console.log(data, "wallet save");
-  } catch (error) {
-    console.log(error);
-  } finally {
-    navigateTo("/account");
+  loading.value = true;
+  if (!authUser.value) {
+    loading.value = false;
+    useNuxtApp().$toast.error("Please Login First!!");
+    return false;
+  }
+
+  const result = await storeWallet({
+    userId: authUser.value.id,
+    name: form.name,
+    amount: form.amount,
+  });
+
+  if (result.success) {
+    useNuxtApp().$toast.success("Account Created Successfully");
+    router.push("/account");
+  } else {
+    loading.value = false;
+    useNuxtApp().$toast.error(result.message);
   }
 };
 </script>
