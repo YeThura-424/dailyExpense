@@ -30,7 +30,7 @@
           option-key="id"
           name="Category"
           placeholder="Select Category..."
-          v-model="form.category_id"
+          v-model="form.categoryId"
         />
       </div>
       <div class="description_input py-2">
@@ -41,8 +41,9 @@
           :options="wallet"
           option-key="id"
           name="Wallet"
-          v-model="form.wallet_id"
+          v-model="form.walletId"
           placeholder="Select Wallet"
+          showAmount
         />
       </div>
       <div class="repeat-transaction flex justify-between items-center py-3">
@@ -86,14 +87,16 @@
 <script setup>
 import { Switch } from "@headlessui/vue";
 import { useCategoryStore } from "~/store/category";
+import { usetransactionStore } from "~/store/transaction";
+import { useWalletStore } from "~/store/wallet";
 
 const router = useRouter();
 const form = reactive({
   action_date: "",
   amount: 0,
   description: "",
-  category_id: "",
-  wallet_id: "",
+  categoryId: "",
+  walletId: "",
   repeat: false,
   type: "income",
 });
@@ -101,6 +104,8 @@ const form = reactive({
 const wallet = ref([]);
 const categoryStore = useCategoryStore();
 const { categories } = storeToRefs(categoryStore);
+const { fetchWallets } = useWalletStore();
+const { createTransaction } = usetransactionStore();
 const incomeLoading = ref(false);
 
 onMounted(async () => {
@@ -124,26 +129,32 @@ const fetchCategory = async () => {
 };
 
 const fetchWallet = async () => {
-  //
+  const result = await fetchWallets();
+  wallet.value = result.data;
 };
 
 const saveIncome = async () => {
+  console.log(new Date(form.action_date), "date output");
+
+  if (isNaN(new Date(form.action_date))) {
+    useNuxtApp().$toast.error("Invalid date format");
+    return false;
+  }
+
+  const formattedDate = new Date(form.action_date).toISOString().split("T")[0];
+  form.action_date = formattedDate;
+
   incomeLoading.value = true;
-  try {
-    useFetch("/api/income/create", {
-      method: "POST",
-      body: form,
-    });
-    if (form.repeat) {
-      resetForm();
-      useNuxtApp().$toast.success("Income Record Created Successfully");
-    } else {
-      navigateTo("/transaction");
-    }
-  } catch (error) {
-    console.log(error);
-  } finally {
+  const result = await createTransaction(form);
+  console.log(result, "logging income transaction result");
+  if (result.success) {
     incomeLoading.value = false;
+    useNuxtApp().$toast.error(result.message);
+    router.push("/transaction");
+  } else {
+    incomeLoading.value = false;
+    resetForm();
+    useNuxtApp().$toast.error(result.error);
   }
 };
 
