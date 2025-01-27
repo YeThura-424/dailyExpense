@@ -26,7 +26,7 @@
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
-          :options="categories"
+          :options="incomeCategories"
           option-key="id"
           name="Category"
           placeholder="Select Category..."
@@ -103,7 +103,7 @@ const form = reactive({
 
 const wallet = ref([]);
 const categoryStore = useCategoryStore();
-const { categories } = storeToRefs(categoryStore);
+const { incomeCategories } = storeToRefs(categoryStore);
 const { fetchWallets } = useWalletStore();
 const { createTransaction } = usetransactionStore();
 const incomeLoading = ref(false);
@@ -125,7 +125,7 @@ const backAction = () => {
 };
 
 const fetchCategory = async () => {
-  await categoryStore.fetchCategories();
+  await categoryStore.fetchIncomeCategory();
 };
 
 const fetchWallet = async () => {
@@ -134,8 +134,6 @@ const fetchWallet = async () => {
 };
 
 const saveIncome = async () => {
-  console.log(new Date(form.action_date), "date output");
-
   if (isNaN(new Date(form.action_date))) {
     useNuxtApp().$toast.error("Invalid date format");
     return false;
@@ -146,7 +144,7 @@ const saveIncome = async () => {
 
   incomeLoading.value = true;
   const result = await createTransaction(form);
-  console.log(result, "logging income transaction result");
+
   if (result.success) {
     incomeLoading.value = false;
     useNuxtApp().$toast.error(result.message);
