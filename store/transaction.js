@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { supabase } from "~/lib/supabaseClient";
 
 export const usetransactionStore = defineStore("transaction", () => {
-  const authUser = useCookie("auth");
+  const authUser = useCookie("user");
 
   const createTransaction = async (payload) => {
     let data = {
@@ -20,11 +20,24 @@ export const usetransactionStore = defineStore("transaction", () => {
       .insert(data);
 
     if (transactionErr)
-      return { success: false, message: transactionErr.message };
+      return { success: false, error: transactionErr.message };
 
     // updating corresponding wallet amount
+
+    const { data: walletData, error: walletFetchError } = await supabase
+      .from("wallet")
+      .select("amount")
+      .eq("id", payload.walletId)
+      .single();
+
+    if (walletFetchError) {
+      return { success: false, message: walletFetchError.message };
+    }
+
     const transactionAmount =
-      payload.type === "income" ? payload.amount : -payload.amount;
+      payload.type === "income"
+        ? walletData.amount + payload.amount
+        : walletData.amount - payload.amount;
 
     const { error: walletErr } = supabase
       .from("wallet")
@@ -34,7 +47,7 @@ export const usetransactionStore = defineStore("transaction", () => {
       .eq("id", payload.walletId);
 
     if (walletErr) {
-      return { success: false, message: walletErr.message };
+      return { success: false, error: walletErr.message };
     }
 
     return {
