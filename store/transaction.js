@@ -23,7 +23,6 @@ export const usetransactionStore = defineStore("transaction", () => {
       return { success: false, error: transactionErr.message };
 
     // updating corresponding wallet amount
-
     const { data: walletData, error: walletFetchError } = await supabase
       .from("wallet")
       .select("amount")
@@ -42,7 +41,7 @@ export const usetransactionStore = defineStore("transaction", () => {
     const { error: walletErr } = supabase
       .from("wallet")
       .update({
-        amount: supabase.raw(`amount + ${transactionAmount}`),
+        amount: transactionAmount,
       })
       .eq("id", payload.walletId);
 

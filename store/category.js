@@ -3,6 +3,7 @@ import { supabase } from "~/lib/supabaseClient";
 
 export const useCategoryStore = defineStore("category", () => {
   const categories = ref([]);
+  const incomeCategories = ref([]);
   const category = ref(null);
 
   const fetchCategories = async () => {
@@ -20,6 +21,19 @@ export const useCategoryStore = defineStore("category", () => {
         type: item.type,
       };
     });
+  };
+
+  const fetchIncomeCategory = async () => {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id", "name")
+      .eq("type", "income");
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    incomeCategories.value = data;
   };
 
   const categoryDetail = async (id) => {
@@ -155,9 +169,11 @@ export const useCategoryStore = defineStore("category", () => {
   return {
     category,
     categories,
+    incomeCategories,
     fetchCategories,
     categoryDetail,
     storeCategory,
     updateCategory,
+    fetchIncomeCategory,
   };
 });
