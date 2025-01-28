@@ -26,7 +26,7 @@ export const useCategoryStore = defineStore("category", () => {
   const fetchIncomeCategory = async () => {
     const { data, error } = await supabase
       .from("categories")
-      .select("id", "name")
+      .select("id, name")
       .eq("type", "income");
 
     if (error) {
