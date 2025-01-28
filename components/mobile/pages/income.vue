@@ -147,7 +147,7 @@ const saveIncome = async () => {
 
   if (result.success) {
     incomeLoading.value = false;
-    useNuxtApp().$toast.error(result.message);
+    useNuxtApp().$toast.success(result.message);
     router.push("/transaction");
   } else {
     incomeLoading.value = false;
