@@ -5,54 +5,53 @@ export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
 
   const createTransaction = async (payload) => {
-    let data = {
-      category_id: payload.categoryId,
-      wallet_id: payload.walletId,
-      user_id: authUser.value.id,
-      description: payload.description,
-      amount: payload.amount,
-      type: payload.type,
-      action_date: payload.action_date,
-    };
+    const { categoryId, walletId, description, amount, type, action_date } =
+      payload;
+    const userId = authUser.value.id;
 
-    const { error: transactionErr } = await supabase
-      .from("transactions")
-      .insert(data);
+    try {
+      // Insert transaction
+      const { error: transactionErr } = await supabase
+        .from("transactions")
+        .insert({
+          category_id: categoryId,
+          wallet_id: walletId,
+          user_id: userId,
+          description,
+          amount,
+          type,
+          action_date,
+        });
 
-    if (transactionErr)
-      return { success: false, error: transactionErr.message };
+      if (transactionErr) throw new Error(transactionErr.message);
 
-    // updating corresponding wallet amount
-    const { data: walletData, error: walletFetchError } = await supabase
-      .from("wallet")
-      .select("amount")
-      .eq("id", payload.walletId)
-      .single();
+      // Fetch wallet data
+      const { data: walletData, error: walletFetchError } = await supabase
+        .from("wallet")
+        .select("amount")
+        .eq("id", walletId)
+        .single();
 
-    if (walletFetchError) {
-      return { success: false, message: walletFetchError.message };
+      if (walletFetchError) throw new Error(walletFetchError.message);
+
+      // Calculate new wallet amount
+      const transactionAmount =
+        type === "income"
+          ? parseInt(walletData.amount) + parseInt(amount)
+          : parseInt(walletData.amount) - parseInt(amount);
+
+      // Update wallet amount
+      const { error: walletErr } = await supabase
+        .from("wallet")
+        .update({ amount: transactionAmount })
+        .eq("id", walletId);
+
+      if (walletErr) throw new Error(walletErr.message);
+
+      return { success: true, message: "Transaction added successfully." };
+    } catch (error) {
+      return { success: false, error: error.message };
     }
-
-    const transactionAmount =
-      payload.type === "income"
-        ? walletData.amount + payload.amount
-        : walletData.amount - payload.amount;
-
-    const { error: walletErr } = supabase
-      .from("wallet")
-      .update({
-        amount: transactionAmount,
-      })
-      .eq("id", payload.walletId);
-
-    if (walletErr) {
-      return { success: false, error: walletErr.message };
-    }
-
-    return {
-      success: true,
-      message: "Income transaction added successfully.",
-    };
   };
 
   return {
