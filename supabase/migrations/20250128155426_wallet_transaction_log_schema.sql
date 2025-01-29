@@ -1,9 +1,10 @@
-drop table if exists wallet_transaction_log_schema;
+drop table if exists wallet_transaction_log;
 
 create table 
-  wallet_transaction_log_schema (
+  wallet_transaction_log (
     id bigint primary key generated always as identity not null,
     action_date timestamptz not null,
+    user_id UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
     wallet_id int not null references wallet(id) on delete cascade,
     transaction_id int not null references transactions(id) on delete cascade,
     type text not null,

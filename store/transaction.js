@@ -11,17 +11,22 @@ export const usetransactionStore = defineStore("transaction", () => {
 
     try {
       // Insert transaction
-      const { error: transactionErr } = await supabase
+      const { data: transactionData, error: transactionErr } = await supabase
         .from("transactions")
-        .insert({
-          category_id: categoryId,
-          wallet_id: walletId,
-          user_id: userId,
-          description,
-          amount,
-          type,
-          action_date,
-        });
+        .insert(
+          {
+            category_id: categoryId,
+            wallet_id: walletId,
+            user_id: userId,
+            description,
+            amount,
+            type,
+            action_date,
+          },
+          { returning: "minimal" }
+        )
+        .select("id")
+        .single();
 
       if (transactionErr) throw new Error(transactionErr.message);
 
@@ -47,6 +52,23 @@ export const usetransactionStore = defineStore("transaction", () => {
         .eq("id", walletId);
 
       if (walletErr) throw new Error(walletErr.message);
+      const transactionId = transactionData?.id;
+      if (!transactionId) throw new Error("Transaction id not found!!");
+
+      // recore wallet transaction
+      const { error: transactionLogErr } = await supabase
+        .from("wallet_transaction_log")
+        .insert({
+          action_date,
+          user_id: userId,
+          wallet_id: walletId,
+          transaction_id: transactionId,
+          type,
+          before_amount: walletData.amount,
+          transaction_amount: amount,
+          after_amount: transactionAmount,
+        });
+      if (transactionLogErr) throw new Error(transactionLogErr.message);
 
       return { success: true, message: "Transaction added successfully." };
     } catch (error) {
