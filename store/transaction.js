@@ -3,6 +3,26 @@ import { supabase } from "~/lib/supabaseClient";
 
 export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
+  const transactions = ref([]);
+
+  const fetchTransactions = async (query) => {
+    const from = (query.page - 1) * query.perPage;
+    const to = from + query.perPage - 1;
+
+    try {
+      const { data, error } = supabase
+        .from("transactions")
+        .select("*")
+        .eq("type", query.type)
+        .eq("category_id", query.categoryId)
+        .range(from, to);
+      if (error) throw new Error(error.message);
+
+      return { success: true, data: data };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
 
   const createTransaction = async (payload) => {
     const { categoryId, walletId, description, amount, type, action_date } =
@@ -78,5 +98,6 @@ export const usetransactionStore = defineStore("transaction", () => {
 
   return {
     createTransaction,
+    fetchTransactions,
   };
 });
