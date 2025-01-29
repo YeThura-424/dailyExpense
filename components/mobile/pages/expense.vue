@@ -11,7 +11,7 @@
       <div class="expense_amount text-white pt-40">
         <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
-          <span class="font-extrabold text-5xl">$</span>
+          <span class="font-extrabold text-5xl"> {{ getCurrency() }} </span>
           <input
             v-model="form.amount"
             type="text"
