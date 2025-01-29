@@ -26,7 +26,7 @@
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
-          :options="incomeCategories"
+          :options="typeCategories"
           option-key="id"
           name="Category"
           placeholder="Select Category..."
@@ -103,7 +103,7 @@ const form = reactive({
 
 const wallet = ref([]);
 const categoryStore = useCategoryStore();
-const { incomeCategories } = storeToRefs(categoryStore);
+const { typeCategories } = storeToRefs(categoryStore);
 const { fetchWallets } = useWalletStore();
 const { createTransaction } = usetransactionStore();
 const incomeLoading = ref(false);
@@ -125,7 +125,7 @@ const backAction = () => {
 };
 
 const fetchCategory = async () => {
-  await categoryStore.fetchIncomeCategory();
+  await categoryStore.fetchCategoryWithType("income");
 };
 
 const fetchWallet = async () => {
