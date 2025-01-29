@@ -7,7 +7,7 @@ CREATE TABLE transactions (
     user_id UUID NOT NULL REFERENCES auth.users ON DELETE CASCADE,
     description TEXT NOT NULL,
     amount INT NOT NULL,
-    type TEXT CHECK (type IN ('income', 'expend')) NOT NULL,
+    type TEXT CHECK (type IN ('income', 'expense')) NOT NULL,
     action_date TIMESTAMP DEFAULT NULL,
     deleted_at TIMESTAMP DEFAULT NULL,
     created_at TIMESTAMP DEFAULT NOW(),
