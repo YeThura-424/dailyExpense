@@ -14,14 +14,14 @@ export const usetransactionStore = defineStore("transaction", () => {
         .from("transactions")
         .select(
           `
-  *,
-  wallet(
-  id,name
-  ),
-  categories(
-  id,name
-  )
-  `
+            *,
+            wallet(
+            id,name
+            ),
+            categories(
+            id,name
+            )
+          `
         )
         .eq("user_id", authUser.value.id);
 
