@@ -10,12 +10,28 @@ export const usetransactionStore = defineStore("transaction", () => {
     const to = from + query.perPage - 1;
 
     try {
-      const { data, error } = supabase
+      const query = supabase
         .from("transactions")
-        .select("*")
-        .eq("type", query.type)
-        .eq("category_id", query.categoryId)
-        .range(from, to);
+        .select(
+          `
+  *,
+  wallet(
+  id,name
+  ),
+  categories(
+  id,name
+  )
+  `
+        )
+        .eq("user_id", authUser.value.id);
+
+      if (query.type) query = query.eq("type", query.type);
+      if (query.categoryId) query.eq("category_id", query.categoryId);
+
+      const { data, error } = await query
+        .range(from, to)
+        .order("created_at", { ascending: false });
+
       if (error) throw new Error(error.message);
 
       return { success: true, data: data };

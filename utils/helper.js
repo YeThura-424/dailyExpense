@@ -12,13 +12,15 @@ export const getPreviousMonth = () => {
   for (let i = 0; i <= currentMonth; i++) {
     previousMonths.push({
       id: i + 1,
-      name: new Date(currentDate.getFullYear(), i).toLocaleString('default', { month: 'long' }),
-      value: i
-    })
+      name: new Date(currentDate.getFullYear(), i).toLocaleString("default", {
+        month: "long",
+      }),
+      value: i,
+    });
   }
 
   return previousMonths;
-}
+};
 
 export const formatDate = (dateString) => {
   if (!dateString) {
@@ -37,58 +39,59 @@ export const isSameDate = (date1, date2) => {
 };
 
 export const dayToName = (rawDate) => {
-  const date = formatDate(rawDate);
+  const formattedDate = rawDate.split("T")[0];
+  const date = new Date(formattedDate);
+  console.log(formattedDate);
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  if (isSameDate(date, today)) return 'Today'
-  if (isSameDate(date, yesterday)) return 'Yesterday'
-  return rawDate 
-}
-
-export const dateLocalString = (rawDate) => {
-
-const [datePart, timePart, period] = rawDate.split(' ');
-const [day, month, year] = datePart.split('-');
-let [hour, minute, second] = timePart.split(':');
-
-if (period.toLowerCase() === 'pm' && hour !== '12') {
-  hour = parseInt(hour, 10) + 12;
-} else if (period.toLowerCase() === 'am' && hour === '12') {
-  hour = '00';
-}
-
-const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
-
-const options = { 
-  weekday: 'long', 
-  day: 'numeric', 
-  month: 'long', 
-  year: 'numeric', 
-  hour: '2-digit', 
-  minute: '2-digit',
-  hour12: false 
+  if (isSameDate(date, today)) return "Today";
+  if (isSameDate(date, yesterday)) return "Yesterday";
+  return formattedDate;
 };
 
-// Format the date
-return date.toLocaleString('en-GB', options);
-}
+export const dateLocalString = (rawDate) => {
+  const [datePart, timePart, period] = rawDate.split(" ");
+  const [day, month, year] = datePart.split("-");
+  let [hour, minute, second] = timePart.split(":");
 
-export const getCurrency = () => {
-  const user = useCookie('user');
-  let userCurrency = user?.value?.currency ?? 'ks';
-  const currency = {
-    ks: 'Ks',
-    usd: '$',
-    baht: 'B'
+  if (period.toLowerCase() === "pm" && hour !== "12") {
+    hour = parseInt(hour, 10) + 12;
+  } else if (period.toLowerCase() === "am" && hour === "12") {
+    hour = "00";
   }
 
-  return currency[userCurrency] ?? 'Ks';
-}
+  const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  // Format the date
+  return date.toLocaleString("en-GB", options);
+};
+
+export const getCurrency = () => {
+  const user = useCookie("user");
+  let userCurrency = user?.value?.currency ?? "ks";
+  const currency = {
+    ks: "Ks",
+    usd: "$",
+    baht: "B",
+  };
+
+  return currency[userCurrency] ?? "Ks";
+};
 
 export const formatAmount = (amount) => {
   let currency = new Intl.NumberFormat();
 
   return `${getCurrency()} ${currency.format(amount)}`;
-}
+};
