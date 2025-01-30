@@ -158,12 +158,12 @@ const resetFilter = () => {
 // fetch transaction (income expend)
 const fetchTransaction = async (page = 1, form = {}) => {
   transactionLoading.value = true;
-  const result = transactionStore.fetchTransactions({
+  const result = await transactionStore.fetchTransactions({
     page: page,
-    type: form?.filterBy ?? [],
-    sort: form?.sortBy ?? [],
-    categoryId: form?.category ?? [],
-    perpage: 15,
+    type: form?.filterBy ?? null,
+    sort: form?.sortBy ?? null,
+    categoryId: form?.category ?? null,
+    perPage: 15,
   });
 
   if (result.success) {
@@ -171,7 +171,7 @@ const fetchTransaction = async (page = 1, form = {}) => {
     transactions.value = groupTransaction(result?.data);
   } else {
     transactionLoading.value = false;
-    useNuxtApp().$toast.error(result.message);
+    useNuxtApp().$toast.error(result.error);
   }
   // try {
   //   await useFetch("/api/income/list", {
