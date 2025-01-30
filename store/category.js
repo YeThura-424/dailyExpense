@@ -2,12 +2,16 @@ import { defineStore } from "pinia";
 import { supabase } from "~/lib/supabaseClient";
 
 export const useCategoryStore = defineStore("category", () => {
+  const authUser = useCookie("user");
   const categories = ref([]);
   const typeCategories = ref([]);
   const category = ref(null);
 
   const fetchCategories = async () => {
-    const { data, error } = await supabase.from("categories").select();
+    const { data, error } = await supabase
+      .from("categories")
+      .select()
+      .eq("user_id", authUser.value.id);
 
     if (error) {
       return { success: false, error: error.message };
@@ -27,7 +31,8 @@ export const useCategoryStore = defineStore("category", () => {
     const { data, error } = await supabase
       .from("categories")
       .select("id, name")
-      .eq("type", type);
+      .eq("type", type)
+      .eq("user_id", authUser.value.id);
 
     if (error) {
       return { success: false, error: error.message };
@@ -82,6 +87,7 @@ export const useCategoryStore = defineStore("category", () => {
       name: formData.name,
       type: formData.type,
       icon: categoryIcon.value ?? null,
+      user_id: authUser.value.id,
     });
 
     if (categoryError) {

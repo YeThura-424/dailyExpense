@@ -9,6 +9,7 @@ create table
     id bigint primary key generated always as identity not null,
     name text unique not null,
     type category_type default 'income' not null,
+    user_id uuid references auth.users on delete cascade not null,
     icon text default null,
     created_at timestamptz default now() not null
   );
