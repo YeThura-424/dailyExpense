@@ -40,6 +40,36 @@ export const usetransactionStore = defineStore("transaction", () => {
     }
   };
 
+  const fetchTransactionsForToday = async () => {
+    const today = new Date().toISOString().split("T")[0];
+    try {
+      const { data, error } = await supabase
+        .from("transactions")
+        .select(
+          `
+            *,
+            wallet(
+            id,name
+            ),
+            categories(
+            id,name
+            )
+          `
+        )
+        .eq("user_id", authUser.value.id)
+        // .eq("created_at", today)
+        .order("created_at", {
+          ascending: false,
+        });
+
+      if (error) throw new Error(error.message);
+
+      return { success: true, data: data };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
   const createTransaction = async (payload) => {
     const { categoryId, walletId, description, amount, type, action_date } =
       payload;
@@ -115,5 +145,6 @@ export const usetransactionStore = defineStore("transaction", () => {
   return {
     createTransaction,
     fetchTransactions,
+    fetchTransactionsForToday,
   };
 });
