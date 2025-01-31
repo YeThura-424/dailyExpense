@@ -40,10 +40,9 @@ export const usetransactionStore = defineStore("transaction", () => {
     }
   };
 
-  const fetchTransactionsForToday = async () => {
-    const today = new Date().toISOString().split("T")[0];
+  const fetchTransactionsForToday = async (query) => {
     try {
-      const { data, error } = await supabase
+      const query = supabase
         .from("transactions")
         .select(
           `
@@ -57,10 +56,36 @@ export const usetransactionStore = defineStore("transaction", () => {
           `
         )
         .eq("user_id", authUser.value.id)
-        // .eq("created_at", today)
         .order("created_at", {
           ascending: false,
         });
+
+      if (query.today) {
+        query = query.eq("action_date", new Date().toISOString().split("T")[0]);
+      }
+
+      if (query.week) {
+        const startOfWeek = new Date();
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Start of week (Sunday)
+        const endOfWeek = new Date(startOfWeek);
+        endOfWeek.setDate(endOfWeek.getDate() + 6); // End of week (Saturday)
+
+        query = query
+          .gte("action_date", startOfWeek.toISOString().split("T")[0])
+          .lte("action_date", endOfWeek.toISOString().split("T")[0]);
+      }
+
+      if (filters.value.month) {
+        const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-indexed
+        query = query.eq("EXTRACT(MONTH FROM action_date)", currentMonth);
+      }
+
+      if (filters.value.year) {
+        const currentYear = new Date().getFullYear();
+        query = query.eq("EXTRACT(YEAR FROM action_date)", currentYear);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw new Error(error.message);
 
