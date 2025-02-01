@@ -87,7 +87,7 @@ const fetchTransaction = async () => {
   // }
   transactionLoading.value = true;
 
-  const result = await transactionStore.fetchTransactionsForToday();
+  const result = await transactionStore.fetchTransactionsForToday(filterParams);
 
   if (result.success) {
     console.log(result.data);

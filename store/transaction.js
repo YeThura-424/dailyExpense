@@ -26,7 +26,7 @@ export const usetransactionStore = defineStore("transaction", () => {
         .eq("user_id", authUser.value.id);
 
       if (query.type) query = query.eq("type", query.type);
-      if (query.categoryId) query.eq("category_id", query.categoryId);
+      if (query.categoryId) query = query.eq("category_id", query.categoryId);
 
       const { data, error } = await query
         .range(from, to)
@@ -40,9 +40,10 @@ export const usetransactionStore = defineStore("transaction", () => {
     }
   };
 
-  const fetchTransactionsForToday = async (query) => {
+  const fetchTransactionsForToday = async (payload) => {
+    console.log(payload, "filter payload");
     try {
-      const query = supabase
+      let query = supabase
         .from("transactions")
         .select(
           `
@@ -60,14 +61,14 @@ export const usetransactionStore = defineStore("transaction", () => {
           ascending: false,
         });
 
-      if (query.today) {
+      if (payload?.today) {
         query = query.eq("action_date", new Date().toISOString().split("T")[0]);
       }
 
-      if (query.week) {
-        const startOfWeek = new Date();
+      if (payload?.week) {
+        let startOfWeek = new Date();
         startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay()); // Start of week (Sunday)
-        const endOfWeek = new Date(startOfWeek);
+        let endOfWeek = new Date(startOfWeek);
         endOfWeek.setDate(endOfWeek.getDate() + 6); // End of week (Saturday)
 
         query = query
@@ -75,12 +76,12 @@ export const usetransactionStore = defineStore("transaction", () => {
           .lte("action_date", endOfWeek.toISOString().split("T")[0]);
       }
 
-      if (filters.value.month) {
+      if (payload?.month) {
         const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-indexed
         query = query.eq("EXTRACT(MONTH FROM action_date)", currentMonth);
       }
 
-      if (filters.value.year) {
+      if (payload?.year) {
         const currentYear = new Date().getFullYear();
         query = query.eq("EXTRACT(YEAR FROM action_date)", currentYear);
       }
