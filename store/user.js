@@ -92,6 +92,14 @@ export const useUserStore = defineStore("user", () => {
     });
   };
 
+  const getWalletAndTransaction = async (payload) => {
+    const query = supabase
+      .from("wallet_transaction_log")
+      .eq("user_id", user.value.id);
+    // logic for filtering wallet amount and transaction(income and expence) with month and year
+    const { data, error } = await query;
+  };
+
   return {
     user,
     token,
@@ -100,5 +108,6 @@ export const useUserStore = defineStore("user", () => {
     logout,
     trackAuthChange,
     getSession,
+    getWalletAndTransaction,
   };
 });
