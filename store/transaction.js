@@ -98,7 +98,9 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (payload?.year) {
         const currentYear = new Date().getFullYear();
-        query = query.eq("EXTRACT(YEAR FROM action_date)", currentYear);
+        query = query
+          .gte("action_date", `${currentYear}-01-01`)
+          .lte("action_date", `${currentYear}-12-31`);
       }
 
       const { data, error } = await query;
