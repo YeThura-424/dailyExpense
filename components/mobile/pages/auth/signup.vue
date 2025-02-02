@@ -53,11 +53,12 @@
           >
         </label>
       </div>
+      {{ isReadySignUp }}
       <div class="sign-up py-3">
         <button
           type="button"
           @click="registerUser"
-          :disabled="isReadySignUp ? true : false"
+          :disabled="!isReadySignUp ? true : false"
           class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
         >
           <Icon
@@ -104,7 +105,8 @@ const form = reactive({
 const { signup } = useUserStore();
 
 watch(form, (newValue) => {
-  if (newValue.password !== newValue.password_confirmation) {
+  console.log("newVal", newValue);
+  if (newValue.password !== newValue.password_confirmation && !newValue.terms) {
     isReadySignUp.value = false;
   } else {
     isReadySignUp.value = true;
