@@ -23,13 +23,18 @@
           >
             <div class="flex items-center gap-x-3">
               <div
-                class="category-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+                class="category-logo w-14 h-14 rounded-2xl flex justify-center items-center"
               >
-                <img
+                <!-- <img
                   class="w-12 h-12 object-cover mix-blend-multiply"
                   :src="category.icon ?? '/images/placeholder.png'"
                   alt=""
+                /> -->
+                <IconHomeExpense
+                  v-if="category.type == 'expense'"
+                  fill="#FDD5D7"
                 />
+                <IconHomeIncome v-else fill="#CFFAEA" />
               </div>
               <div>
                 <h1 class="text-[#292B2D] text-xl font-medium">
@@ -105,7 +110,7 @@ getCategory();
 
 <style>
 .category-list-wrapper.bg-white {
-  max-height: calc(100vh - 150px);
+  max-height: calc(100vh - 130px);
   overflow-x: auto;
 }
 </style>

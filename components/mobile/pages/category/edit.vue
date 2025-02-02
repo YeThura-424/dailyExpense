@@ -28,9 +28,9 @@
         />
         <!-- <CoreMultiSelectV2/> -->
       </div>
-      <div class="category_attachment py-3">
+      <!-- <div class="category_attachment py-3">
         <CoreFileUpload v-model="form.icon" />
-      </div>
+      </div> -->
 
       <div class="save-button gap-x-5 py-3">
         <button
@@ -68,12 +68,12 @@ const { categoryDetail } = useCategoryStore();
 const form = reactive({
   id: "",
   type: "",
-  icon: null,
-  newIcon: null,
-  oldIcon: null,
+  // icon: null,
+  // newIcon: null,
+  // oldIcon: null,
   name: "",
 });
-const oldIcon = ref(null);
+// const oldIcon = ref(null);
 const route = useRoute();
 const categoryId = route.params.id;
 
@@ -83,18 +83,18 @@ const backAction = () => {
   navigateTo("/category");
 };
 
-watch(
-  () => form.icon,
-  (newVal, oldVal) => {
-    console.log("form icon update", newVal, oldVal);
-    if (oldVal) {
-      form.newIcon = newVal;
-      form.oldIcon = oldIcon.value;
-    }
+// watch(
+//   () => form.icon,
+//   (newVal, oldVal) => {
+//     console.log("form icon update", newVal, oldVal);
+//     if (oldVal) {
+//       form.newIcon = newVal;
+//       form.oldIcon = oldIcon.value;
+//     }
 
-    console.log(form, "logging the form");
-  }
-);
+//     console.log(form, "logging the form");
+//   }
+// );
 
 const getCategoryDetail = async () => {
   categoryDetailLoading.value = true;
@@ -104,10 +104,10 @@ const getCategoryDetail = async () => {
   if (result.success) {
     form.name = result.data.name;
     form.type = result.data.type;
-    form.icon = result.data.icon;
+    // form.icon = result.data.icon;
     form.id = result.data.id;
 
-    oldIcon.value = result.data.oldIcon;
+    // oldIcon.value = result.data.oldIcon;
 
     categoryDetailLoading.value = false;
   } else {

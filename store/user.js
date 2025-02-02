@@ -3,7 +3,7 @@ import { supabase } from "../lib/supabaseClient";
 
 export const useUserStore = defineStore("user", () => {
   const user = useCookie("user");
-  const userProfile = useCookie("userProfile");
+  const profile = useCookie("profile");
   const token = useCookie("token");
 
   const signup = async (form) => {
@@ -27,7 +27,7 @@ export const useUserStore = defineStore("user", () => {
 
       token.value = data.session.access_token; // set token to cookie
       user.value = data.user;
-      userProfile.value = profile;
+      setProfile();
 
       return { success: true };
     }
@@ -47,10 +47,28 @@ export const useUserStore = defineStore("user", () => {
     if (data) {
       user.value = data.user;
       token.value = data.session.access_token;
+      setProfile();
       return { success: true };
     }
 
     return { success: false, error: "Unknown error occurred." };
+  };
+
+  const setProfile = async () => {
+    if (!user.value) {
+      profile.value = null;
+      return;
+    }
+
+    if (!profile.value || profile.value.id !== user.value.id) {
+      const { data } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", user.value.id)
+        .single();
+
+      profile.value = data;
+    }
   };
 
   const logout = async () => {
@@ -60,7 +78,7 @@ export const useUserStore = defineStore("user", () => {
 
     user.value = null;
     token.value = null;
-    userProfile.value = null;
+    profile.value = null;
 
     return true;
   };
@@ -70,10 +88,11 @@ export const useUserStore = defineStore("user", () => {
     if (data.session) {
       token.value = data.session.access_token;
       user.value = data.session.user;
+      setProfile();
     } else {
       user.value = null;
       token.value = null;
-      userProfile.value = null;
+      profile.value = null;
     }
   };
 
@@ -83,10 +102,11 @@ export const useUserStore = defineStore("user", () => {
         if (session) {
           token.value = session.access_token;
           user.value = session.user;
+          setProfile();
         } else {
           user.value = null;
           token.value = null;
-          userProfile.value = null;
+          profile.value = null;
         }
       }, 0);
     });

@@ -11,7 +11,8 @@ export const useCategoryStore = defineStore("category", () => {
     const { data, error } = await supabase
       .from("categories")
       .select()
-      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
+      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`)
+      .order("created_at", { ascending: false });
 
     if (error) {
       return { success: false, error: error.message };
