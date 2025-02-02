@@ -12,7 +12,8 @@
     "supabase:login": "supabase login",
     "supabase:link": "supabase link --project-ref eszqsoixyvrokeacwzcn",
     "make:migration": "supabase migration new",
-    "db:reset": "supabase db reset --linked"
+    "db:reset": "supabase db reset --linked",
+    "db:push": "supabase db push --linked"
   },
   "dependencies": {
     "@headlessui/vue": "^1.7.22",
