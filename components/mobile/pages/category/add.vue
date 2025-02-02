@@ -25,9 +25,9 @@
         />
         <!-- <CoreMultiSelectV2/> -->
       </div>
-      <div class="category_attachment py-3">
+      <!-- <div class="category_attachment py-3">
         <CoreFileUpload v-model="form.icon" />
-      </div>
+      </div> -->
 
       <div class="save-button gap-x-5 py-3">
         <button
@@ -65,7 +65,7 @@ const router = useRouter();
 
 const form = reactive({
   type: "",
-  icon: null,
+  // icon: null,
   name: "",
 });
 

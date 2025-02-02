@@ -11,7 +11,7 @@ export const useCategoryStore = defineStore("category", () => {
     const { data, error } = await supabase
       .from("categories")
       .select()
-      .eq("user_id", authUser.value.id);
+      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
 
     if (error) {
       return { success: false, error: error.message };
@@ -32,7 +32,7 @@ export const useCategoryStore = defineStore("category", () => {
       .from("categories")
       .select("id, name")
       .eq("type", type)
-      .eq("user_id", authUser.value.id);
+      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
 
     if (error) {
       return { success: false, error: error.message };
@@ -56,8 +56,8 @@ export const useCategoryStore = defineStore("category", () => {
         id: data.id,
         name: data.name,
         type: data.type,
-        icon: getCategoryIcon(data.icon),
-        oldIcon: data.icon,
+        // icon: getCategoryIcon(data.icon),
+        // oldIcon: data.icon,
       },
     };
   };
@@ -73,20 +73,20 @@ export const useCategoryStore = defineStore("category", () => {
   const storeCategory = async (formData) => {
     const categoryIcon = ref(null);
 
-    if (formData.icon) {
-      const uploadResult = await storeIcon(formData.icon);
+    // if (formData.icon) {
+    //   const uploadResult = await storeIcon(formData.icon);
 
-      if (uploadResult.success) {
-        categoryIcon.value = uploadResult.data;
-      } else {
-        return { success: false, message: uploadResult.message };
-      }
-    }
+    //   if (uploadResult.success) {
+    //     categoryIcon.value = uploadResult.data;
+    //   } else {
+    //     return { success: false, message: uploadResult.message };
+    //   }
+    // }
 
     const { error: categoryError } = await supabase.from("categories").insert({
       name: formData.name,
       type: formData.type,
-      icon: categoryIcon.value ?? null,
+      // icon: categoryIcon.value ?? null,
       user_id: authUser.value.id,
     });
 
@@ -100,37 +100,37 @@ export const useCategoryStore = defineStore("category", () => {
   const updateCategory = async (formData) => {
     const categoryIcon = ref(null);
 
-    if (formData.newIcon) {
-      const oldIcon = formData.oldIcon;
-      if (oldIcon) {
-        // update old one with new one
-        const uploadResult = await updateIcon(
-          formData.newIcon,
-          formData.oldIcon
-        );
-        if (uploadResult.success) {
-          categoryIcon.value = uploadResult.data;
-        } else {
-          return { success: false, message: uploadResult.message };
-        }
-      } else {
-        // add new one if old does not exist
-        const uploadResult = await storeIcon(formData.newIcon);
+    // if (formData.newIcon) {
+    //   const oldIcon = formData.oldIcon;
+    //   if (oldIcon) {
+    //     // update old one with new one
+    //     const uploadResult = await updateIcon(
+    //       formData.newIcon,
+    //       formData.oldIcon
+    //     );
+    //     if (uploadResult.success) {
+    //       categoryIcon.value = uploadResult.data;
+    //     } else {
+    //       return { success: false, message: uploadResult.message };
+    //     }
+    //   } else {
+    //     // add new one if old does not exist
+    //     const uploadResult = await storeIcon(formData.newIcon);
 
-        if (uploadResult.success) {
-          categoryIcon.value = uploadResult.data;
-        } else {
-          return { success: false, message: uploadResult.message };
-        }
-      }
-    }
+    //     if (uploadResult.success) {
+    //       categoryIcon.value = uploadResult.data;
+    //     } else {
+    //       return { success: false, message: uploadResult.message };
+    //     }
+    //   }
+    // }
 
     const { error } = supabase
       .from("categories")
       .update({
         name: formData.name,
         type: formData.type,
-        icon: categoryIcon.value ?? null,
+        // icon: categoryIcon.value ?? null,
       })
       .eq("id", formData.id);
 

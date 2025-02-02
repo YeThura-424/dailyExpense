@@ -53,7 +53,6 @@
           >
         </label>
       </div>
-      {{ isReadySignUp }}
       <div class="sign-up py-3">
         <button
           type="button"
