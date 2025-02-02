@@ -93,17 +93,20 @@
 </template>
 
 <script setup>
-import { usetransactionStore } from "~/store/transaction";
+import { useUserStore } from "~/store/user";
 
-const rawMonth = computed(() => getPreviousMonth());
-const user = useCookie("user");
-const rawYear = ref([{ id: 1, name: 2024, value: 2024 }]);
-
+const rawYear = ref([
+  { id: 1, name: 2025, value: 2025 },
+  { id: 2, name: 2024, value: 2024 },
+]);
 const selectedDate = reactive({
   year: null,
   month: null,
 });
-const transactionStore = usetransactionStore();
+const rawMonth = computed(() => getPreviousMonth(selectedDate.year?.value));
+const user = useCookie("user");
+
+const userStore = useUserStore();
 const loading = reactive({
   incomeExpend: false,
 });
@@ -122,7 +125,7 @@ const getIncomeExpense = async (year, month) => {
   //     accountData.value = response.data?.data;
   //   }
   // })
-  const result = await transactionStore.fetchTransactionsForToday();
+  const result = await userStore.getWalletAndTransaction();
 
   if (result.success) {
     console.log(result.data);

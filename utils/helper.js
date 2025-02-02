@@ -5,18 +5,34 @@ export const toTitleCase = (str) => {
     .join(" "); // Join words with spaces
 };
 
-export const getPreviousMonth = () => {
+export const getPreviousMonth = (year) => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
   const previousMonths = [];
-  for (let i = 0; i <= currentMonth; i++) {
-    previousMonths.push({
-      id: i + 1,
-      name: new Date(currentDate.getFullYear(), i).toLocaleString("default", {
-        month: "long",
-      }),
-      value: i,
-    });
+
+  const isPastYear = year !== currentYear;
+
+  if (isPastYear) {
+    for (let i = 0; i <= 12; i++) {
+      previousMonths.push({
+        id: i + 1,
+        name: new Date(2024, i).toLocaleString("default", {
+          month: "long",
+        }),
+        value: i,
+      });
+    }
+  } else {
+    for (let i = 0; i <= currentMonth; i++) {
+      previousMonths.push({
+        id: i + 1,
+        name: new Date(2024, i).toLocaleString("default", {
+          month: "long",
+        }),
+        value: i,
+      });
+    }
   }
 
   return previousMonths;
