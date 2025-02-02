@@ -13,6 +13,7 @@
     "supabase:link": "supabase link --project-ref eszqsoixyvrokeacwzcn",
     "make:migration": "supabase migration new",
     "db:reset": "supabase db reset --linked",
+    "db:seed": "node --env-file=.env database/seed.js",
     "db:push": "supabase db push --linked"
   },
   "dependencies": {

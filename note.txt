@@ -11,3 +11,24 @@ CREATE POLICY objects_update_policy ON storage.objects FOR UPDATE
 
 CREATE POLICY objects_delete_policy ON storage.objects FOR DELETE 
   USING (auth.role() = 'authenticated');
+
+
+General Expense
+
+Rent
+Transportation
+Food & Drink
+Skincare
+Health Care
+Body Care
+Gift
+Donation
+Grocery
+Clothing & Accessories
+
+
+Income
+
+Salary
+Bonus
+Sales
