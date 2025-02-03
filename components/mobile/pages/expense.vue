@@ -156,6 +156,11 @@ const saveExpense = async () => {
       return false;
     }
 
+    if (form.amount <= 0) {
+      useNuxtApp().$toast.error("Expense Amount Must be greater than 0");
+      return false;
+    }
+
     const formattedDate = new Date(form.action_date)
       .toISOString()
       .split("T")[0];
@@ -167,7 +172,11 @@ const saveExpense = async () => {
     if (result.success) {
       expenseLoading.value = false;
       useNuxtApp().$toast.success(result.message);
-      router.push("/transaction");
+      if (form.repeat) {
+        resetForm();
+      } else {
+        router.push("/transaction");
+      }
     } else {
       expenseLoading.value = false;
       resetForm();

@@ -114,10 +114,12 @@ onMounted(async () => {
 });
 
 const resetForm = () => {
-  (form.action_date = ""),
-    (form.amount = 0),
-    (form.description = ""),
-    (form.repeat = false);
+  form.action_date = null;
+  form.amount = 0;
+  form.description = "";
+  form.repeat = false;
+  form.categoryId = null;
+  form.walletId = null;
 };
 
 const backAction = () => {
@@ -139,6 +141,11 @@ const saveIncome = async () => {
     return false;
   }
 
+  if (form.amount <= 0) {
+    useNuxtApp().$toast.error("Income Amount Must be greater than 0");
+    return false;
+  }
+
   const formattedDate = new Date(form.action_date).toISOString().split("T")[0];
   form.action_date = formattedDate;
 
@@ -148,7 +155,11 @@ const saveIncome = async () => {
   if (result.success) {
     incomeLoading.value = false;
     useNuxtApp().$toast.success(result.message);
-    router.push("/transaction");
+    if (form.repeat) {
+      resetForm();
+    } else {
+      router.push("/transaction");
+    }
   } else {
     incomeLoading.value = false;
     resetForm();
