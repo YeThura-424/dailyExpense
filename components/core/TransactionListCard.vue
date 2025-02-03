@@ -34,6 +34,9 @@
         </div>
       </div>
       <div class="transaction_list_amount w-1/4 text-right">
+        <span class="text-sm text-[#91919F] truncate">{{
+          transaction.wallet.name
+        }}</span>
         <h1
           v-if="transaction.type == 'expense'"
           class="font-semibold text-lg text-[#FD3C4A]"
@@ -43,7 +46,6 @@
         <h1 v-else class="font-semibold text-lg text-[#00A86B]">
           {{ getCurrency() }}+{{ transaction.amount }}
         </h1>
-        <span class="text-sm text-[#91919F]">{{ transaction.time }}</span>
       </div>
     </nuxt-link>
   </div>

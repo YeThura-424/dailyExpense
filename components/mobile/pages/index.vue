@@ -48,8 +48,9 @@
             </h1>
             <!-- <span class="text-2xl font-semibold text-[#161719]">{{ accountData.walletBalance }} Ks </span> -->
             <span class="text-2xl font-semibold text-[#161719]">
-              {{ formatAmount(accountData?.walletBalance ?? 0) }}</span
-            >
+              <!-- {{ formatAmount(accountData?.walletBalance ?? 0) }} -->
+              {{ formatAmount(walletTotal) }}
+            </span>
           </div>
           <div class="income_expense flex justify-between gap-x-4">
             <div
@@ -96,6 +97,7 @@
 
 <script setup>
 import { useUserStore } from "~/store/user";
+import { useWalletStore } from "~/store/wallet";
 
 const rawYear = ref([
   { id: 1, name: 2025, value: 2025 },
@@ -109,6 +111,7 @@ const rawMonth = computed(() => getPreviousMonth(selectedDate.year?.value));
 const user = useCookie("user");
 
 const userStore = useUserStore();
+const walletStore = useWalletStore();
 const loading = reactive({
   incomeExpend: false,
 });
@@ -123,7 +126,6 @@ const getIncomeExpense = async (year, month) => {
   const result = await userStore.getWalletAndTransaction();
 
   if (result.success) {
-    console.log(result.data);
     incomeTotal.value = result.data
       .filter((item) => item.type === "income")
       .reduce((total, income) => total + income.transaction_amount, 0);
@@ -131,11 +133,24 @@ const getIncomeExpense = async (year, month) => {
     expendTotal.value = result.data
       .filter((item) => item.type === "expense")
       .reduce((total, expense) => total + expense.transaction_amount, 0);
+
+    getWallet();
   } else {
     loading.incomeExpend = false;
     useNuxtApp().$toast.error(result.error);
   }
   loading.incomeExpend = false;
+};
+
+const getWallet = async () => {
+  const result = await walletStore.fetchWallets();
+
+  if (result.success) {
+    walletTotal.value = result.data.reduce(
+      (total, wallet) => total + wallet.amount,
+      0
+    );
+  }
 };
 
 watch(
