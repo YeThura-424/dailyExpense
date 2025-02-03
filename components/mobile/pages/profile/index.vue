@@ -4,7 +4,7 @@
       <div class="profile-info-wrapper flex items-center gap-x-3">
         <div class="profile-image rounded-full border-2 border-[#7F3DFF]">
           <img
-            :src="user?.image ?? '/images/userprofile.png'"
+            :src="profile?.avatar_url ?? '/images/userprofile.png'"
             alt=""
             class="w-20 h-20 rounded-full p-1"
           />
@@ -15,7 +15,7 @@
             <h1
               class="text-xl text-[#161719] capitalize font-semibold line-clamp-1"
             >
-              {{ user.name }}
+              {{ profile.username }}
             </h1>
           </div>
           <div class="profile-info-edit" @click="editProfile(user?.id)">
@@ -97,10 +97,10 @@ import { useUserStore } from "~/store/user";
 const { logout } = useUserStore();
 const loading = ref(false);
 
-const user = useCookie("user").value;
+const user = useCookie("user");
+const profile = useCookie("profile");
 
 const editProfile = (id) => {
-  console.log(id);
   navigateTo(`/profile/${id}`);
 };
 
