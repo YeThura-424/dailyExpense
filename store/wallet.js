@@ -31,6 +31,8 @@ export const useWalletStore = defineStore("wallet", () => {
     return { success: true };
   };
 
+  const userWallet = async () => {};
+
   return {
     fetchWallets,
     storeWallet,

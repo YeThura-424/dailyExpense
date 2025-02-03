@@ -108,5 +108,7 @@ export const getCurrency = () => {
 export const formatAmount = (amount) => {
   let currency = new Intl.NumberFormat();
 
+  if (!amount || amount < 0) return `${getCurrency()} - 0`;
+
   return `${getCurrency()} ${currency.format(amount)}`;
 };

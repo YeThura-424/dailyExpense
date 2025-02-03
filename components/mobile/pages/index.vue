@@ -48,7 +48,7 @@
             </h1>
             <!-- <span class="text-2xl font-semibold text-[#161719]">{{ accountData.walletBalance }} Ks </span> -->
             <span class="text-2xl font-semibold text-[#161719]">
-              {{ formatAmount(accountData.walletBalance) }}</span
+              {{ formatAmount(accountData?.walletBalance ?? 0) }}</span
             >
           </div>
           <div class="income_expense flex justify-between gap-x-4">
@@ -61,7 +61,8 @@
               <div class="income_text text-white">
                 <span class="text-lg">Income</span>
                 <h1 class="text-lg">
-                  {{ formatAmount(accountData?.income?.amount) }}
+                  <!-- {{ formatAmount(accountData?.income?.amount ?? 0) }} -->
+                  {{ formatAmount(incomeTotal) }}
                 </h1>
               </div>
             </div>
@@ -74,7 +75,8 @@
               <div class="expense_text text-white">
                 <span class="text-lg">Expense</span>
                 <h1 class="text-lg">
-                  {{ formatAmount(accountData?.expend?.amount) }}
+                  <!-- {{ formatAmount(accountData?.expend?.amount ?? 0) }} -->
+                  {{ formatAmount(expendTotal) }}
                 </h1>
               </div>
             </div>
@@ -112,24 +114,23 @@ const loading = reactive({
 });
 
 const accountData = ref([]);
+const incomeTotal = ref(0);
+const expendTotal = ref(0);
+const walletTotal = ref(0);
 
 const getIncomeExpense = async (year, month) => {
   loading.incomeExpend = true;
-  // await useFetch('api/income-expend', {
-  //   method: "GET",
-  //   params: {
-  //     year: year,
-  //     month: month
-  //   },
-  //   transform: (response) => {
-  //     accountData.value = response.data?.data;
-  //   }
-  // })
   const result = await userStore.getWalletAndTransaction();
 
   if (result.success) {
     console.log(result.data);
-    accountData.value = result.data;
+    incomeTotal.value = result.data
+      .filter((item) => item.type === "income")
+      .reduce((total, income) => total + income.transaction_amount, 0);
+
+    expendTotal.value = result.data
+      .filter((item) => item.type === "expense")
+      .reduce((total, expense) => total + expense.transaction_amount, 0);
   } else {
     loading.incomeExpend = false;
     useNuxtApp().$toast.error(result.error);
