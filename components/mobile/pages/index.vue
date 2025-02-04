@@ -100,8 +100,8 @@ import { useUserStore } from "~/store/user";
 import { useWalletStore } from "~/store/wallet";
 
 const rawYear = ref([
-  { id: 1, name: 2025, value: 2025 },
-  { id: 2, name: 2024, value: 2024 },
+  { id: 1, name: 2024, value: 2024 },
+  { id: 2, name: 2025, value: 2025 },
 ]);
 const selectedDate = reactive({
   year: null,

@@ -75,12 +75,15 @@ const props = defineProps({
     required: true,
   },
 });
-const emit = defineEmits(['update:modelValue']);
+const emit = defineEmits(["update:modelValue"]);
 const selectedMonth = ref(props.months[props.months.length - 1]); // to get current month
 
-watch(() => selectedMonth.value, (updateValue) => {
-  emit('update:modelValue', updateValue);
-})
+watch(
+  () => selectedMonth.value,
+  (updateValue) => {
+    emit("update:modelValue", updateValue);
+  }
+);
 
-emit('update:modelValue', selectedMonth.value);
+emit("update:modelValue", selectedMonth.value);
 </script>
