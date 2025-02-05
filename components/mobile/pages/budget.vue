@@ -14,6 +14,7 @@
     <div
       class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
     >
+      {{ budgets.value }}
       <MobileBudgetEmptyState v-if="false" />
       <!-- budget listing  -->
       <div class="budget-listing" v-if="budgets.length">
@@ -56,6 +57,8 @@
   </div>
 </template>
 <script setup>
+import { useBudgetStore } from "~/store/budget";
+
 const months = [
   "January",
   "Febuary",
@@ -75,6 +78,8 @@ const budgets = ref([]);
 const currentSlideMonth = ref(null);
 
 const budgetCarousel = ref(null);
+const budgetStore = useBudgetStore();
+
 const date = new Date();
 const currentMonth = date.getMonth();
 const currentYear = date.getUTCFullYear();
@@ -92,17 +97,24 @@ const handleSlideStart = (month) => {
 };
 
 const getBudgets = async (month) => {
-  await useFetch("/api/budget/user-budget", {
-    method: "GET",
-    params: {
-      month: month + 1,
-      year: currentYear,
-      per_page: 15,
-    },
-    transform: (response) => {
-      budgets.value = response?.data?.data;
-    },
-  });
+  // await useFetch("/api/budget/user-budget", {
+  //   method: "GET",
+  //   params: {
+  //     month: month + 1,
+  //     year: currentYear,
+  //     per_page: 15,
+  //   },
+  //   transform: (response) => {
+  //     budgets.value = response?.data?.data;
+  //   },
+  // });
+  const result = await budgetStore.fetchBudget();
+
+  if (result.success) {
+    budgets.value = result.data;
+  } else {
+    useNuxtApp().$toast.error(result.error);
+  }
 };
 
 getBudgets(currentMonth);

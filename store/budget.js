@@ -4,6 +4,17 @@ import { supabase } from "~/lib/supabaseClient";
 export const useBudgetStore = defineStore("budget", () => {
   const user = useCookie("user");
 
+  const fetchBudget = async () => {
+    const { data, error } = await supabase.from("budget").select(`
+          *,
+          categories(id,name)
+        `);
+
+    if (error) return { success: false, error: error.message };
+
+    return { success: true, data: data };
+  };
+
   const createBudget = async (payload) => {
     try {
       const categoryId = payload.categoryId;
@@ -24,11 +35,13 @@ export const useBudgetStore = defineStore("budget", () => {
       if (budgetData) {
         const budgetExpireAt = new Date(budgetData.expired_at).getMonth();
         if (budgetExpireAt == currentMonth) {
+          const updateRemaining = payload.total + budgetData.remaining_amount;
           const { budgetUpdateError } = await supabase
             .from("budget")
             .update({
               total: payload.total,
               alert: payload.alert,
+              remaining_amount: updateRemaining,
               category_id: categoryId,
             })
             .eq("id", budgetData.id);
@@ -56,6 +69,7 @@ export const useBudgetStore = defineStore("budget", () => {
       user_id: user.value.id,
       category_id: payload.categoryId,
       total: payload.total,
+      remaining_amount: payload.total,
       alert: payload.alert,
       expired_at: expiredAt,
     });
@@ -69,5 +83,6 @@ export const useBudgetStore = defineStore("budget", () => {
 
   return {
     createBudget,
+    fetchBudget,
   };
 });
