@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { supabase } from "~/lib/supabaseClient";
 
-export const usebudgetStore = defineStore("budget", () => {
+export const useBudgetStore = defineStore("budget", () => {
   const user = useCookie("user");
 
   const createBudget = async (payload) => {
@@ -11,17 +11,15 @@ export const usebudgetStore = defineStore("budget", () => {
       const currentMonth = currentDate.getMonth();
       const expiredAt = new Date(
         currentDate.getFullYear(),
-        date.getMonth() + 1,
+        currentDate.getMonth() + 1,
         0
       );
-      const { data: budgetData, error: budgetError } = await supabase
+      const { data: budgetData } = await supabase
         .from("budget")
-        .select()
+        .select("*")
         .eq("category_id", categoryId)
         .eq("user_id", user.value.id)
         .single();
-
-      if (budgetError) throw new Error(budgetError.message);
 
       if (budgetData) {
         const budgetExpireAt = new Date(budgetData.expired_at).getMonth();
@@ -39,12 +37,12 @@ export const usebudgetStore = defineStore("budget", () => {
         } else {
           const result = await storeBudget(payload, expiredAt);
 
-          if (!result) throw new Error(result.error);
+          if (!result.success) throw new Error(result.error);
         }
       } else {
         const result = await storeBudget(payload, expiredAt);
 
-        if (!result) throw new Error(result.error);
+        if (!result.success) throw new Error(result.error);
       }
 
       return { success: true };
@@ -56,6 +54,7 @@ export const usebudgetStore = defineStore("budget", () => {
   const storeBudget = async (payload, expiredAt) => {
     const { data, error } = await supabase.from("budget").insert({
       user_id: user.value.id,
+      category_id: payload.categoryId,
       total: payload.total,
       alert: payload.alert,
       expired_at: expiredAt,

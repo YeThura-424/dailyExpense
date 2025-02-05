@@ -93,39 +93,23 @@ const currency = ref([
 
 const router = useRouter();
 const form = reactive({
-  username: "test_user",
-  email: "testuser@gmail.com",
-  password: "123456",
-  password_confirmation: "123456",
-  currency: "ks",
+  username: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+  currency: "",
   terms: false,
 });
 
 const { signup } = useUserStore();
 
 watch(form, (newValue) => {
-  console.log("newVal", newValue);
   if (newValue.password !== newValue.password_confirmation && !newValue.terms) {
     isReadySignUp.value = false;
   } else {
     isReadySignUp.value = true;
   }
 });
-// const signup = async () => {
-//   const { data, status, error } = await useFetch("/api/register", {
-//     method: 'POST',
-//     body: form,
-//   });
-//   if (status.value == 'success') {
-//     token.value = data?.value?.data?.token; // set token to cookie
-//     user.value = data?.value?.data?.user;
-//     navigateTo('/');
-//   }
-
-//   if (error.value) {
-//     validationError.value = error.value?.data?.data?.errors;
-//   }
-// }
 
 const registerUser = async (e) => {
   loading.value = true;
