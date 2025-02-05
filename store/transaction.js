@@ -41,7 +41,6 @@ export const usetransactionStore = defineStore("transaction", () => {
   };
 
   const fetchTransactionsForToday = async (payload) => {
-    console.log(payload, "filter payload");
     try {
       let query = supabase
         .from("transactions")

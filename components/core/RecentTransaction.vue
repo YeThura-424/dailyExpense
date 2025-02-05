@@ -90,7 +90,6 @@ const fetchTransaction = async () => {
   const result = await transactionStore.fetchTransactionsForToday(filterParams);
 
   if (result.success) {
-    console.log(result.data);
     transactions.value = result.data;
   } else {
     transactionLoading.value = false;
