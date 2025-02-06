@@ -25,11 +25,6 @@
               <div
                 class="category-logo w-14 h-14 rounded-2xl flex justify-center items-center"
               >
-                <!-- <img
-                  class="w-12 h-12 object-cover mix-blend-multiply"
-                  :src="category.icon ?? '/images/placeholder.png'"
-                  alt=""
-                /> -->
                 <IconHomeExpense
                   v-if="category.type == 'expense'"
                   fill="#FDD5D7"
