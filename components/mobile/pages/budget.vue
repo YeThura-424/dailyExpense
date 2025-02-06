@@ -97,17 +97,6 @@ const handleSlideStart = (month) => {
 };
 
 const getBudgets = async (month) => {
-  // await useFetch("/api/budget/user-budget", {
-  //   method: "GET",
-  //   params: {
-  //     month: month + 1,
-  //     year: currentYear,
-  //     per_page: 15,
-  //   },
-  //   transform: (response) => {
-  //     budgets.value = response?.data?.data;
-  //   },
-  // });
   const result = await budgetStore.fetchBudget();
 
   if (result.success) {
