@@ -173,24 +173,6 @@ const fetchTransaction = async (page = 1, form = {}) => {
     transactionLoading.value = false;
     useNuxtApp().$toast.error(result.error);
   }
-  // try {
-  //   await useFetch("/api/income/list", {
-  //     method: "GET",
-  //     params: {
-  //       page: page,
-  //       type: form?.filterBy ?? [],
-  //       sort: form?.sortBy ?? [],
-  //       category_id: form?.category ?? [],
-  //       perpage: 15,
-  //     },
-  //     transform: (response) => {
-  //       transactions.value = groupTransaction(response?.data?.data);
-  //     },
-  //   });
-  //   transactionLoading.value = false;
-  // } catch (error) {
-  //   console.log(error);
-  // }
 };
 
 // to group transactions with date
