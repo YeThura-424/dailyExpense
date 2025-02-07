@@ -76,8 +76,6 @@ export const usetransactionStore = defineStore("transaction", () => {
       }
 
       if (payload?.month) {
-        // const currentMonth = new Date().getMonth() + 1; // JavaScript months are 0-indexed
-        // query = query.eq("EXTRACT(MONTH FROM action_date)", currentMonth);
         const currentMonth = new Date().getMonth() + 1;
         query = query.filter(
           "action_date",
@@ -184,9 +182,22 @@ export const usetransactionStore = defineStore("transaction", () => {
     }
   };
 
+  const fetchTransactionDetail = async (id) => {
+    const { data, error } = await supabase
+      .from("transactions")
+      .select("*, categories(id, name), wallet(id,name)")
+      .eq("id", id)
+      .single();
+
+    if (error) return { success: false, error: error.message };
+
+    return { success: true, data: data };
+  };
+
   return {
     createTransaction,
     fetchTransactions,
     fetchTransactionsForToday,
+    fetchTransactionDetail,
   };
 });
