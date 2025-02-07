@@ -67,17 +67,17 @@ export const dayToName = (rawDate) => {
 };
 
 export const dateLocalString = (rawDate) => {
-  const [datePart, timePart, period] = rawDate.split(" ");
-  const [day, month, year] = datePart.split("-");
-  let [hour, minute, second] = timePart.split(":");
+  // const [datePart, timePart] = rawDate.split("T");
+  // const [day, month, year] = datePart.split("-");
+  // let [hour, minute, second] = timePart.split(":");
 
-  if (period.toLowerCase() === "pm" && hour !== "12") {
-    hour = parseInt(hour, 10) + 12;
-  } else if (period.toLowerCase() === "am" && hour === "12") {
-    hour = "00";
-  }
+  // if (period.toLowerCase() === "pm" && hour !== "12") {
+  //   hour = parseInt(hour, 10) + 12;
+  // } else if (period.toLowerCase() === "am" && hour === "12") {
+  //   hour = "00";
+  // }
 
-  const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
+  const date = new Date(rawDate);
 
   const options = {
     weekday: "long",
