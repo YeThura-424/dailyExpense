@@ -8,10 +8,10 @@ CREATE TABLE transactions (
     description TEXT NOT NULL,
     amount INT NOT NULL,
     type TEXT CHECK (type IN ('income', 'expense')) NOT NULL,
-    action_date TIMESTAMP DEFAULT NULL,
-    deleted_at TIMESTAMP DEFAULT NULL,
-    created_at TIMESTAMP DEFAULT NOW(),
-    updated_at TIMESTAMP DEFAULT NOW()
+    action_date timestamptz DEFAULT NULL,
+    deleted_at timestamptz DEFAULT NULL,
+    created_at timestamptz DEFAULT NOW(),
+    updated_at timestamptz DEFAULT NOW()
 );
 
 
