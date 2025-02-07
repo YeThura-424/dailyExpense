@@ -31,7 +31,7 @@ export const useCategoryStore = defineStore("category", () => {
   const fetchCategoryWithType = async (type) => {
     const { data, error } = await supabase
       .from("categories")
-      .select("id, name")
+      .select("id, name, budget(*)")
       .eq("type", type)
       .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
 
