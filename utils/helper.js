@@ -96,6 +96,8 @@ export const dateLocalString = (rawDate) => {
 export const getCurrency = () => {
   const profile = useCookie("profile");
   let userCurrency = profile?.value?.currency ?? "ks";
+
+  console.log(profile.value);
   const currency = {
     ks: "Ks",
     usd: "$",

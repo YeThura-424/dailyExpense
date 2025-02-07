@@ -15,6 +15,8 @@
         <CoreSelectBox
           placeholder="Select Default Currency"
           :options="currency"
+          v-model="form.currency"
+          option-key="value"
           show-icon
         />
       </div>
@@ -88,7 +90,7 @@ const isReadySignUp = ref(false);
 const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
   { name: "USD", value: "usd", icon: "/images/dollar.png" },
-  { name: "Baht", value: "bhat", icon: "/images/baht.png" },
+  { name: "Baht", value: "baht", icon: "/images/baht.png" },
 ]);
 
 const router = useRouter();
