@@ -113,3 +113,10 @@ export const formatAmount = (amount) => {
 
   return `${getCurrency()} ${currency.format(amount)}`;
 };
+
+export const getDateByMonth = (month) => {
+  const today = new Date();
+  const newDate = new Date(today.getFullYear(), month, today.getDate());
+
+  return newDate.toISOString();
+};

@@ -1,7 +1,11 @@
 <template>
   <div class="bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
-      <Carousel ref="budgetCarousel" @slide-start="handleSlideStart">
+      <Carousel
+        ref="budgetCarousel"
+        @slide-start="handleSlideStart"
+        @slide-registered=""
+      >
         <Slide v-for="month in months" :key="month">
           <div class="carousel__item text-lg">{{ month }}</div>
         </Slide>
@@ -93,11 +97,12 @@ onMounted(() => {
 
 const handleSlideStart = (month) => {
   currentSlideMonth.value = month.slidingToIndex;
-  getBudgets(currentSlideMonth.value);
+  const currentMonthDate = getDateByMonth(currentSlideMonth.value);
+  getBudgets(currentMonthDate);
 };
 
 const getBudgets = async (month) => {
-  const result = await budgetStore.fetchBudget();
+  const result = await budgetStore.fetchBudget(month);
 
   if (result.success) {
     budgets.value = result.data;
