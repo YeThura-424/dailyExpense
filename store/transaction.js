@@ -159,6 +159,7 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (walletErr) throw new Error(walletErr.message);
       const transactionId = transactionData?.id;
+
       if (!transactionId) throw new Error("Transaction id not found!!");
 
       // recore wallet transaction
@@ -175,6 +176,31 @@ export const usetransactionStore = defineStore("transaction", () => {
           after_amount: transactionAmount,
         });
       if (transactionLogErr) throw new Error(transactionLogErr.message);
+
+      const { data: budgetData, error: budgetError } = await supabase
+        .from("budget")
+        .select()
+        .eq("category_id", categoryId)
+        .eq("user_id", userId)
+        .single();
+
+      if (budgetError) throw new Error(budgetError.message);
+
+      const spendAmount = parseInt(budgetData.spend_amount) + parseInt(amount);
+      const usage = parseInt(budgetData.usage) + parseInt(amount);
+      const remainingAmount =
+        parseInt(budgetData.remaining_amount) + parseInt(amount);
+
+      const { error: budgetUpdateErr } = await supabase
+        .from("budget")
+        .update({
+          spend_amount: spendAmount,
+          usage: usage,
+          remaining_amount: remainingAmount,
+        })
+        .eq("id", budgetData.id);
+
+      if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
 
       return { success: true, message: "Transaction added successfully." };
     } catch (error) {
