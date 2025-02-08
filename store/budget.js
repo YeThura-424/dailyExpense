@@ -5,10 +5,15 @@ export const useBudgetStore = defineStore("budget", () => {
   const user = useCookie("user");
 
   const fetchBudget = async () => {
-    const { data, error } = await supabase.from("budget").select(`
+    const { data, error } = await supabase
+      .from("budget")
+      .select(
+        `
           *,
           categories(id,name)
-        `);
+        `
+      )
+      .eq("user_id", user.value.id);
 
     if (error) return { success: false, error: error.message };
 
