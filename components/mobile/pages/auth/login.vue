@@ -65,8 +65,8 @@ const loading = ref(false);
 const router = useRouter();
 
 const form = reactive({
-  email: "testuser@gmail.com",
-  password: "123456",
+  email: "",
+  password: "",
 });
 
 const loginUser = async () => {
@@ -90,71 +90,4 @@ const loginUser = async () => {
 
   loading.value = false;
 };
-
-// const login = async () => {
-//   loading.value = true;
-//   const { data, error } = await useFetch("/api/login", {
-//     method: "POST",
-//     body: form,
-//     transform: (response) => {
-//       return response;
-//     },
-//   });
-
-//   if (data?.value) {
-//     console.log(data.value.data);
-//     const token = useCookie("token"); // useCookie new hook in nuxt 3
-//     const user = useCookie("user");
-//     token.value = data?.value?.data?.token; // set token to cookie
-//     user.value = data?.value?.data?.user;
-//     loading.value = false;
-//     useNuxtApp().$toast.success("Login Successful");
-//     router.push("/");
-//   }
-
-//   if (error?.value) {
-//     loading.value = false;
-//     useNuxtApp().$toast.error(error.value?.data?.data?.message);
-//   }
-// };
-
-// const sendTokenToBackend = async () => {
-//   let token = data.value?.access_token;
-
-//   let provider = data.value?.provider;
-//   console.log("nanda", provider);
-
-//   if (token) {
-//     const { data, error } = await useFetch(`/api/${provider}/login`, {
-//       method: "POST",
-//       body: {
-//         access_token: token,
-//       },
-//       transform: (response) => {
-//         console.log(response);
-//         return response;
-//       },
-//     });
-
-//     if (data?.value) {
-//       console.log(data.value.data);
-//       const token = useCookie("token");
-//       const user = useCookie("user");
-//       token.value = data?.value?.data?.token; // set token to cookie
-//       user.value = data?.value?.data?.user;
-//       loading.value = false;
-//       useNuxtApp().$toast.success("Login Successful");
-//       router.push("/");
-//     }
-
-//     if (error?.value) {
-//       loading.value = false;
-//       useNuxtApp().$toast.error(error.value?.data?.data?.message);
-//     }
-//   }
-// };
-
-// if (status.value === "authenticated") {
-//   sendTokenToBackend();
-// }
 </script>
