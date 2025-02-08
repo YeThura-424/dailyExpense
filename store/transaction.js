@@ -186,10 +186,11 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (budgetError) throw new Error(budgetError.message);
 
-      const spendAmount = parseInt(budgetData.spend_amount) + parseInt(amount);
+      const spendAmount =
+        parseInt(budgetData.spend_amount ?? 0) + parseInt(amount);
       const usage = parseInt(budgetData.usage) + parseInt(amount);
       const remainingAmount =
-        parseInt(budgetData.remaining_amount) + parseInt(amount);
+        parseInt(budgetData.remaining_amount) - parseInt(amount);
 
       const { error: budgetUpdateErr } = await supabase
         .from("budget")
