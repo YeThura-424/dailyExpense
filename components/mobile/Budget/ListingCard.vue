@@ -55,7 +55,8 @@ const remaining = (budget) => {
 };
 
 const isExceed = (budget) => {
-  return budget.spend_amount ?? 0 >= budget.total;
+  let amount = budget.spend_amount ?? 0;
+  return amount >= budget.total;
 };
 
 const alertTheme = (budget) => {
