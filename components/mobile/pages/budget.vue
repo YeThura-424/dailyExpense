@@ -111,7 +111,7 @@ const getBudgets = async (month) => {
   }
 };
 
-getBudgets(currentMonth);
+// getBudgets(currentMonth);
 </script>
 
 <style>

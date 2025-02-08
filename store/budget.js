@@ -6,7 +6,8 @@ export const useBudgetStore = defineStore("budget", () => {
 
   const fetchBudget = async (month) => {
     console.log(month);
-    const { data, error } = await supabase
+
+    let query = supabase
       .from("budget")
       .select(
         `
@@ -14,8 +15,13 @@ export const useBudgetStore = defineStore("budget", () => {
           categories(id,name)
         `
       )
-      .eq("user_id", user.value.id)
-      .gt("expired_at", month);
+      .eq("user_id", user.value.id);
+
+    if (month) {
+      query = query.gt("expired_at", month);
+    }
+
+    const { data, error } = await query;
 
     if (error) return { success: false, error: error.message };
 
