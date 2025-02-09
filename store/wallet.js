@@ -20,6 +20,18 @@ export const useWalletStore = defineStore("wallet", () => {
     return { success: true, data: data };
   };
 
+  const walletDetail = async (id) => {
+    const { data, error } = await supabase
+      .from("wallet")
+      .select("*, transactions(*, wallet(id,name), categories(id,name))")
+      .eq("id", id)
+      .single();
+
+    if (error) return { success: false, error: error.message };
+
+    return { success: true, data: data };
+  };
+
   const storeWallet = async (payload) => {
     const { data, error } = await supabase.from("wallet").insert({
       user_id: payload.userId,
@@ -49,5 +61,6 @@ export const useWalletStore = defineStore("wallet", () => {
     fetchWallets,
     storeWallet,
     updateWallet,
+    walletDetail,
   };
 });
