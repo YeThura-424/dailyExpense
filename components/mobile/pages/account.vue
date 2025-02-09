@@ -3,7 +3,7 @@
     <div class="account_content">
       <div class="account_header">
         <MobilePageHeader
-          title="Account"
+          title="Wallets List"
           text-color="text-black"
           @back="backAction"
         />
@@ -12,7 +12,7 @@
         class="account_info text-center px-6 py-16"
         v-if="userAccountBalance"
       >
-        <h1 class="text-sm text-p[#91919F] font-medium">Account Balance</h1>
+        <h1 class="text-sm text-p[#91919F] font-medium">Wallets Balance</h1>
         <p class="text-3xl font-bold text-[#161719]">
           {{ formatAmount(userAccountBalance) }}
         </p>
@@ -49,12 +49,23 @@
                 <h1 class="text-[#292B2D] text-xl font-medium">
                   {{ wallet.name }}
                 </h1>
+                <p class="text-base text-[#91919F]">
+                  {{ formatAmount(wallet.amount) }}
+                </p>
               </div>
             </div>
-            <div class="amount">
-              <p class="text-xl text-[#212325]">
-                {{ formatAmount(wallet.amount) }}
-              </p>
+            <div class="amount flex gap-x-2">
+              <nuxt-link :to="`/account/${wallet.id}`">
+                <Icon
+                  name="ion:ios-information-circle"
+                  class="text-2xl text-[#7F3DFF]"
+                />
+              </nuxt-link>
+              <Icon
+                @click="openWalletEditModel(wallet)"
+                name="ion:ios-settings"
+                class="text-2xl text-[#FCAC12]"
+              />
             </div>
           </div>
         </div>
@@ -77,19 +88,48 @@
         </nuxt-link>
       </div>
     </div>
+
+    <CoreModelBox
+      :visible="isOpenWalletEditModel"
+      @dismiss="closeWalletEditModel"
+      @apply="updateEditWallet"
+    >
+      <div class="wallet-edit-form">
+        <div class="wallet_name_input py-2">
+          <label class="text-base text-[#91919F]">Name</label>
+          <CoreInputBox placeholder="Name" v-model="form.name" />
+        </div>
+        <div class="wallet_amount_input py-2 relative">
+          <label class="text-base text-[#91919F]">Amount</label>
+          <CoreInputBox placeholder="Amount" v-model="form.amount" disabled />
+          <span
+            class="text-xl text-[#323236] absolute left-[78px] top-[46px]"
+            >{{ getCurrency() }}</span
+          >
+        </div>
+      </div>
+    </CoreModelBox>
   </div>
 </template>
 
 <script setup>
 import { useWalletStore } from "~/store/wallet";
 
+const isOpenWalletEditModel = ref(false);
 const walletLists = ref(null);
 const userAccountBalance = ref(null);
 const walletLoading = ref(true);
-const { fetchWallets } = useWalletStore();
+const walletUpdateLoading = ref(false);
+const { fetchWallets, updateWallet } = useWalletStore();
 const backAction = () => {
   navigateTo("/profile");
 };
+
+const form = reactive({
+  name: "",
+  amount: 0,
+  id: "",
+});
 
 const pullWallet = async () => {
   walletLoading.value = true;
@@ -105,6 +145,41 @@ const pullWallet = async () => {
     useNuxtApp().$toast.error(result.message);
   }
 };
+
+const openWalletEditModel = (wallet) => {
+  form.name = wallet.name;
+  form.amount = wallet.amount;
+  form.id = wallet.id;
+
+  isOpenWalletEditModel.value = true;
+};
+
+const closeWalletEditModel = (updateVal) => {
+  isOpenWalletEditModel.value = updateVal;
+};
+
+const updateEditWallet = async (updateVal) => {
+  walletUpdateLoading.value = true;
+  const result = await updateWallet(form);
+
+  if (result.success) {
+    walletUpdateLoading.value = false;
+    useNuxtApp().$toast.success("Wallet Updated Sucessfully!");
+    pullWallet();
+  } else {
+    walletUpdateLoading.value = false;
+    useNuxtApp().$toast.error(result.error);
+    resetForm();
+    isOpenWalletEditModel.value = updateVal;
+  }
+};
+
+const resetForm = () => {
+  form.name = "";
+  form.amount = 0;
+  form.id = "";
+};
+
 pullWallet();
 </script>
 

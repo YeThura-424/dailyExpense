@@ -11,6 +11,7 @@ export const useWalletStore = defineStore("wallet", () => {
       .from("wallet")
       .select()
       .eq("user_id", authUser.value.id);
+    // .order("created_at", { ascending: true });
 
     if (error) {
       return { success: false, message: error.message };
@@ -31,8 +32,22 @@ export const useWalletStore = defineStore("wallet", () => {
     return { success: true };
   };
 
+  const updateWallet = async (payload) => {
+    const { error } = await supabase
+      .from("wallet")
+      .update({
+        name: payload.name,
+      })
+      .eq("id", payload.id);
+
+    if (error) return { success: false, error: error.message };
+
+    return { success: true };
+  };
+
   return {
     fetchWallets,
     storeWallet,
+    updateWallet,
   };
 });

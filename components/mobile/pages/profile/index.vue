@@ -35,7 +35,7 @@
             >
               <Icon name="ion:ios-wallet" class="text-4xl text-[#7F3DFF]" />
             </div>
-            <h1 class="text-[#292B2D] text-xl font-medium">Account</h1>
+            <h1 class="text-[#292B2D] text-xl font-medium">Wallets</h1>
           </div>
         </nuxt-link>
         <!-- setting  -->
