@@ -31,6 +31,7 @@
           placeholder="Select Category"
           v-model="form.categoryId"
         />
+        <!-- <CoreMultiSelectV2 /> -->
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
