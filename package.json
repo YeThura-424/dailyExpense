@@ -21,7 +21,6 @@
     "@heroicons/vue": "^2.1.5",
     "@nuxt/icon": "^1.4.5",
     "@pinia/nuxt": "^0.5.4",
-    "@popperjs/core": "^2.11.8",
     "@supabase/supabase-js": "^2.47.16",
     "@vuepic/vue-datepicker": "^9.0.3",
     "floating-vue": "^5.2.2",
