@@ -6,7 +6,7 @@
   background-color: #f1f5f9;
   color: transparent;
   overflow: hidden;
-  position: relative
+  position: relative;
 }
 
 .hide-text:before {
@@ -20,15 +20,19 @@
   left: 0;
   position: absolute;
   top: 0;
-  width: 50px
+  width: 50px;
+}
+
+.v-popper__popper.v-popper__popper--shown {
+  width: 95%;
 }
 
 @keyframes skeleton-animation {
   0% {
-    left: 0
+    left: 0;
   }
 
   to {
-    left: 100%
+    left: 100%;
   }
 }

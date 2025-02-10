@@ -19,6 +19,7 @@ export default defineNuxtConfig({
     "vue3-carousel-nuxt",
     "@pinia/nuxt",
     "@vueuse/nuxt",
+    "floating-vue/nuxt",
   ],
   postcss: {
     plugins: {
