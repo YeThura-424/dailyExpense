@@ -25,7 +25,7 @@
           <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
             <li v-for="option in selectedOptions" :key="option">
               <div
-                class="flex items-center gap-x-2 bg-[#FF5200] px-2 py-1 rounded-md"
+                class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md"
               >
                 <span class="text-white text-sm">{{ option.name }}</span>
                 <Icon
