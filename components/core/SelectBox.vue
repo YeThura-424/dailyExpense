@@ -64,6 +64,25 @@
         </div>
       </template>
     </VDropdown>
+
+    <!-- selected values list  -->
+    <div v-if="selectedOption.value.length > 0" class="">
+      <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
+        <li v-for="option in selectedOption.value" :key="option">
+          <div
+            class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md"
+          >
+            <span class="text-white text-sm">{{ option.name }}</span>
+            <Icon
+              name="ion:ios-close-circle-outline"
+              class="text-white"
+              @click="removeSelectedOption(option.id)"
+            />
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- selected values list ends  -->
   </div>
 </template>
 
@@ -173,6 +192,14 @@ const checkActive = (data) => {
       selectedOption.key === data;
     }
   }
+};
+
+const removeSelectedOption = (id) => {
+  selectedOption.key = selectedOption.key.filter((option) => option.id !== id);
+  selectedOption.key = [
+    ...selectedOption.key,
+    options.find((option) => option.id === id),
+  ].sort((a, b) => a.id - b.id);
 };
 </script>
 
