@@ -24,14 +24,14 @@
     </div>
     <div class="budget_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="category_select py-3">
-        <!-- <CoreSelectBox
+        <CoreSelectBox
           :options="typeCategories"
           option-key="id"
           name="Category"
           placeholder="Select Category"
           v-model="form.categoryId"
-        /> -->
-        <CoreMultiSelectV2 multiple />
+        />
+        <!-- <CoreMultiSelectV2 multiple /> -->
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">
