@@ -15,7 +15,7 @@
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">{{ getCurrency() }}</span>
           <input
-            v-model="form.total"
+            v-model="form.amount"
             type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3"
           />
@@ -26,10 +26,9 @@
       <div class="from-wallet py-3">
         <CoreSelectBox
           :options="wallets"
-          option-key="id"
           name="Category"
           placeholder="From Wallet"
-          v-model="form.categoryId"
+          v-model="form.fromWallet"
           show-amount
         />
       </div>
@@ -37,10 +36,9 @@
       <div class="to-wallet py-3">
         <CoreSelectBox
           :options="wallets"
-          option-key="id"
           name="Category"
           placeholder="To Wallet"
-          v-model="form.categoryId"
+          v-model="form.toWallet"
           show-amount
         />
       </div>
@@ -70,9 +68,9 @@
 import { useWalletStore } from "~/store/wallet";
 
 const form = reactive({
-  total: 0,
-  categoryId: "",
-  alert: false,
+  amount: 0,
+  fromWallet: "",
+  toWallet: "",
 });
 const walletLoading = ref(false);
 const wallets = ref([]);
@@ -95,7 +93,22 @@ const fetchWallet = async () => {
 };
 
 const submit = async () => {
-  console.log("d nar mar");
+  if (form.amount <= 0) {
+    useNuxtApp().$toast.error("Transfer amount cannot be zero!!");
+    return false;
+  }
+
+  if (form.fromWallet.id == form.toWallet.id) {
+    useNuxtApp().$toast.error("Cann't Transfer to the same wallet!!");
+    return false;
+  }
+
+  if (form.amount > form.fromWallet.amount) {
+    useNuxtApp().$toast.error(
+      "Transfer amount cann't be greater than wallet amount"
+    );
+    return false;
+  }
   budgetLoading.value = true;
   const result = await budgetStore.createBudget(form);
   console.log("result herer", result);
