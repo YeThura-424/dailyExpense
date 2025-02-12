@@ -29,7 +29,7 @@
             >
               <div class="upper_menu_wrapper flex justify-center gap-x-24">
                 <div class="income_menu">
-                  <nuxt-link to="/income" class="focus:outline-none">
+                  <nuxt-link to="/transfer" class="focus:outline-none">
                     <button
                       class="bg-[#0077FF] flex items-center justify-center rounded-full w-14 h-14"
                     >
