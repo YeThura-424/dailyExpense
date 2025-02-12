@@ -14,7 +14,7 @@
       <p class="font-normal text-[#91919F]">Budget</p>
       <p class="font-medium text-[#FD3C4A]">{{ budget }} Ks</p>
     </div>
-    <VDropdown compute-transform-origin :distance="6" ,>
+    <VDropdown compute-transform-origin :distance="6">
       <div :class="['input-wrapper h-14 relative']">
         <input
           v-model="selectedOption.value"
@@ -66,7 +66,7 @@
     </VDropdown>
 
     <!-- selected values list  -->
-    <div v-if="selectedOption.value.length > 0" class="">
+    <div v-if="selectedOption.value.length > 0 && multiple" class="">
       <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
         <li v-for="option in selectedOption.value" :key="option">
           <div

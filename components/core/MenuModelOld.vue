@@ -27,7 +27,18 @@
             <DialogPanel
               class="w-fit max-w-md transform overflow-hidden transition-all absolute bottom-[90px]"
             >
-              <div class="menu_wrapper flex justify-center gap-x-24">
+              <div class="upper_menu_wrapper flex justify-center gap-x-24">
+                <div class="income_menu">
+                  <nuxt-link to="/income" class="focus:outline-none">
+                    <button
+                      class="bg-[#0077FF] flex items-center justify-center rounded-full w-14 h-14"
+                    >
+                      <IconTransfer />
+                    </button>
+                  </nuxt-link>
+                </div>
+              </div>
+              <div class="lower_menu_wrapper flex justify-center gap-x-24">
                 <div class="income_menu">
                   <nuxt-link to="/income">
                     <button
