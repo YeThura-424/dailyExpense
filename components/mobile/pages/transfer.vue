@@ -25,21 +25,23 @@
     <div class="transfer_form bg-white rounded-t-[40px] shadow px-6 py-4">
       <div class="from-wallet py-3">
         <CoreSelectBox
-          :options="typeCategories"
+          :options="wallets"
           option-key="id"
           name="Category"
           placeholder="From Wallet"
           v-model="form.categoryId"
+          show-amount
         />
       </div>
 
       <div class="to-wallet py-3">
         <CoreSelectBox
-          :options="typeCategories"
+          :options="wallets"
           option-key="id"
           name="Category"
           placeholder="To Wallet"
           v-model="form.categoryId"
+          show-amount
         />
       </div>
 
@@ -65,26 +67,31 @@
 </template>
 
 <script setup>
-import { Switch } from "@headlessui/vue";
-import { useBudgetStore } from "~/store/budget";
-import { useCategoryStore } from "~/store/category";
+import { useWalletStore } from "~/store/wallet";
 
 const form = reactive({
   total: 0,
   categoryId: "",
   alert: false,
 });
-const budgetLoading = ref(false);
-const budgetStore = useBudgetStore();
-const categoryStore = useCategoryStore();
-const { typeCategories } = storeToRefs(categoryStore);
+const walletLoading = ref(false);
+const wallets = ref([]);
+const walletStore = useWalletStore();
 
 const backAction = () => {
   navigateTo("/budget");
 };
 
-const fetchCategory = async () => {
-  await categoryStore.fetchCategoryWithType("expense");
+const fetchWallet = async () => {
+  const result = await walletStore.fetchWallets();
+
+  if (result.success) {
+    walletLoading.value = false;
+    wallets.value = result.data;
+  } else {
+    walletLoading.value = false;
+    useNuxtApp().$toast.error(result.message);
+  }
 };
 
 const submit = async () => {
@@ -100,5 +107,5 @@ const submit = async () => {
     useNuxtApp().$toast.error(result.error);
   }
 };
-fetchCategory();
+fetchWallet();
 </script>
