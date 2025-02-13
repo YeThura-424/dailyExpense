@@ -69,10 +69,11 @@ import { useWalletStore } from "~/store/wallet";
 
 const form = reactive({
   amount: 0,
-  fromWallet: "",
-  toWallet: "",
+  fromWallet: null,
+  toWallet: null,
 });
 const walletLoading = ref(false);
+const logLoading = ref(false);
 const wallets = ref([]);
 const walletStore = useWalletStore();
 
@@ -109,14 +110,15 @@ const submit = async () => {
     );
     return false;
   }
-  budgetLoading.value = true;
-  const result = await budgetStore.createBudget(form);
+  console.log("logging the form", form);
+  logLoading.value = true;
+  const result = await walletStore.walletTransferLog(form);
   console.log("result herer", result);
   if (result.success) {
-    useNuxtApp().$toast.success("Budget Created Successfully!!");
-    navigateTo("/budget");
+    useNuxtApp().$toast.success("Wallet Amount Transfer Successfully!!");
+    navigateTo("/transaction");
   } else {
-    budgetLoading.value = false;
+    logLoading.value = false;
     useNuxtApp().$toast.error(result.error);
   }
 };
