@@ -7,9 +7,10 @@ create table
     user_id UUID not null references auth.users on delete cascade,
     from_wallet bigint not null references wallet(id) on delete cascade,
     to_wallet bigint not null references wallet(id) on delete cascade,
-    from_wallet_before_amount default 0 not null,
-    to_wallet_before_amount default 0 not null,
+    from_wallet_before_amount int default 0 not null,
+    to_wallet_before_amount int default 0 not null,
     transfer_amount int default 0 not null,
     from_wallet_after_amount int default 0 not null,
-    to_wallet_after_amount default 0 not null,
+    to_wallet_after_amount int default 0 not null,
+    description text null
   );

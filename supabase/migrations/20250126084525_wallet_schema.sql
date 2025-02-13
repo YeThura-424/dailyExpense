@@ -6,6 +6,6 @@ create table
     user_id uuid references auth.users on delete cascade not null,
     name text not null,
     amount int default 0 not null,
-    created_at timestampz default now() not null,
+    created_at timestamptz default now() not null,
     CONSTRAINT unique_user_wallet UNIQUE (user_id, name)
   );
