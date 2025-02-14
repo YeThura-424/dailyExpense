@@ -31,7 +31,11 @@
           placeholder="Select Category"
           v-model="form.categoryId"
         /> -->
-        <CoreMultiSelectV2 :options="typeCategories" multiple />
+        <CoreMultiSelectV2
+          v-model="form.categoryId"
+          :options="typeCategories"
+          multiple
+        />
       </div>
 
       <div class="repeat-transaction flex justify-between items-center py-3">

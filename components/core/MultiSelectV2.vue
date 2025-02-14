@@ -104,8 +104,7 @@ const props = defineProps({
   },
 });
 
-console.log(props.options);
-
+const emit = defineEmits(["update:modelValue"]);
 const selectOptions = ref([]);
 const searchText = ref(null);
 const selectedOptions = ref([]);
@@ -149,6 +148,8 @@ const setSelectOption = (id) => {
   } else {
     selectedOptions.value = props.options.find((option) => option.id == id);
   }
+
+  emit("update:modelValue", selectedOptions.value);
 };
 
 const removeSelectedOption = (id) => {
@@ -159,6 +160,8 @@ const removeSelectedOption = (id) => {
     ...selectOptions.value,
     props.options.find((option) => option.id === id),
   ].sort((a, b) => a.id - b.id);
+
+  emit("update:modelValue", selectedOptions.value);
 };
 
 getSelectOptions(props.options);
