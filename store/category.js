@@ -33,9 +33,9 @@ export const useCategoryStore = defineStore("category", () => {
 
     const { data, error } = await supabase
       .from("categories")
-      .select("id, name, budget(*)")
-      .eq("budget.user_id", authUser.value.id)
-      .gt("budget.expired_at", today)
+      .select("id, name, budget_categories(*)")
+      // .eq("budget.user_id", authUser.value.id)
+      // .gt("budget.expired_at", today)
       .eq("type", type)
       .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
 

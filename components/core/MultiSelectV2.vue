@@ -1,18 +1,12 @@
 <template>
   <div class="select-wrapper">
-    <!-- <select multiple class="hidden" :name="name">
-      <option v-for="(option, idx) in selectedOptions" :key="idx" :value="getOptionValue(option)">
-        {{ getOptionValue(option) }}
-      </option>
-    </select> -->
-
     <div v-if="multiple">
       <div class="relative">
         <!-- select input box -->
         <div class="select-input">
           <input
             type="text"
-            class="w-full p-3 focus:outline-none border border-[#FF5200] focus:ring-1 focus:ring-[#FF5200] rounded-md"
+            class="w-full p-3 focus:outline-none border border-[#7F3DFF] focus:ring-1 focus:ring-[#7F3DFF] rounded-md"
             placeholder="Select Category"
             @click="selectAction"
             v-model="searchText"
@@ -66,7 +60,7 @@
         <div class="select-input">
           <input
             type="text"
-            class="w-full p-3 focus:outline-none border border-[#FF5200] focus:ring-1 focus:ring-[#FF5200] rounded-md"
+            class="w-full p-3 focus:outline-none border border-[#7F3DFF] focus:ring-1 focus:ring-[#7F3DFF] rounded-md"
             placeholder="Select Category"
             @click="selectAction"
             v-model="selectedOptions.name"
@@ -109,58 +103,9 @@ const props = defineProps({
     default: false,
   },
 });
-const options = [
-  {
-    name: "Category 1",
-    value: "category_1",
-    id: 1,
-  },
-  {
-    name: "Category 2",
-    value: "category_2",
-    id: 2,
-  },
-  {
-    name: "Category 3",
-    value: "category_3",
-    id: 3,
-  },
-  {
-    name: "Category 4",
-    value: "category_4",
-    id: 4,
-  },
-  {
-    name: "Category 5",
-    value: "category_5",
-    id: 5,
-  },
-  {
-    name: "Category 6",
-    value: "category_6",
-    id: 6,
-  },
-  {
-    name: "Category 7",
-    value: "category_7",
-    id: 7,
-  },
-  {
-    name: "Category 8",
-    value: "category_8",
-    id: 8,
-  },
-  {
-    name: "Category 9",
-    value: "category_9",
-    id: 9,
-  },
-  {
-    name: "Category 10",
-    value: "category_10",
-    id: 10,
-  },
-];
+
+console.log(props.options);
+
 const selectOptions = ref([]);
 const searchText = ref(null);
 const selectedOptions = ref([]);
@@ -169,12 +114,19 @@ watch(
   () => searchText.value,
   (value) => {
     if (value) {
-      selectOptions.value = options.filter((option) =>
+      selectOptions.value = props.options.filter((option) =>
         option.name.toLowerCase().includes(value.toLowerCase())
       );
     } else {
-      selectOptions.value = options;
+      selectOptions.value = props.options;
     }
+  }
+);
+
+watch(
+  () => props.options,
+  (updatedOption) => {
+    getSelectOptions(updatedOption);
   }
 );
 const selectAction = (e) => {
@@ -189,13 +141,13 @@ const setSelectOption = (id) => {
   if (props.multiple && selectedOptions.value) {
     selectedOptions.value = [
       ...selectedOptions.value,
-      options.find((option) => option.id === id),
+      props.options.find((option) => option.id === id),
     ];
     selectOptions.value = selectOptions.value.filter(
       (option) => option.id !== id
     );
   } else {
-    selectedOptions.value = options.find((option) => option.id == id);
+    selectedOptions.value = props.options.find((option) => option.id == id);
   }
 };
 
@@ -205,10 +157,11 @@ const removeSelectedOption = (id) => {
   );
   selectOptions.value = [
     ...selectOptions.value,
-    options.find((option) => option.id === id),
+    props.options.find((option) => option.id === id),
   ].sort((a, b) => a.id - b.id);
 };
-getSelectOptions(options);
+
+getSelectOptions(props.options);
 </script>
 
 <style scoped>
