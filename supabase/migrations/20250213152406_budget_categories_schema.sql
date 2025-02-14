@@ -7,5 +7,5 @@ create table
     budget_id bigint not null references budget(id) on delete cascade,
     category_id bigint not null references categories(id) on delete cascade,
     created_at timestamptz default now() not null,
-    unique (budget_id, category_id)
+    expired_at timestamptz null
   );
