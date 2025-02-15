@@ -77,6 +77,24 @@ export const useBudgetStore = defineStore("budget", () => {
     }
   };
 
+  const budgetDetail = async (id) => {
+    const { data, error } = await supabase
+      .from("budget")
+      .select(
+        `
+          *,
+          budget_categories(*, categories(name))
+        `
+      )
+      .eq("id", id)
+      .eq("user_id", user.value.id)
+      .single();
+
+    if (error) return { success: false, error: error.message };
+
+    return { success: true, data: data };
+  };
+
   const storeBudget = async (payload, expiredAt) => {
     const { data, error } = await supabase.from("budget").insert({
       user_id: user.value.id,
@@ -202,5 +220,6 @@ export const useBudgetStore = defineStore("budget", () => {
     fetchBudget,
     createBudgetV2,
     storeBudgetV2,
+    budgetDetail,
   };
 });

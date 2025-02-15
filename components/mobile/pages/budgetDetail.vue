@@ -75,14 +75,33 @@
   </div>
 </template>
 <script setup>
+import { useBudgetStore } from "~/store/budget";
+
 const router = useRouter();
 const route = useRoute();
+const budgetId = route.params.id;
+const budgetDetail = ref([]);
+const budgetStore = useBudgetStore();
 
 const backAction = () => {
-  navigateTo('/budget');
-}
+  navigateTo("/budget");
+};
 
 const deleteAction = () => {
   console.log("delete action");
 };
+
+const fetchBudget = async () => {
+  const result = await budgetStore.budgetDetail(budgetId);
+
+  if (!result.success) {
+    useNuxtApp().$toast.error(result.error);
+    router.back();
+  }
+
+  budgetDetail.value = result.data;
+  console.log(budgetDetail.value);
+};
+
+fetchBudget();
 </script>

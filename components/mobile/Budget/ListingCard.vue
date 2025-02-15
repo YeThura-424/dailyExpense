@@ -22,7 +22,7 @@
             + {{ budget.budget_categories.length - 1 }}
           </button>
         </div>
-        <div class="header-alert">
+        <div class="header-alert" @click="budgetDetail(budget.id)">
           <Icon
             name="ion:information-circled"
             :class="['text-3xl', alertTheme(budget)]"
@@ -89,5 +89,9 @@ const spentPercent = (budget) => {
   const percent = Math.floor((budget.spend_amount / budget.total) * 100);
 
   return `${percent}%`;
+};
+
+const budgetDetail = (id) => {
+  navigateTo(`/budget/${id}`);
 };
 </script>
