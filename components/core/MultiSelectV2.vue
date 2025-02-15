@@ -37,7 +37,7 @@
         <ul
           v-if="showOptions"
           :class="[
-            'rounded-md my-2 absolute bg-[#fdfdfd] select-shadow h-[200px] w-full overflow-x-scroll',
+            'rounded-md my-2 absolute bg-[#fdfdfd] select-shadow h-[200px] w-full overflow-x-scroll z-10',
             selectedOptions.length > 0 ? '-bottom-[135px]' : '-bottom-[220px]',
           ]"
         >

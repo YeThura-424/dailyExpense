@@ -6,12 +6,20 @@
       :key="budget"
     >
       <div class="card-header flex justify-between items-center">
-        <div class="header-type py-2">
+        <div class="header-type py-2 flex gap-x-2">
           <button
+            v-for="(budgetCategory, index) in budget.budget_categories"
+            v-show="index == 0"
             class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5"
           >
             <Icon name="ion:ios-radio-button-on" :class="alertTheme(budget)" />
-            {{ budget.categories.name }}
+            {{ budgetCategory.categories.name }}
+          </button>
+          <button
+            v-if="budget.budget_categories.length > 1"
+            class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5"
+          >
+            + {{ budget.budget_categories.length - 1 }}
           </button>
         </div>
         <div class="header-alert">

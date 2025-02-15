@@ -32,8 +32,8 @@
           v-model="form.categoryId"
         /> -->
         <CoreMultiSelectV2
-          v-model="form.categoryId"
-          :options="typeCategories"
+          v-model="form.category"
+          :options="budgetCategory"
           multiple
         />
       </div>
@@ -84,26 +84,26 @@ import { useCategoryStore } from "~/store/category";
 
 const form = reactive({
   total: 0,
-  categoryId: "",
+  category: "",
   alert: false,
 });
 const budgetLoading = ref(false);
 const budgetStore = useBudgetStore();
 const categoryStore = useCategoryStore();
-const { typeCategories } = storeToRefs(categoryStore);
+const { budgetCategory } = storeToRefs(categoryStore);
 
 const backAction = () => {
   navigateTo("/budget");
 };
 
 const fetchCategory = async () => {
-  await categoryStore.fetchCategoryWithType("expense");
+  await categoryStore.categoryForBudget();
 };
 
 const submit = async () => {
   console.log("d nar mar");
   budgetLoading.value = true;
-  const result = await budgetStore.createBudget(form);
+  const result = await budgetStore.createBudgetV2(form);
   console.log("result herer", result);
   if (result.success) {
     useNuxtApp().$toast.success("Budget Created Successfully!!");
