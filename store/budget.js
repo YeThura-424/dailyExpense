@@ -12,7 +12,7 @@ export const useBudgetStore = defineStore("budget", () => {
       .select(
         `
           *,
-          budget_categories(*)
+          budget_categories(*, categories(name))
         `
       )
       .eq("user_id", user.value.id);
@@ -96,7 +96,7 @@ export const useBudgetStore = defineStore("budget", () => {
 
   const createBudgetV2 = async (payload) => {
     try {
-      const categoryId = payload.categoryId;
+      const categoryId = payload.category.map((cate) => cate.id);
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const expiredAt = new Date(
@@ -104,7 +104,7 @@ export const useBudgetStore = defineStore("budget", () => {
         currentDate.getMonth() + 1,
         0
       );
-      let budgetId;
+      const budgetId = ref(null);
       const { data: budgetData } = await supabase
         .from("budget")
         .select("*, budget_categories(*)")
@@ -116,7 +116,8 @@ export const useBudgetStore = defineStore("budget", () => {
       if (budgetData) {
         const budgetExpireAt = new Date(budgetData.expired_at).getMonth();
         if (budgetExpireAt == currentMonth) {
-          const updateRemaining = payload.total + budgetData.remaining_amount;
+          const updateRemaining =
+            parseInt(payload.total) + parseInt(budgetData.remaining_amount);
           const { budgetUpdateError } = await supabase
             .from("budget")
             .update({
@@ -128,23 +129,27 @@ export const useBudgetStore = defineStore("budget", () => {
 
           if (budgetUpdateError) throw new Error(budgetUpdateError.message);
 
-          budgetId = budgetData.id;
+          budgetId.value = budgetData.id;
         } else {
-          const result = await storeBudget(payload, expiredAt);
+          const result = await storeBudgetV2(payload, expiredAt);
 
           if (!result.success) throw new Error(result.error);
 
-          budgetId = result.data.id;
+          budgetId.value = result.data.id;
         }
       } else {
-        const result = await storeBudget(payload, expiredAt);
+        const result = await storeBudgetV2(payload, expiredAt);
 
         if (!result.success) throw new Error(result.error);
 
-        budgetId = result.data.id;
+        budgetId.value = result.data.id;
       }
 
-      const result = await storeBudgetCategory();
+      const result = await storeBudgetCategory(
+        expiredAt,
+        budgetId.value,
+        payload
+      );
 
       if (!result.success) throw new Error(result.error);
 
@@ -174,11 +179,11 @@ export const useBudgetStore = defineStore("budget", () => {
     return { success: true, data: data };
   };
 
-  const storeBudgetCategory = async (expiredAt, budgetId, categoryIds) => {
-    if (payload.categoryIds?.length > 0) {
-      const categoryEntries = categoryIds.map((categoryId) => ({
+  const storeBudgetCategory = async (expiredAt, budgetId, payload) => {
+    if (payload.category?.length > 0) {
+      const categoryEntries = payload.category.map((cate) => ({
         budget_id: budgetId,
-        category_id: categoryId,
+        category_id: cate.id,
         user_id: user.value.id,
         expired_at: expiredAt,
       }));

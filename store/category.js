@@ -6,6 +6,7 @@ export const useCategoryStore = defineStore("category", () => {
   const categories = ref([]);
   const typeCategories = ref([]);
   const category = ref(null);
+  const budgetCategory = ref(null);
 
   const fetchCategories = async () => {
     const { data, error } = await supabase
@@ -44,6 +45,20 @@ export const useCategoryStore = defineStore("category", () => {
     }
 
     typeCategories.value = data;
+  };
+
+  const categoryForBudget = async () => {
+    const { data, error } = await supabase
+      .from("categories")
+      .select("id, name")
+      .eq("type", "expense")
+      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
+
+    if (error) {
+      return { success: false, error: error.message };
+    }
+
+    budgetCategory.value = data;
   };
 
   const categoryDetail = async (id) => {
@@ -179,10 +194,12 @@ export const useCategoryStore = defineStore("category", () => {
     category,
     categories,
     typeCategories,
+    budgetCategory,
     fetchCategories,
     categoryDetail,
     storeCategory,
     updateCategory,
     fetchCategoryWithType,
+    categoryForBudget,
   };
 });
