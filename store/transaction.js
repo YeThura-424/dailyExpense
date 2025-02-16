@@ -177,31 +177,38 @@ export const usetransactionStore = defineStore("transaction", () => {
         });
       if (transactionLogErr) throw new Error(transactionLogErr.message);
 
-      const { data: budgetData, error: budgetError } = await supabase
-        .from("budget")
-        .select()
-        .eq("category_id", categoryId)
-        .eq("user_id", userId)
-        .single();
+      // expense ဆိုမှ budget ကို update လုပ်မယ်
+      if (type == "expense") {
+        const currentDate = new Date();
+        const { data: budgetData, error: budgetError } = await supabase
+          .from("budget")
+          .select("*, budget_categories!inner(category_id)")
+          .eq("budget_categories.category_id", categoryId)
+          .eq("user_id", userId)
+          .gte("expired_at", currentDate.toISOString())
+          .maybeSingle();
 
-      if (budgetError) throw new Error(budgetError.message);
+        if (budgetError) throw new Error(budgetError.message);
+        //
+        if (budgetData) {
+          const spendAmount =
+            parseInt(budgetData.spend_amount ?? 0) + parseInt(amount);
+          const usage = parseInt(budgetData.usage) + parseInt(amount);
+          const remainingAmount =
+            parseInt(budgetData.remaining_amount) - parseInt(amount);
 
-      const spendAmount =
-        parseInt(budgetData.spend_amount ?? 0) + parseInt(amount);
-      const usage = parseInt(budgetData.usage) + parseInt(amount);
-      const remainingAmount =
-        parseInt(budgetData.remaining_amount) - parseInt(amount);
+          const { error: budgetUpdateErr } = await supabase
+            .from("budget")
+            .update({
+              spend_amount: spendAmount,
+              usage: usage,
+              remaining_amount: remainingAmount,
+            })
+            .eq("id", budgetData.id);
 
-      const { error: budgetUpdateErr } = await supabase
-        .from("budget")
-        .update({
-          spend_amount: spendAmount,
-          usage: usage,
-          remaining_amount: remainingAmount,
-        })
-        .eq("id", budgetData.id);
-
-      if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
+          if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
+        }
+      }
 
       return { success: true, message: "Transaction added successfully." };
     } catch (error) {
