@@ -6,7 +6,7 @@
         <div class="select-input">
           <input
             type="text"
-            class="w-full p-3 focus:outline-none border border-[#7F3DFF] focus:ring-1 focus:ring-[#7F3DFF] rounded-md"
+            class="text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]"
             placeholder="Select Category"
             @click="selectAction"
             v-model="searchText"
@@ -16,7 +16,7 @@
 
         <!-- selected values list  -->
         <div v-if="selectedOptions.length > 0" class="">
-          <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
+          <ul class="max-h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
             <li v-for="option in selectedOptions" :key="option">
               <div
                 class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md"

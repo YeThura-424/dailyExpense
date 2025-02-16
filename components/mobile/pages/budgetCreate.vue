@@ -23,6 +23,9 @@
       </div>
     </div>
     <div class="budget_form bg-white rounded-t-[40px] shadow px-6 py-4">
+      <div class="budget_title">
+        <CoreInputBox placeholder="Title" v-model="form.title" />
+      </div>
       <div class="category_select py-3">
         <!-- <CoreSelectBox
           :options="typeCategories"
@@ -83,6 +86,7 @@ import { useBudgetStore } from "~/store/budget";
 import { useCategoryStore } from "~/store/category";
 
 const form = reactive({
+  title: "",
   total: 0,
   category: "",
   alert: false,
