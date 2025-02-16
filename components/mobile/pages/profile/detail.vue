@@ -200,10 +200,12 @@
 <script setup>
 const user = useCookie("user");
 const profile = useCookie("profile");
+console.log(profile.value);
 const passwordUpdate = ref([]);
 const userInfo = reactive({
   name: profile.value.username,
   profile: profile.value.avatar_url,
+  newProfile: null,
   email: user.value.email,
   currency: profile.value.currency,
 });
@@ -230,8 +232,6 @@ const currency = ref([
 watch(
   () => userInfo,
   (newUserInfo) => {
-    console.log(newUserInfo);
-    console.log(user.value);
     // to make sure update button is disabled for not updating data situation
     if (
       newUserInfo.name == user.value.name &&
@@ -263,30 +263,31 @@ const handleUpload = (e) => {
 
 const updateProfile = async () => {
   userLoading.value = true;
-  if (userProfilePreview.value) {
-    const formData = new FormData();
-    formData.append("name", userInfo.name);
-    formData.append("currency", userInfo.currency);
-    formData.append("image", userInfo.profile[0]);
-    await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
-      method: "POST",
-      body: formData,
-      transform: (response) => {
-        console.log(response, "updating with image");
-      },
-    });
-    userLoading.value = false;
-  } else {
-    await useFetch(`/api/profile-update/${user.value.id}`, {
-      method: "POST",
-      body: userInfo,
-      transform: (response) => {
-        user.value = response.data?.data;
-      },
-    });
-    userLoading.value = false;
-  }
-  useNuxtApp().$toast.success("Profile Updated Successfully!!");
+  console.log(userInfo, "logging hererer");
+  // if (userProfilePreview.value) {
+  //   const formData = new FormData();
+  //   formData.append("name", userInfo.name);
+  //   formData.append("currency", userInfo.currency);
+  //   formData.append("image", userInfo.profile[0]);
+  //   await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
+  //     method: "POST",
+  //     body: formData,
+  //     transform: (response) => {
+  //       console.log(response, "updating with image");
+  //     },
+  //   });
+  //   userLoading.value = false;
+  // } else {
+  //   await useFetch(`/api/profile-update/${user.value.id}`, {
+  //     method: "POST",
+  //     body: userInfo,
+  //     transform: (response) => {
+  //       user.value = response.data?.data;
+  //     },
+  //   });
+  //   userLoading.value = false;
+  // }
+  // useNuxtApp().$toast.success("Profile Updated Successfully!!");
 };
 
 const updatePassword = async () => {
