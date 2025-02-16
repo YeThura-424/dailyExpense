@@ -159,6 +159,74 @@ export const useUserStore = defineStore("user", () => {
     }
   };
 
+  const updateProfile = async (payload) => {
+    const oldProfile = payload.profile;
+    const newProfile = payload.newProfile;
+    const avatarUrl = ref(null);
+
+    try {
+      // update profile photo and delete old one if both present
+      if (oldProfile && newProfile) {
+        const updateResult = await updateProfilePhoto(newProfile, oldProfile);
+
+        if (!updateResult.success) throw new Error(updateResult.error);
+
+        avatarUrl.value = updateResult.data;
+      }
+      // only store new profile if old photo does not exist
+      if (newProfile) {
+        const updateResult = await storeProfilePhoto(newProfile);
+
+        if (!updateResult.success) throw new Error(updateResult.error);
+
+        avatarUrl.value = updateResult.data;
+      }
+
+      const { error: updateError } = await supabase.from("profiles").update({
+        username: payload.username,
+        currency: payload.currency,
+        avatar_url: avatarUrl.value,
+      });
+
+      if (updateError) throw new Error(updateError.message);
+
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
+
+  const storeProfilePhoto = async (fileData) => {
+    const file = fileData[0];
+    const fileName = `${Date.now()}-${file.name}`;
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("user_profile")
+      .upload(fileName, file, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    if (uploadData) return { success: true, data: uploadData.path };
+  };
+
+  const updateProfilePhoto = async (newFile, oldFile) => {
+    const file = newFile[0];
+
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("user_profile")
+      .update(oldFile, file, {
+        cacheControl: "3600",
+        upsert: true,
+      });
+
+    if (uploadError) return { success: false, error: uploadError.message };
+
+    if (uploadData) return { success: true, data: uploadData.path };
+  };
+
   return {
     user,
     token,

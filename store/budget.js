@@ -158,15 +158,6 @@ export const useBudgetStore = defineStore("budget", () => {
           if (budgetUpdateError) throw new Error(budgetUpdateError.message);
 
           budgetId.value = budgetData.id;
-
-          // const budgetCategoryUpdateResult = updateBudgetCategory(
-          //   expiredAt,
-          //   budgetId.value,
-          //   payload
-          // );
-
-          // if (!budgetCategoryUpdateResult.success)
-          //   throw new Error(result.error);
         } else {
           const result = await storeBudgetV2(payload, expiredAt);
 
@@ -246,7 +237,6 @@ export const useBudgetStore = defineStore("budget", () => {
     }
   };
 
-  const updateBudgetCategory = async (expiredAt, budgetId, payload) => {};
   return {
     createBudget,
     fetchBudget,
