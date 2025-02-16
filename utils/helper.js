@@ -120,3 +120,8 @@ export const getDateByMonth = (month) => {
 
   return newDate.toISOString();
 };
+
+export const debugLog = (message, data) => {
+  console.log(message, data);
+  throw new Error("Debug Logging ...");
+};

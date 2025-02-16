@@ -101,8 +101,11 @@ const fetchCategory = async () => {
 };
 
 const submit = async () => {
-  console.log("d nar mar");
   budgetLoading.value = true;
+  if (form.category.length <= 0) {
+    useNuxtApp().$toast.error("Please choose at least one category");
+    return false;
+  }
   const result = await budgetStore.createBudgetV2(form);
   console.log("result herer", result);
   if (result.success) {

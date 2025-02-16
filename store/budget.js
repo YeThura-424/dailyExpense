@@ -114,7 +114,10 @@ export const useBudgetStore = defineStore("budget", () => {
 
   const createBudgetV2 = async (payload) => {
     try {
-      const categoryId = payload.category.map((cate) => cate.id);
+      const categoryId =
+        payload.category.length > 0
+          ? payload.category.map((cate) => cate.id)
+          : [];
       const currentDate = new Date();
       const currentMonth = currentDate.getMonth();
       const expiredAt = new Date(
@@ -125,11 +128,13 @@ export const useBudgetStore = defineStore("budget", () => {
       const budgetId = ref(null);
       const { data: budgetData } = await supabase
         .from("budget")
-        .select("*, budget_categories(*)")
-        .in("budget_categories.category_id", categoryId)
+        .select("*, budget_categories!inner(category_id)")
+        .eq("budget_categories.category_id", categoryId)
         .eq("user_id", user.value.id)
         .gte("expired_at", currentDate.toISOString())
-        .single();
+        .maybeSingle();
+
+      // debugLog("Existing budget data", budgetData);
 
       if (budgetData) {
         const budgetExpireAt = new Date(budgetData.expired_at).getMonth();
@@ -148,12 +153,29 @@ export const useBudgetStore = defineStore("budget", () => {
           if (budgetUpdateError) throw new Error(budgetUpdateError.message);
 
           budgetId.value = budgetData.id;
+
+          const budgetCategoryUpdateResult = updateBudgetCategory(
+            expiredAt,
+            budgetId.value,
+            payload
+          );
+
+          if (!budgetCategoryUpdateResult.success)
+            throw new Error(result.error);
         } else {
           const result = await storeBudgetV2(payload, expiredAt);
 
           if (!result.success) throw new Error(result.error);
 
           budgetId.value = result.data.id;
+
+          const budgetCategoryResult = await storeBudgetCategory(
+            expiredAt,
+            budgetId.value,
+            payload
+          );
+
+          if (!budgetCategoryResult.success) throw new Error(result.error);
         }
       } else {
         const result = await storeBudgetV2(payload, expiredAt);
@@ -161,15 +183,15 @@ export const useBudgetStore = defineStore("budget", () => {
         if (!result.success) throw new Error(result.error);
 
         budgetId.value = result.data.id;
+
+        const budgetCategoryResult = await storeBudgetCategory(
+          expiredAt,
+          budgetId.value,
+          payload
+        );
+
+        if (!budgetCategoryResult.success) throw new Error(result.error);
       }
-
-      const result = await storeBudgetCategory(
-        expiredAt,
-        budgetId.value,
-        payload
-      );
-
-      if (!result.success) throw new Error(result.error);
 
       return { success: true };
     } catch (error) {
@@ -215,6 +237,8 @@ export const useBudgetStore = defineStore("budget", () => {
       return { success: true };
     }
   };
+
+  const updateBudgetCategory = async (expiredAt, budgetId, payload) => {};
   return {
     createBudget,
     fetchBudget,
