@@ -1,19 +1,19 @@
 <template>
-  <div class="min-w-28">
+  <div class="w-full">
     <Listbox v-model="selectedMonth">
       <div class="relative mt-1">
         <ListboxButton
-          class="relative min-w-28 cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-center shadow-md focus:outline-none border-2 border-[#7F3DFF]"
+          class="relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-14 shadow-md focus:outline-none border border-[#91919F]"
         >
-          <span class="block truncate">{{ selectedMonth.name }}</span>
-          <span
+          <div class="truncate">{{ selectedMonth.name }}</div>
+          <div
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
             <ChevronUpDownIcon
               class="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-          </span>
+          </div>
         </ListboxButton>
 
         <transition
@@ -22,7 +22,7 @@
           leave-to-class="opacity-0"
         >
           <ListboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
           >
             <ListboxOption
               v-slot="{ active, selected }"
