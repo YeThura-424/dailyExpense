@@ -63,6 +63,24 @@
             <CoreMonthSelect v-model="form.year" :months="rawYear" />
           </div>
         </div>
+
+        <div
+          class="category-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
+        >
+          <!-- <nuxt-link to="/category/add"> -->
+          <button
+            type="button"
+            :disabled="!isReadyToExport"
+            class="w-full disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
+          >
+            <Icon
+              name="ion:ios-create"
+              class="text-white text-2xl cursor-pointer"
+            />
+            Export Selected Data
+          </button>
+          <!-- </nuxt-link> -->
+        </div>
       </div>
     </div>
   </div>
@@ -76,13 +94,14 @@ const rawYear = ref([
   { id: 1, name: 2024, value: 2024 },
   { id: 2, name: 2025, value: 2025 },
 ]);
+const isReadyToExport = ref(false);
 
 const form = reactive({
-  type: "",
-  range: "",
-  from_date: "",
-  to_date: "",
-  month: "",
+  type: null,
+  range: null,
+  from_date: null,
+  to_date: null,
+  month: null,
   year: rawYear.value[0].value,
 });
 
@@ -116,11 +135,30 @@ const exportRange = ref([
   { id: 2, key: "month", name: "Month" },
   { id: 3, key: "year", name: "Year" },
 ]);
+
+watch(
+  () => form,
+  (newVal) => {
+    if (newVal.type) {
+      console.log("type change");
+      if (newVal.range == "day" && newVal.from_date && newVal.to_date) {
+        isReadyToExport.value = true;
+      } else if (newVal.range == "month" && newVal.month) {
+        isReadyToExport.value = true;
+      } else if (newVal.range == "year") {
+        isReadyToExport.value = true;
+      } else {
+        isReadyToExport.value = false;
+      }
+    }
+  },
+  { deep: true }
+);
 </script>
 
 <style>
 .export-filter-section {
-  height: calc(100vh - 130px);
+  height: calc(100vh - 120px);
   overflow-x: auto;
 }
 </style>
