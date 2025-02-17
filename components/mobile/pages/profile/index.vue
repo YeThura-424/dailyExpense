@@ -63,16 +63,21 @@
           </div>
         </nuxt-link>
         <!-- export  -->
-        <div
-          class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
-        >
+        <nuxt-link to="/export">
           <div
-            class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            class="account-section flex items-center gap-x-3 border-b border-[#eee] px-4 py-4"
           >
-            <Icon name="ion:ios-cloud-upload" class="text-4xl text-[#7F3DFF]" />
+            <div
+              class="account-logo w-14 h-14 bg-[#EEE5FF] rounded-2xl flex justify-center items-center"
+            >
+              <Icon
+                name="ion:ios-cloud-upload"
+                class="text-4xl text-[#7F3DFF]"
+              />
+            </div>
+            <h1 class="text-[#292B2D] text-xl font-medium">Export</h1>
           </div>
-          <h1 class="text-[#292B2D] text-xl font-medium">Export</h1>
-        </div>
+        </nuxt-link>
         <!-- logout  -->
         <div
           @click.prevent="Logout"
