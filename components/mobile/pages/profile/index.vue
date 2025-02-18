@@ -4,7 +4,11 @@
       <div class="profile-info-wrapper flex items-center gap-x-3">
         <div class="profile-image rounded-full border-2 border-[#7F3DFF]">
           <img
-            :src="profile?.avatar_url ?? '/images/userprofile.png'"
+            :src="
+              profile?.avatar_url
+                ? getUserProfilePhoto(profile?.avatar_url)
+                : '/images/userprofile.png'
+            "
             alt=""
             class="w-20 h-20 rounded-full p-1"
           />
@@ -99,7 +103,7 @@
 <script setup>
 import { useUserStore } from "~/store/user";
 
-const { logout } = useUserStore();
+const { logout, getUserProfilePhoto } = useUserStore();
 const loading = ref(false);
 
 const user = useCookie("user");

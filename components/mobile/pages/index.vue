@@ -7,7 +7,11 @@
           <div class="profile">
             <NuxtLink :to="`/profile/${user?.id}`">
               <img
-                :src="user?.image ?? '/images/user.jpg'"
+                :src="
+                  profile?.avatar_url
+                    ? getUserProfilePhoto(profile?.avatar_url)
+                    : '/images/user.jpg'
+                "
                 class="w-8 h-8 rounded-full border-2 border-[#7F3DFF] p-1"
                 alt=""
               />
@@ -109,8 +113,9 @@ const selectedDate = reactive({
 });
 const rawMonth = computed(() => getPreviousMonth(selectedDate.year?.value));
 const user = useCookie("user");
+const profile = useCookie("profile");
 
-const userStore = useUserStore();
+const { getWalletAndTransaction, getUserProfilePhoto } = useUserStore();
 const walletStore = useWalletStore();
 const loading = reactive({
   incomeExpend: false,
@@ -123,7 +128,7 @@ const walletTotal = ref(0);
 
 const getIncomeExpense = async (year, month) => {
   loading.incomeExpend = true;
-  const result = await userStore.getWalletAndTransaction();
+  const result = await getWalletAndTransaction();
 
   if (result.success) {
     incomeTotal.value = result.data
