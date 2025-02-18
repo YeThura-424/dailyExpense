@@ -232,6 +232,14 @@ export const useUserStore = defineStore("user", () => {
     if (uploadData) return { success: true, data: uploadData.path };
   };
 
+  const getUserProfilePhoto = (id) => {
+    const { data } = supabase.storage.from("user_profile").getPublicUrl(id);
+
+    if (data) return data.publicUrl;
+
+    return null;
+  };
+
   return {
     user,
     token,
@@ -242,5 +250,6 @@ export const useUserStore = defineStore("user", () => {
     getSession,
     getWalletAndTransaction,
     updateProfile,
+    getUserProfilePhoto,
   };
 });

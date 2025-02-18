@@ -45,7 +45,11 @@
             />
             <img
               v-else
-              :src="user?.image ? user?.image : '/images/userprofile.png'"
+              :src="
+                profile?.avatar_url
+                  ? getUserProfilePhoto(profile?.avatar_url)
+                  : '/images/userprofile.png'
+              "
               alt=""
               class="w-[190px] h-[190px] border border-[#ccbaf0] rounded-full"
             />
@@ -202,7 +206,7 @@ import { useUserStore } from "../../../../store/user";
 
 const user = useCookie("user");
 const profile = useCookie("profile");
-const { getSession, updateProfile } = useUserStore();
+const { getSession, updateProfile, getUserProfilePhoto } = useUserStore();
 
 const passwordUpdate = ref([]);
 const userInfo = reactive({
@@ -260,7 +264,7 @@ const backAction = () => {
 };
 
 const handleUpload = (e) => {
-  userInfo.profile = e.target.files;
+  userInfo.newProfile = e.target.files;
   userProfilePreview.value = URL.createObjectURL(e.target.files[0]);
 };
 
