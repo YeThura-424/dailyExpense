@@ -236,5 +236,6 @@ export const useUserStore = defineStore("user", () => {
     trackAuthChange,
     getSession,
     getWalletAndTransaction,
+    updateProfile,
   };
 });

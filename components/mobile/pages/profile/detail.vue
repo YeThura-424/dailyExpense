@@ -32,7 +32,7 @@
       </div>
       <div class="profile-tab-content">
         <div
-          v-if="activeTab == 'info'"
+          v-if="activeTab == 'info' && profile"
           class="profile-info flex flex-col justify-center items-center gap-y-4 pt-4"
         >
           <div
@@ -198,16 +198,19 @@
 </template>
 
 <script setup>
+import { useUserStore } from "../../../../store/user";
+
 const user = useCookie("user");
 const profile = useCookie("profile");
-console.log(profile.value);
+const { getSession } = useUserStore();
+
 const passwordUpdate = ref([]);
 const userInfo = reactive({
-  name: profile.value.username,
-  profile: profile.value.avatar_url,
+  name: profile.value?.username,
+  profile: profile.value?.avatar_url,
   newProfile: null,
-  email: user.value.email,
-  currency: profile.value.currency,
+  email: user.value?.email,
+  currency: profile.value?.currency,
 });
 
 const userLoading = ref(false);
@@ -311,4 +314,6 @@ const updatePassword = async () => {
     }
   }
 };
+
+await getSession();
 </script>
