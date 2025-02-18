@@ -174,7 +174,7 @@ export const useUserStore = defineStore("user", () => {
         avatarUrl.value = updateResult.data;
       }
       // only store new profile if old photo does not exist
-      if (newProfile) {
+      if (newProfile && !oldProfile) {
         const updateResult = await storeProfilePhoto(newProfile);
 
         if (!updateResult.success) throw new Error(updateResult.error);
@@ -182,15 +182,20 @@ export const useUserStore = defineStore("user", () => {
         avatarUrl.value = updateResult.data;
       }
 
-      const { error: updateError } = await supabase.from("profiles").update({
-        username: payload.username,
-        currency: payload.currency,
-        avatar_url: avatarUrl.value,
-      });
+      const { data, error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          username: payload.name,
+          currency: payload.currency,
+          avatar_url: avatarUrl.value,
+        })
+        .eq("id", user.value.id)
+        .select()
+        .single();
 
       if (updateError) throw new Error(updateError.message);
 
-      return { success: true };
+      return { success: true, data: data };
     } catch (error) {
       return { success: false, error: error.message };
     }

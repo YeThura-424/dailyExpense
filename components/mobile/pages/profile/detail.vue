@@ -92,7 +92,7 @@
             </div>
             <div class="update-button py-4">
               <button
-                @click="updateProfile"
+                @click="updateUserProfile"
                 type="button"
                 :disabled="!shouldUpdate"
                 class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
@@ -202,7 +202,7 @@ import { useUserStore } from "../../../../store/user";
 
 const user = useCookie("user");
 const profile = useCookie("profile");
-const { getSession } = useUserStore();
+const { getSession, updateProfile } = useUserStore();
 
 const passwordUpdate = ref([]);
 const userInfo = reactive({
@@ -264,33 +264,18 @@ const handleUpload = (e) => {
   userProfilePreview.value = URL.createObjectURL(e.target.files[0]);
 };
 
-const updateProfile = async () => {
+const updateUserProfile = async () => {
   userLoading.value = true;
   console.log(userInfo, "logging hererer");
-  // if (userProfilePreview.value) {
-  //   const formData = new FormData();
-  //   formData.append("name", userInfo.name);
-  //   formData.append("currency", userInfo.currency);
-  //   formData.append("image", userInfo.profile[0]);
-  //   await useFetch(`/api/file-upload/profile-update/${user.value.id}`, {
-  //     method: "POST",
-  //     body: formData,
-  //     transform: (response) => {
-  //       console.log(response, "updating with image");
-  //     },
-  //   });
-  //   userLoading.value = false;
-  // } else {
-  //   await useFetch(`/api/profile-update/${user.value.id}`, {
-  //     method: "POST",
-  //     body: userInfo,
-  //     transform: (response) => {
-  //       user.value = response.data?.data;
-  //     },
-  //   });
-  //   userLoading.value = false;
-  // }
-  // useNuxtApp().$toast.success("Profile Updated Successfully!!");
+
+  const result = await updateProfile(userInfo);
+  userLoading.value = false;
+  if (result.success) {
+    useNuxtApp().$toast.success("Profile Updated Successfully!!");
+    profile.value = result.data;
+  } else {
+    useNuxtApp().$toast.error(result.error);
+  }
 };
 
 const updatePassword = async () => {
