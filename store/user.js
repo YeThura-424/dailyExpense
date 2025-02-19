@@ -83,6 +83,23 @@ export const useUserStore = defineStore("user", () => {
     return true;
   };
 
+  const updatePassword = async (payload) => {
+    const { data, error } = await supabase.auth.updateUser({
+      password: payload.new_password,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: true,
+    };
+  };
+
   const getSession = async () => {
     const { data } = await supabase.auth.getSession();
     if (data.session) {
@@ -251,5 +268,6 @@ export const useUserStore = defineStore("user", () => {
     getWalletAndTransaction,
     updateProfile,
     getUserProfilePhoto,
+    updatePassword,
   };
 });

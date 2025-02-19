@@ -171,7 +171,7 @@
             </div>
             <div class="update-button py-4">
               <button
-                @click="updatePassword"
+                @click="updateUserPassword"
                 type="button"
                 class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
               >
@@ -182,6 +182,9 @@
                 Change
               </button>
             </div>
+          </div>
+          <div v-if="userLoading" class="loading-container">
+            <MobileLoadingDots />
           </div>
         </div>
       </div>
@@ -194,7 +197,13 @@ import { useUserStore } from "../../../../store/user";
 
 const user = useCookie("user");
 const profile = useCookie("profile");
-const { getSession, updateProfile, getUserProfilePhoto } = useUserStore();
+const {
+  getSession,
+  updateProfile,
+  getUserProfilePhoto,
+  updatePassword,
+  logout,
+} = useUserStore();
 const passwordMatch = ref(true);
 
 const passwordUpdate = ref([]);
@@ -285,7 +294,7 @@ const updateUserProfile = async () => {
   }
 };
 
-const updatePassword = async () => {
+const updateUserPassword = async () => {
   if (!userPassword.new_password || !userPassword.confirm_password) {
     useNuxtApp().$toast.error("New password cann't be empty");
     return false;
@@ -295,25 +304,17 @@ const updatePassword = async () => {
     useNuxtApp().$toast.error("Password and comfirm password doesn't match!");
     return false;
   }
+  userLoading.value = true;
 
-  const { data, error } = await useFetch(
-    `/api/change-password/${user.value.id}`,
-    {
-      method: "POST",
-      body: userPassword,
-      transform: (response) => {
-        return response;
-      },
-    }
-  );
-  if (data?.value) {
-    useNuxtApp().$toast.success("Profile Updated Successfully!!");
-  }
-  if (error?.value) {
-    passwordUpdate.value = error.value?.data?.data?.errors;
-    if (error?.value?.data?.data?.message) {
-      useNuxtApp().$toast.error(error.value?.data?.data?.message);
-    }
+  const result = await updatePassword(userPassword);
+
+  if (result.success) {
+    useNuxtApp().$toast.success("Password updated successfully");
+    logout();
+    navigateTo("/");
+  } else {
+    userLoading.value = false;
+    useNuxtApp().$toast.error(result.error);
   }
 };
 
