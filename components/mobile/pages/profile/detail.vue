@@ -115,7 +115,7 @@
         </div>
         <div v-else class="profile-security">
           <div class="user-profile-info w-full pt-4 px-6">
-            <div class="oldpassword py-2">
+            <!-- <div class="oldpassword py-2">
               <label
                 class="text-lg text-[#3f4142] font-medium"
                 for="oldpassword"
@@ -134,7 +134,7 @@
               >
                 {{ passwordUpdate.old_password[0] }}
               </p>
-            </div>
+            </div> -->
             <div class="newpassword py-2">
               <label
                 class="text-lg text-[#3f4142] font-medium"
@@ -144,19 +144,13 @@
               <CoreInputBox
                 v-model="userPassword.new_password"
                 type="password"
-                placeholder="Old Password"
-              />
-              <p
-                v-if="
-                  passwordUpdate?.new_password &&
-                  (!userPassword.new_password ||
-                    userPassword.new_password.length < 6 ||
-                    userPassword.new_password.length > 12)
+                placeholder="New Password"
+                :input-class="
+                  passwordMatch
+                    ? 'text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]'
+                    : 'text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-red-600 text-red-600'
                 "
-                class="text-sm text-red-600 font-normal"
-              >
-                {{ passwordUpdate.new_password[0] }}
-              </p>
+              />
             </div>
             <div class="newpassword py-2">
               <label
@@ -167,19 +161,13 @@
               <CoreInputBox
                 v-model="userPassword.confirm_password"
                 type="password"
-                placeholder="Old Password"
-              />
-              <p
-                v-if="
-                  passwordUpdate?.confirm_password &&
-                  (!userPassword.confirm_password ||
-                    userPassword.confirm_password.length < 6 ||
-                    userPassword.confirm_password.length > 12)
+                placeholder="Confirm New Password"
+                :input-class="
+                  passwordMatch
+                    ? 'text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]'
+                    : 'text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-red-600 text-red-600'
                 "
-                class="text-sm text-red-600 font-normal"
-              >
-                {{ passwordUpdate.confirm_password[0] }}
-              </p>
+              />
             </div>
             <div class="update-button py-4">
               <button
@@ -207,6 +195,7 @@ import { useUserStore } from "../../../../store/user";
 const user = useCookie("user");
 const profile = useCookie("profile");
 const { getSession, updateProfile, getUserProfilePhoto } = useUserStore();
+const passwordMatch = ref(true);
 
 const passwordUpdate = ref([]);
 const userInfo = reactive({
@@ -220,7 +209,6 @@ const userInfo = reactive({
 const userLoading = ref(false);
 const shouldUpdate = ref(false);
 const userPassword = reactive({
-  old_password: null,
   new_password: null,
   confirm_password: null,
 });
@@ -248,6 +236,21 @@ watch(
       shouldUpdate.value = false;
     } else {
       shouldUpdate.value = true;
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => userPassword,
+  (updateVal) => {
+    if (
+      updateVal.confirm_password &&
+      updateVal.new_password != updateVal.confirm_password
+    ) {
+      passwordMatch.value = false;
+    } else {
+      passwordMatch.value = true;
     }
   },
   { deep: true }
@@ -283,6 +286,16 @@ const updateUserProfile = async () => {
 };
 
 const updatePassword = async () => {
+  if (!userPassword.new_password || !userPassword.confirm_password) {
+    useNuxtApp().$toast.error("New password cann't be empty");
+    return false;
+  }
+
+  if (userPassword.new_password != userPassword.confirm_password) {
+    useNuxtApp().$toast.error("Password and comfirm password doesn't match!");
+    return false;
+  }
+
   const { data, error } = await useFetch(
     `/api/change-password/${user.value.id}`,
     {
