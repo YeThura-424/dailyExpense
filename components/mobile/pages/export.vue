@@ -71,6 +71,7 @@
           <button
             type="button"
             :disabled="!isReadyToExport"
+            @click="exportData"
             class="w-full disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer"
           >
             <Icon
@@ -87,9 +88,12 @@
 </template>
 
 <script setup>
+import { useExportStore } from "~/store/export";
+
 const backAction = () => {
   navigateTo("/profile");
 };
+const { exportTransaction } = useExportStore();
 const rawYear = ref([
   { id: 1, name: 2024, value: 2024 },
   { id: 2, name: 2025, value: 2025 },
@@ -154,6 +158,22 @@ watch(
   },
   { deep: true }
 );
+
+const exportData = async (form) => {
+  if (form.type == "transaction") {
+    await transactionExport();
+  }
+};
+
+const transactionExport = async () => {
+  const result = await exportTransaction(form);
+
+  if (result.success) {
+    // all the logic for exporting as csv, xlsx, pdf
+  } else {
+    useNuxtApp().$toast.error(result.error);
+  }
+};
 </script>
 
 <style>
