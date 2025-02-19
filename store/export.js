@@ -24,6 +24,17 @@ export const useExportStore = defineStore("export", () => {
           ascending: false,
         });
 
+      if (payload.from_date && payload.to_date) {
+        const fromDate = new Date(payload.from_date)
+          .toISOString()
+          .split("T")[0];
+
+        query = query.filter("action_date", "gte", fromDate);
+
+        const toDate = new Date(payload.to_date).toISOString().split("T")[0];
+
+        query = query.filter("action_date", "lte", toDate);
+      }
       if (payload?.month) {
         const currentMonth = new Date().getMonth() + 1;
         query = query.filter(
