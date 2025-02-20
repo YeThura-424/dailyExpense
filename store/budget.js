@@ -54,6 +54,7 @@ export const useBudgetStore = defineStore("budget", () => {
             .update({
               total: payload.total,
               alert: payload.alert,
+              alert_percent: payload.alertPercent,
               remaining_amount: updateRemaining,
               category_id: categoryId,
             })
@@ -151,6 +152,7 @@ export const useBudgetStore = defineStore("budget", () => {
               title: payload.title,
               total: payload.total,
               alert: payload.alert,
+              alert_percent: payload.alertPercent,
               remaining_amount: updateRemaining,
             })
             .eq("id", budgetData.id);
@@ -201,10 +203,10 @@ export const useBudgetStore = defineStore("budget", () => {
       .insert({
         user_id: user.value.id,
         title: payload.title,
-        // category_id: payload.categoryId,
         total: payload.total,
         remaining_amount: payload.total,
         alert: payload.alert,
+        alert_percent: payload.alertPercent,
         expired_at: expiredAt,
       })
       .select("id")
