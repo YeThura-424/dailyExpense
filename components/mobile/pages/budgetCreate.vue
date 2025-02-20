@@ -64,7 +64,7 @@
         </div>
       </div>
       <div v-if="form.alert" class="budget-alert-percentage-bar">
-        <CoreRangeSlider v-model="form.range" />
+        <CoreRangeSlider v-model="form.alertPercent" />
       </div>
       <div class="save-button flex justify-end gap-x-5 py-3">
         <button
@@ -93,7 +93,7 @@ const form = reactive({
   total: 0,
   category: "",
   alert: false,
-  percent: 0,
+  alertPercent: 0,
 });
 const budgetLoading = ref(false);
 const budgetStore = useBudgetStore();
@@ -112,6 +112,11 @@ const submit = async () => {
   budgetLoading.value = true;
   if (form.category.length <= 0) {
     useNuxtApp().$toast.error("Please choose at least one category");
+    return false;
+  }
+
+  if (form.alert && form.alertPercent < 0) {
+    useNuxtApp().$toast.error("Please set alert percent!!");
     return false;
   }
   const result = await budgetStore.createBudgetV2(form);

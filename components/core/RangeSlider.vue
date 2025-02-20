@@ -1,7 +1,7 @@
 <template>
   <VueSlider
     v-model="slideValue"
-    :height="20"
+    :height="18"
     :processStyle="{ backgroundColor: '#7f3dff' }"
     tooltip="none"
   >
@@ -9,12 +9,12 @@
       <div
         class="flex justify-center items-center"
         style="
-          width: 54px;
-          height: 30px;
+          width: 40px;
+          height: 25px;
           background-color: #7f3dff;
           border-radius: 50px;
           color: white;
-          box-shadow: 0 0 0 10px #fff;
+          box-shadow: 0 0 0 5px #fff;
           position: absolute;
           top: 50%;
           transform: translateY(-50%);
