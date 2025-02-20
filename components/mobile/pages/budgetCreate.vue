@@ -41,7 +41,7 @@
         />
       </div>
 
-      <div class="repeat-transaction flex justify-between items-center py-3">
+      <div class="budget-alert flex justify-between items-center py-3">
         <div class="text">
           <h1 class="text-xl font-semibold text-[#292B2D]">Receive Alert</h1>
           <p class="text-sm text-[#91919F]">
@@ -62,6 +62,9 @@
             </button>
           </Switch>
         </div>
+      </div>
+      <div v-if="form.alert" class="budget-alert-percentage-bar">
+        <CoreRangeSlider v-model="form.range" />
       </div>
       <div class="save-button flex justify-end gap-x-5 py-3">
         <button
@@ -90,6 +93,7 @@ const form = reactive({
   total: 0,
   category: "",
   alert: false,
+  percent: 0,
 });
 const budgetLoading = ref(false);
 const budgetStore = useBudgetStore();
