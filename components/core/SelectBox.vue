@@ -174,7 +174,7 @@ const setOptionValue = (list) => {
     amount.value = list.amount;
   }
   if (props.showBudget) {
-    budget.value = list?.budget[0]?.remaining_amount ?? null;
+    budget.value = list?.budget_categories[0]?.budget?.remaining_amount ?? null;
   }
 };
 
