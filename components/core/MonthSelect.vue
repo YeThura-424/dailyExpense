@@ -5,7 +5,7 @@
         <ListboxButton
           class="relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-14 shadow-md focus:outline-none border border-[#91919F]"
         >
-          <div class="truncate">{{ selectedMonth.name }}</div>
+          <div class="truncate">{{ selectedMonth?.name }}</div>
           <div
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
@@ -74,16 +74,32 @@ const props = defineProps({
     type: Array,
     required: true,
   },
+  type: {
+    type: String,
+    default: "month",
+  },
 });
 const emit = defineEmits(["update:modelValue"]);
-const selectedMonth = ref(props.months[props.months.length - 1]); // to get current month
+const currentYear = new Date().getFullYear();
+const selectedMonth = ref(null);
+onMounted(() => {
+  if (props.type == "month") {
+    selectedMonth.value = props.months[props.months.length - 1];
+  } else {
+    selectedMonth.value = props.months.find(
+      (month) => month.value == currentYear
+    );
+  }
+});
 
+console.log("inside of month select selected month", selectedMonth.value);
+console.log("inside of month select", props.months);
 watch(
   () => selectedMonth.value,
   (updateValue) => {
-    emit("update:modelValue", updateValue);
+    emit("update:modelValue", updateValue.value);
   }
 );
 
-emit("update:modelValue", selectedMonth.value);
+emit("update:modelValue", selectedMonth.value?.value);
 </script>

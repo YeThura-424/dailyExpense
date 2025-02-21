@@ -56,11 +56,15 @@
         </div>
         <div
           v-if="form.range == 'year'"
-          class="month_range grid grid-cols-1 gap-x-12"
+          class="year_range grid grid-cols-1 gap-x-12"
         >
           <div class="year_select">
             <p class="text-[#161719] text-lg pt-2">Year</p>
-            <CoreMonthSelect v-model="form.year" :months="rawYear" />
+            <CoreMonthSelect
+              v-model="form.year"
+              :months="rawYear"
+              type="year"
+            />
           </div>
         </div>
 
@@ -159,10 +163,12 @@ watch(
   { deep: true }
 );
 
-const exportData = async (form) => {
-  if (form.type == "transaction") {
-    await transactionExport();
-  }
+const exportData = async () => {
+  console.log(form);
+  alert("Exporting data comming soon...");
+  // if (form.type == "transaction") {
+  //   await transactionExport();
+  // }
 };
 
 const transactionExport = async () => {
