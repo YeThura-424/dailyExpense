@@ -5,11 +5,10 @@ export const useExportStore = defineStore("export", () => {
   const authUser = useCookie("user");
 
   const exportTransaction = async (payload) => {
+    console.log("payload here", payload);
     try {
-      const query = supabase
-        .from("transactions")
-        .select(
-          `
+      let query = supabase.from("transactions").select(
+        `
           *,
           wallet(
           id,name
@@ -18,11 +17,7 @@ export const useExportStore = defineStore("export", () => {
           id,name
           )
         `
-        )
-        .eq("user_id", authUser.value.id)
-        .order("created_at", {
-          ascending: false,
-        });
+      );
 
       if (payload.from_date && payload.to_date) {
         const fromDate = new Date(payload.from_date)
@@ -60,7 +55,11 @@ export const useExportStore = defineStore("export", () => {
           .lte("action_date", `${currentYear}-12-31`);
       }
 
-      const { data, error } = await query;
+      const { data, error } = await query
+        .eq("user_id", authUser.value.id)
+        .order("created_at", {
+          ascending: false,
+        });
 
       if (error) throw new Error(error.message);
 

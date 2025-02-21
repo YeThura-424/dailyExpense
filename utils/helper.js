@@ -12,7 +12,7 @@ export const getPreviousMonth = (year) => {
   const previousMonths = [];
 
   const isPastYear = year !== currentYear;
-
+  console.log(isPastYear, year, currentYear);
   if (isPastYear) {
     for (let i = 0; i <= 12; i++) {
       previousMonths.push({
