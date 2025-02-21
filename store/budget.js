@@ -5,8 +5,6 @@ export const useBudgetStore = defineStore("budget", () => {
   const user = useCookie("user");
 
   const fetchBudget = async (month) => {
-    console.log(month);
-
     let query = supabase
       .from("budget")
       .select(
@@ -181,7 +179,6 @@ export const useBudgetStore = defineStore("budget", () => {
         if (!result.success) throw new Error(result.error);
 
         budgetId.value = result.data.id;
-        console.log(result.data, "result logging", budgetId.value);
         const budgetCategoryResult = await storeBudgetCategory(
           expiredAt,
           budgetId.value,
@@ -220,7 +217,6 @@ export const useBudgetStore = defineStore("budget", () => {
   };
 
   const storeBudgetCategory = async (expiredAt, budgetId, payload) => {
-    console.log("budget id", budgetId);
     if (payload.category?.length > 0) {
       const categoryEntries = payload.category.map((cate) => ({
         budget_id: budgetId,

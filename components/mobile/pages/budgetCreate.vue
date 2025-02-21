@@ -27,13 +27,6 @@
         <CoreInputBox placeholder="Title" v-model="form.title" />
       </div>
       <div class="category_select py-3">
-        <!-- <CoreSelectBox
-          :options="typeCategories"
-          option-key="id"
-          name="Category"
-          placeholder="Select Category"
-          v-model="form.categoryId"
-        /> -->
         <CoreMultiSelectV2
           v-model="form.category"
           :options="budgetCategory"
@@ -120,7 +113,6 @@ const submit = async () => {
     return false;
   }
   const result = await budgetStore.createBudgetV2(form);
-  console.log("result herer", result);
   if (result.success) {
     useNuxtApp().$toast.success("Budget Created Successfully!!");
     navigateTo("/budget");
