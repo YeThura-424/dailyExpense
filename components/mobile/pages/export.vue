@@ -45,13 +45,17 @@
           v-if="form.range == 'month'"
           class="month_range grid grid-cols-2 gap-x-4"
         >
+          <pre> {{ form }} </pre>
           <div class="year_select">
             <p class="text-[#161719] text-lg pt-2">Year</p>
-            <CoreMonthSelect v-model="form.year" :months="rawYear" />
+            <CoreYearSelect v-model="form.year" :min-year="2024" />
           </div>
           <div class="month_select">
             <p class="text-[#161719] text-lg pt-2">Month</p>
-            <CoreMonthSelect v-model="form.month" :months="rawMonth" />
+            <CoreMonthSelect
+              v-model="form.month"
+              :current-year="yearForMonth"
+            />
           </div>
         </div>
         <div
@@ -60,11 +64,7 @@
         >
           <div class="year_select">
             <p class="text-[#161719] text-lg pt-2">Year</p>
-            <CoreMonthSelect
-              v-model="form.year"
-              :months="rawYear"
-              type="year"
-            />
+            <CoreYearSelect v-model="form.year" :min-year="2024" />
           </div>
         </div>
 
@@ -98,10 +98,7 @@ const backAction = () => {
   navigateTo("/profile");
 };
 const { exportTransaction } = useExportStore();
-const rawYear = ref([
-  { id: 1, name: 2024, value: 2024 },
-  { id: 2, name: 2025, value: 2025 },
-]);
+
 const isReadyToExport = ref(false);
 
 const form = reactive({
@@ -110,10 +107,18 @@ const form = reactive({
   from_date: null,
   to_date: null,
   month: null,
-  year: rawYear.value[0].value,
+  year: null,
 });
 
-const rawMonth = computed(() => getPreviousMonth(form.year));
+const yearForMonth = ref(form.year);
+
+watch(
+  () => form.year,
+  (newYear) => {
+    console.log("year update", newYear);
+    yearForMonth.value = newYear;
+  }
+);
 
 const exportType = ref([
   {

@@ -82,6 +82,8 @@ const emit = defineEmits(["update:modelValue"]);
 
 const monthOptions = ref(getPreviousMonth(props.currentYear));
 
+console.log(monthOptions.value, props.currentYear);
+
 const today = new Date();
 
 const currentMonth = today.getMonth();

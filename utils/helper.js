@@ -6,14 +6,17 @@ export const toTitleCase = (str) => {
 };
 
 export const getPreviousMonth = (year) => {
+  console.log("year as params", year);
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
   const previousMonths = [];
 
+  console.log("current year", currentYear);
+
   const isPastYear = year !== currentYear;
   if (isPastYear) {
-    for (let i = 0; i <= 12; i++) {
+    for (let i = 0; i < 12; i++) {
       previousMonths.push({
         id: i + 1,
         name: new Date(2024, i).toLocaleString("default", {
