@@ -12,7 +12,6 @@ export const getPreviousMonth = (year) => {
   const previousMonths = [];
 
   const isPastYear = year !== currentYear;
-  console.log(isPastYear, year, currentYear);
   if (isPastYear) {
     for (let i = 0; i <= 12; i++) {
       previousMonths.push({
@@ -36,6 +35,28 @@ export const getPreviousMonth = (year) => {
   }
 
   return previousMonths;
+};
+
+export const getPreviousYear = (minYear) => {
+  const today = new Date();
+
+  const currentYear = today.getFullYear(); //2025
+
+  let previousYear = minYear; //2023
+
+  const years = [];
+  let i = 1;
+  do {
+    years.push({
+      id: i + 1,
+      name: previousYear,
+      value: previousYear,
+    });
+    previousYear++;
+    i++;
+  } while (previousYear <= currentYear);
+
+  return years;
 };
 
 export const formatDate = (dateString) => {
