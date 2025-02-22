@@ -18,10 +18,10 @@
             </NuxtLink>
           </div>
           <div class="year_select">
-            <CoreMonthSelect v-model="selectedDate.year" :months="rawYear" />
+            <CoreYearSelect v-model="selectedDate.year" :min-year="2023" />
           </div>
           <div class="month_select">
-            <CoreMonthSelect v-model="selectedDate.month" :months="rawMonth" />
+            <CoreMonthSelect v-model="selectedDate.month" />
           </div>
           <div class="notification">
             <svg
@@ -103,15 +103,11 @@
 import { useUserStore } from "~/store/user";
 import { useWalletStore } from "~/store/wallet";
 
-const rawYear = ref([
-  { id: 1, name: 2024, value: 2024 },
-  { id: 2, name: 2025, value: 2025 },
-]);
 const selectedDate = reactive({
   year: null,
   month: null,
 });
-const rawMonth = computed(() => getPreviousMonth(selectedDate.year?.value));
+
 const user = useCookie("user");
 const profile = useCookie("profile");
 
@@ -161,7 +157,7 @@ const getWallet = async () => {
 watch(
   () => selectedDate,
   (updateDate) => {
-    getIncomeExpense(updateDate.year.value, updateDate.month.id);
+    getIncomeExpense(updateDate?.year?.value, updateDate?.month?.id);
   },
   { deep: true }
 );
