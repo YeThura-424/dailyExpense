@@ -26,7 +26,7 @@
           >
             <ListboxOption
               v-slot="{ active, selected }"
-              v-for="month in months"
+              v-for="month in monthOptions"
               :key="month.name"
               :value="month"
               as="template"
@@ -69,31 +69,31 @@ import {
   ListboxOption,
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
+
 const props = defineProps({
-  months: {
-    type: Array,
-    required: true,
-  },
-  type: {
-    type: String,
-    default: "month",
+  currentYear: {
+    type: Number,
+    default: () => {
+      return new Date().getFullYear();
+    },
   },
 });
 const emit = defineEmits(["update:modelValue"]);
-const currentYear = new Date().getFullYear();
+
+const monthOptions = ref(getPreviousMonth(props.currentYear));
+
+const today = new Date();
+
+const currentMonth = today.getMonth();
+
 const selectedMonth = ref(null);
+
 onMounted(() => {
-  if (props.type == "month") {
-    selectedMonth.value = props.months[props.months.length - 1];
-  } else {
-    selectedMonth.value = props.months.find(
-      (month) => month.value == currentYear
-    );
-  }
+  selectedMonth.value = monthOptions.value.find(
+    (month) => month.value == currentMonth
+  );
 });
 
-console.log("inside of month select selected month", selectedMonth.value);
-console.log("inside of month select", props.months);
 watch(
   () => selectedMonth.value,
   (updateValue) => {
