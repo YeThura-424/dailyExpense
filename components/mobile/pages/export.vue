@@ -87,17 +87,20 @@
         </div>
       </div>
     </div>
+    <MobileLoadingDots v-if="exportLoading" />
   </div>
 </template>
 
 <script setup>
 import { useExportStore } from "~/store/export";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
 
 const backAction = () => {
   navigateTo("/profile");
 };
 const { exportTransaction } = useExportStore();
-
+const exportLoading = ref(false);
 const isReadyToExport = ref(false);
 
 const form = reactive({
@@ -167,18 +170,54 @@ watch(
 );
 
 const exportData = async () => {
-  // alert("Exporting data comming soon...");
   if (form.type == "transaction") {
     await transactionExport();
   }
 };
 
 const transactionExport = async () => {
+  const date = new Date();
+  exportLoading.value = true;
   const result = await exportTransaction(form);
 
-  if (result.success) {
+  if (result.success && result.data) {
     console.log(result.data, "logging all the data");
     // all the logic for exporting as csv, xlsx, pdf
+    try {
+      const dataWithHeader = result.data.map((item) => ({
+        "Action Date": formatDate(item?.action_date),
+        Category: item?.categories.name,
+        Description: item?.description,
+        Type: item?.type,
+        "From Wallet": item?.wallet?.name,
+        Amount: item?.amount,
+        "Created Date": formatDate(item?.created_at),
+      }));
+
+      const workBook = XLSX.utils.book_new();
+      const transactionWorkSheet = XLSX.utils.json_to_sheet(dataWithHeader);
+      XLSX.utils.book_append_sheet(
+        workBook,
+        transactionWorkSheet,
+        "Transactions"
+      );
+
+      const xlsxBuffer = XLSX.write(workBook, {
+        bookType: "xlsx",
+        type: "array",
+      });
+      const blob = new Blob([xlsxBuffer], { type: "application/octet-stream" });
+
+      const fileName = `Transactions_${date.getFullYear()}-${
+        date.getMonth() + 1
+      }-${date.getDate()}.xlsx`;
+
+      saveAs(blob, fileName);
+      exportLoading.value = false;
+    } catch (error) {
+      exportLoading.value = false;
+      useNuxtApp().$toast.error(error.message);
+    }
   } else {
     useNuxtApp().$toast.error(result.error);
   }

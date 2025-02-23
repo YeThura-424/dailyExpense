@@ -63,8 +63,8 @@ export const formatDate = (dateString) => {
   if (!dateString) {
     return;
   }
-  const parts = dateString.split(" ")[0].split("-");
-  return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+
+  return dateString.split("T")[0];
 };
 
 export const isSameDate = (date1, date2) => {
