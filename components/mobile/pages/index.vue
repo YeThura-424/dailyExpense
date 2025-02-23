@@ -21,7 +21,10 @@
             <CoreYearSelect v-model="selectedDate.year" :min-year="2023" />
           </div>
           <div class="month_select">
-            <CoreMonthSelect v-model="selectedDate.month" />
+            <CoreMonthSelect
+              v-model="selectedDate.month"
+              :current-year="yearForMonth"
+            />
           </div>
           <div class="notification">
             <svg
@@ -108,6 +111,7 @@ const selectedDate = reactive({
   month: null,
 });
 
+const yearForMonth = ref(selectedDate.year);
 const user = useCookie("user");
 const profile = useCookie("profile");
 
@@ -160,5 +164,12 @@ watch(
     getIncomeExpense(updateDate?.year?.value, updateDate?.month?.id);
   },
   { deep: true }
+);
+
+watch(
+  () => selectedDate.year,
+  (newYear) => {
+    yearForMonth.value = newYear;
+  }
 );
 </script>

@@ -6,13 +6,10 @@ export const toTitleCase = (str) => {
 };
 
 export const getPreviousMonth = (year) => {
-  console.log("year as params", year);
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
   const currentYear = currentDate.getFullYear();
   const previousMonths = [];
-
-  console.log("current year", currentYear);
 
   const isPastYear = year !== currentYear;
   if (isPastYear) {

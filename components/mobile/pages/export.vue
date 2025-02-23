@@ -45,7 +45,6 @@
           v-if="form.range == 'month'"
           class="month_range grid grid-cols-2 gap-x-4"
         >
-          <pre> {{ form }} </pre>
           <div class="year_select">
             <p class="text-[#161719] text-lg pt-2">Year</p>
             <CoreYearSelect v-model="form.year" :min-year="2024" />
@@ -115,7 +114,6 @@ const yearForMonth = ref(form.year);
 watch(
   () => form.year,
   (newYear) => {
-    console.log("year update", newYear);
     yearForMonth.value = newYear;
   }
 );
@@ -169,7 +167,6 @@ watch(
 );
 
 const exportData = async () => {
-  console.log(form);
   alert("Exporting data comming soon...");
   // if (form.type == "transaction") {
   //   await transactionExport();
