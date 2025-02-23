@@ -5,7 +5,6 @@ export const useExportStore = defineStore("export", () => {
   const authUser = useCookie("user");
 
   const exportTransaction = async (payload) => {
-    console.log("payload here", payload);
     try {
       let query = supabase.from("transactions").select(
         `
@@ -19,7 +18,7 @@ export const useExportStore = defineStore("export", () => {
         `
       );
 
-      if (payload.from_date && payload.to_date) {
+      if (payload.range == "day" && payload.from_date && payload.to_date) {
         const fromDate = new Date(payload.from_date)
           .toISOString()
           .split("T")[0];
@@ -30,29 +29,25 @@ export const useExportStore = defineStore("export", () => {
 
         query = query.filter("action_date", "lte", toDate);
       }
-      if (payload?.month) {
-        const currentMonth = new Date().getMonth() + 1;
+      if (payload.range == "month" && payload?.month && payload?.year) {
         query = query.filter(
           "action_date",
           "gte",
-          `${new Date().getFullYear()}-${currentMonth
-            .toString()
-            .padStart(2, "0")}-01`
+          `${payload?.year}-${payload?.month.toString().padStart(2, "0")}-01`
         );
         query = query.filter(
           "action_date",
           "lt",
-          `${new Date().getFullYear()}-${(currentMonth + 1)
+          `${payload?.year}-${(payload?.month + 1)
             .toString()
             .padStart(2, "0")}-01`
         );
       }
 
-      if (payload?.year) {
-        const currentYear = new Date().getFullYear();
+      if (payload.range == "year" && payload?.year) {
         query = query
-          .gte("action_date", `${currentYear}-01-01`)
-          .lte("action_date", `${currentYear}-12-31`);
+          .gte("action_date", `${payload?.year}-01-01`)
+          .lte("action_date", `${payload?.year}-12-31`);
       }
 
       const { data, error } = await query

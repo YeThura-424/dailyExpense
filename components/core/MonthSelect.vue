@@ -84,7 +84,7 @@ const monthOptions = ref(getPreviousMonth(props.currentYear));
 
 const today = new Date();
 
-const currentMonth = today.getMonth();
+const currentMonth = today.getMonth() + 1;
 
 const selectedMonth = ref(null);
 

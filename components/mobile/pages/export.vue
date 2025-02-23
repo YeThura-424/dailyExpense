@@ -167,16 +167,17 @@ watch(
 );
 
 const exportData = async () => {
-  alert("Exporting data comming soon...");
-  // if (form.type == "transaction") {
-  //   await transactionExport();
-  // }
+  // alert("Exporting data comming soon...");
+  if (form.type == "transaction") {
+    await transactionExport();
+  }
 };
 
 const transactionExport = async () => {
   const result = await exportTransaction(form);
 
   if (result.success) {
+    console.log(result.data, "logging all the data");
     // all the logic for exporting as csv, xlsx, pdf
   } else {
     useNuxtApp().$toast.error(result.error);

@@ -19,7 +19,7 @@ export const getPreviousMonth = (year) => {
         name: new Date(2024, i).toLocaleString("default", {
           month: "long",
         }),
-        value: i,
+        value: i + 1,
       });
     }
   } else {
@@ -29,7 +29,7 @@ export const getPreviousMonth = (year) => {
         name: new Date(2024, i).toLocaleString("default", {
           month: "long",
         }),
-        value: i,
+        value: i + 1,
       });
     }
   }
