@@ -189,7 +189,7 @@ const transactionExport = async () => {
 
   if (result.success && result.data) {
     console.log(result.data, "logging all the data");
-    // all the logic for exporting as csv, xlsx, pdf
+
     try {
       const dataWithHeader = result.data.map((item) => ({
         "Action Date": formatDate(item?.action_date),
@@ -201,25 +201,8 @@ const transactionExport = async () => {
         "Created Date": formatDate(item?.created_at),
       }));
 
-      const workBook = XLSX.utils.book_new();
-      const transactionWorkSheet = XLSX.utils.json_to_sheet(dataWithHeader);
-      XLSX.utils.book_append_sheet(
-        workBook,
-        transactionWorkSheet,
-        "Transactions"
-      );
+      excelExport(dataWithHeader, "Transaction");
 
-      const xlsxBuffer = XLSX.write(workBook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      const blob = new Blob([xlsxBuffer], { type: "application/octet-stream" });
-
-      const fileName = `Transactions_${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}.xlsx`;
-
-      saveAs(blob, fileName);
       exportLoading.value = false;
     } catch (error) {
       exportLoading.value = false;
@@ -242,21 +225,8 @@ const walletExport = async () => {
         "Created Date": formatDate(item?.created_at),
       }));
 
-      const workBook = XLSX.utils.book_new();
-      const walletWorkSheet = XLSX.utils.json_to_sheet(dataWithHeader);
-      XLSX.utils.book_append_sheet(workBook, walletWorkSheet, "Wallets");
+      excelExport(dataWithHeader, "Wallet");
 
-      const xlsxBuffer = XLSX.write(workBook, {
-        bookType: "xlsx",
-        type: "array",
-      });
-      const blob = new Blob([xlsxBuffer], { type: "application/octet-stream" });
-
-      const fileName = `Wallets_${date.getFullYear()}-${
-        date.getMonth() + 1
-      }-${date.getDate()}.xlsx`;
-
-      saveAs(blob, fileName);
       exportLoading.value = false;
     } catch (error) {
       exportLoading.value = false;
@@ -265,6 +235,24 @@ const walletExport = async () => {
   } else {
     useNuxtApp().$toast.error(result.error);
   }
+};
+
+const excelExport = (data, name) => {
+  const workBook = XLSX.utils.book_new();
+  const workSheet = XLSX.utils.json_to_sheet(data);
+  XLSX.utils.book_append_sheet(workBook, workSheet, name);
+
+  const xlsxBuffer = XLSX.write(workBook, {
+    bookType: "xlsx",
+    type: "array",
+  });
+  const blob = new Blob([xlsxBuffer], { type: "application/octet-stream" });
+
+  const fileName = `${name}_${date.getFullYear()}-${
+    date.getMonth() + 1
+  }-${date.getDate()}.xlsx`;
+
+  saveAs(blob, fileName);
 };
 </script>
 
