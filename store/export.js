@@ -70,7 +70,29 @@ export const useExportStore = defineStore("export", () => {
     }
   };
 
+  const exportWallet = async (payload) => {
+    try {
+      const { data, error } = await supabase
+        .from("wallet")
+        .select("*")
+        .eq("user_id", authUser.value.id);
+
+      if (error) throw new Error(error.message);
+
+      return {
+        success: true,
+        data: data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  };
+
   return {
     exportTransaction,
+    exportWallet,
   };
 });

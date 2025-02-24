@@ -19,7 +19,7 @@
             <h1
               class="text-xl text-[#161719] capitalize font-semibold line-clamp-1"
             >
-              {{ profile.username }}
+              {{ profile?.username }}
             </h1>
           </div>
           <div class="profile-info-edit" @click="editProfile(user?.id)">
@@ -96,7 +96,7 @@
         </div>
       </div>
     </div>
-    <MobileLoadingDots v-if="loading" />
+    <MobileLoadingDots v-if="loading && !profile" />
   </div>
 </template>
 
