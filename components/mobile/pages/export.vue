@@ -99,7 +99,12 @@ import { saveAs } from "file-saver";
 const backAction = () => {
   navigateTo("/profile");
 };
-const { exportTransaction, exportWallet, exportBudget } = useExportStore();
+const {
+  exportTransaction,
+  exportWallet,
+  exportBudget,
+  exportWalletTransferLog,
+} = useExportStore();
 const exportLoading = ref(false);
 const isReadyToExport = ref(false);
 const date = new Date();
@@ -185,6 +190,10 @@ const exportData = async () => {
   if (form.type == "budget") {
     await budgetExport();
   }
+
+  if ((form.type = "wallet-transfer-log")) {
+    await walletTransferLogExport();
+  }
 };
 
 const transactionExport = async () => {
@@ -213,7 +222,7 @@ const transactionExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error);
+    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
   }
 };
 
@@ -237,7 +246,41 @@ const walletExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error);
+    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
+  }
+};
+
+const walletTransferLogExport = async () => {
+  exportLoading.value = true;
+  const result = await exportWalletTransferLog(form);
+
+  if (result.success && result.data.length) {
+    try {
+      const dataWithHeader = result.data.map((item) => ({
+        "Created Date": formatDate(item?.created_at),
+        "From Wallet": item?.from_wallet?.name,
+        "To Wallet": item?.to_wallet?.name,
+        "From Wallet Before": item?.from_wallet_before_amount,
+        "To Wallet Before": item?.to_wallet_before_amount,
+        "Transfer Amount": item?.transfer_amount,
+        "From Wallet After": item?.from_wallet_after_amount,
+        "To Wallet After": item?.to_wallet_after_amount,
+        Note: item.description ?? "-",
+      }));
+
+      excelExport(dataWithHeader, "Wallet_Transfer_Log");
+
+      exportLoading.value = false;
+    } catch (error) {
+      exportLoading.value = false;
+      useNuxtApp().$toast.error(error.message);
+    }
+  } else {
+    exportLoading.value = false;
+    useNuxtApp().$toast.warning(
+      result.error ??
+        "Wallet transfer logs not found for the selected criteria!"
+    );
   }
 };
 
@@ -272,7 +315,7 @@ const budgetExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error);
+    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
   }
 };
 
