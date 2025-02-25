@@ -191,7 +191,7 @@ const exportData = async () => {
     await budgetExport();
   }
 
-  if ((form.type = "wallet-transfer-log")) {
+  if (form.type == "wallet-transfer-log") {
     await walletTransferLogExport();
   }
 };
@@ -210,7 +210,9 @@ const transactionExport = async () => {
         Description: item?.description,
         Type: item?.type,
         "From Wallet": item?.wallet?.name,
+        "Before Amount": item?.wallet_transaction_log[0]?.before_amount,
         Amount: item?.amount,
+        "After Amount": item?.wallet_transaction_log[0]?.after_amount,
         "Created Date": formatDate(item?.created_at),
       }));
 

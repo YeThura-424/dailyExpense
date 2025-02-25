@@ -14,7 +14,8 @@ export const useExportStore = defineStore("export", () => {
           ),
           categories(
           id,name
-          )
+          ),
+          wallet_transaction_log(id,before_amount,after_amount)
         `
       );
 
