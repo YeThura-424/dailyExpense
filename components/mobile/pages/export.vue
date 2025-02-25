@@ -200,7 +200,7 @@ const transactionExport = async () => {
   exportLoading.value = true;
   const result = await exportTransaction(form);
 
-  if (result.success && result.data) {
+  if (result.success && result.data.length) {
     console.log(result.data, "logging all the data");
 
     try {
@@ -222,7 +222,10 @@ const transactionExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
+    exportLoading.value = false;
+    useNuxtApp().$toast.warning(
+      result.error ?? "Transaction data not found for the selected criteria!"
+    );
   }
 };
 
@@ -230,7 +233,7 @@ const walletExport = async () => {
   exportLoading.value = true;
   const result = await exportWallet(form);
 
-  if (result.success && result.data) {
+  if (result.success && result.data.length) {
     try {
       const dataWithHeader = result.data.map((item) => ({
         "Wallet Name": item.name,
@@ -246,7 +249,10 @@ const walletExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
+    exportLoading.value = false;
+    useNuxtApp().$toast.warning(
+      result.error ?? "Wallet data not found for the selected criteria!"
+    );
   }
 };
 
@@ -288,7 +294,7 @@ const budgetExport = async () => {
   exportLoading.value = true;
   const result = await exportBudget(form);
 
-  if (result.success && result.data) {
+  if (result.success && result.data.length) {
     try {
       const dataWithHeader = result.data.map((item) => {
         let categories = item.budget_categories.map(
@@ -315,7 +321,10 @@ const budgetExport = async () => {
       useNuxtApp().$toast.error(error.message);
     }
   } else {
-    useNuxtApp().$toast.error(result.error ?? "No Data for exporting!!");
+    exportLoading.value = false;
+    useNuxtApp().$toast.warning(
+      result.error ?? "Budget data not found for the selected criteria!"
+    );
   }
 };
 
