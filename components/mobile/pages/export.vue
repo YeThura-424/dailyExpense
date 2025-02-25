@@ -99,7 +99,7 @@ import { saveAs } from "file-saver";
 const backAction = () => {
   navigateTo("/profile");
 };
-const { exportTransaction, exportWallet } = useExportStore();
+const { exportTransaction, exportWallet, exportBudget } = useExportStore();
 const exportLoading = ref(false);
 const isReadyToExport = ref(false);
 const date = new Date();
@@ -140,8 +140,8 @@ const exportType = ref([
   },
   {
     id: 4,
-    key: "all",
-    name: "All",
+    key: "wallet-transfer-log",
+    name: "Wallet Transfer Log",
   },
 ]);
 
@@ -180,6 +180,10 @@ const exportData = async () => {
 
   if (form.type == "wallet") {
     await walletExport();
+  }
+
+  if (form.type == "budget") {
+    await budgetExport();
   }
 };
 
@@ -226,6 +230,41 @@ const walletExport = async () => {
       }));
 
       excelExport(dataWithHeader, "Wallet");
+
+      exportLoading.value = false;
+    } catch (error) {
+      exportLoading.value = false;
+      useNuxtApp().$toast.error(error.message);
+    }
+  } else {
+    useNuxtApp().$toast.error(result.error);
+  }
+};
+
+const budgetExport = async () => {
+  exportLoading.value = true;
+  const result = await exportBudget(form);
+
+  if (result.success && result.data) {
+    try {
+      const dataWithHeader = result.data.map((item) => {
+        let categories = item.budget_categories.map(
+          (item) => item.categories.name
+        );
+        let data = {
+          Title: item?.title,
+          "Total Amount ": item?.total,
+          "Spent Amount": item?.spend_amount ?? 0,
+          "Remaining Amount": item?.remaining_amount ?? 0,
+          "Category Count": item?.budget_categories?.length,
+          Categories: categories.length > 0 ? categories.join(",") : "-",
+          "Created Date": formatDate(item?.created_at),
+          "Expired Date": formatDate(item?.expired_at),
+        };
+        return data;
+      });
+
+      excelExport(dataWithHeader, "Budget");
 
       exportLoading.value = false;
     } catch (error) {

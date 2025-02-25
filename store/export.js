@@ -93,13 +93,12 @@ export const useExportStore = defineStore("export", () => {
 
   const exportBudget = async (payload) => {
     try {
-      let query = supabase..from("budget")
-        .select(
-          `
-          *,
-          budget_categories(*, categories(name),budget(*))
+      let query = supabase.from("budget").select(
         `
-        );
+          *,
+          budget_categories(*, categories(name))
+        `
+      );
 
       if (payload.range == "day" && payload.from_date && payload.to_date) {
         const fromDate = new Date(payload.from_date)
@@ -151,11 +150,11 @@ export const useExportStore = defineStore("export", () => {
         error: error.message,
       };
     }
-  }
+  };
 
   return {
     exportTransaction,
     exportWallet,
-    exportBudget
+    exportBudget,
   };
 });
