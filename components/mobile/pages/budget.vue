@@ -18,27 +18,30 @@
     <div
       class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
     >
-      {{ budgets.value }}
-      <MobileBudgetEmptyState v-if="false" />
-      <!-- budget listing  -->
-      <div class="budget-listing" v-if="budgets.length">
-        <ClientOnly>
-          <MobileBudgetListingCard :budgets="budgets" />
-        </ClientOnly>
+      <div v-if="budgetLoading" class="budget-loading">
+        <MobileLoadingDots />
       </div>
-      <div
-        v-else
-        class="flex flex-col gap-5 justify-center items-center w-full h-full overflow-hidden"
-      >
-        <div
-          class="w-[300px] h-[300px] overflow-hidden"
-          style="border-radius: 37% 52% 0% 38%; border: 2px solid transparent"
-        >
-          <IconNoBudget />
+      <div v-else class="budget-listing">
+        <!-- budget listing  -->
+        <div class="budget-listing" v-if="budgets.length">
+          <ClientOnly>
+            <MobileBudgetListingCard :budgets="budgets" />
+          </ClientOnly>
         </div>
-        <h1 class="font-500 text-gray-600 text-xl capitalize">
-          no budget for this month
-        </h1>
+        <div
+          v-else
+          class="flex flex-col gap-5 justify-center items-center w-full h-full overflow-hidden"
+        >
+          <div
+            class="w-[300px] h-[300px] overflow-hidden"
+            style="border-radius: 37% 52% 0% 38%; border: 2px solid transparent"
+          >
+            <IconNoBudget />
+          </div>
+          <h1 class="font-500 text-gray-600 text-xl capitalize">
+            no budget for this month
+          </h1>
+        </div>
       </div>
       <div
         class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2"
@@ -87,6 +90,8 @@ const budgetStore = useBudgetStore();
 const date = new Date();
 const currentMonth = date.getMonth();
 const currentYear = date.getUTCFullYear();
+const budgetLoading = ref(false);
+
 onMounted(() => {
   if (budgetCarousel.value && budgetCarousel.value.slideTo) {
     budgetCarousel.value.slideTo(currentMonth);
@@ -102,11 +107,14 @@ const handleSlideStart = (month) => {
 };
 
 const getBudgets = async (month) => {
+  budgetLoading.value = true;
   const result = await budgetStore.fetchBudget(month);
 
   if (result.success) {
+    budgetLoading.value = false;
     budgets.value = result.data;
   } else {
+    budgetLoading.value = false;
     useNuxtApp().$toast.error(result.error);
   }
 };

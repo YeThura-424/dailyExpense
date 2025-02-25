@@ -73,6 +73,7 @@
         </button>
       </div>
     </div>
+    <MobileLoadingDots v-if="budgetLoading" />
   </div>
 </template>
 
