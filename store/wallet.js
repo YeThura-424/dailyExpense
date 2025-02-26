@@ -76,6 +76,7 @@ export const useWalletStore = defineStore("wallet", () => {
           transfer_amount: transferAmount,
           from_wallet_after_amount: fromWalletAfter,
           to_wallet_after_amount: toWalletAfter,
+          description: payload.description,
         });
 
       if (walletTransferLogError)

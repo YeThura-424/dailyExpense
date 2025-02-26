@@ -71,6 +71,7 @@ const form = reactive({
   amount: 0,
   fromWallet: null,
   toWallet: null,
+  description: "",
 });
 const walletLoading = ref(false);
 const logLoading = ref(false);
@@ -110,7 +111,6 @@ const submit = async () => {
     );
     return false;
   }
-  console.log("logging the form", form);
   logLoading.value = true;
   const result = await walletStore.walletTransferLog(form);
   console.log("result herer", result);
