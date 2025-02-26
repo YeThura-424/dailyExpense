@@ -47,13 +47,18 @@
         >
           <div class="year_select">
             <p class="text-[#161719] text-lg pt-2">Year</p>
-            <CoreYearSelect v-model="form.year" :min-year="2024" />
+            <CoreYearSelect
+              v-model="form.year"
+              :min-year="2024"
+              css-class="relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-14 shadow-md focus:outline-none border border-[#91919F]"
+            />
           </div>
           <div class="month_select">
             <p class="text-[#161719] text-lg pt-2">Month</p>
             <CoreMonthSelect
               v-model="form.month"
               :current-year="yearForMonth"
+              cssClass="relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-14 shadow-md focus:outline-none border border-[#91919F]"
             />
           </div>
         </div>

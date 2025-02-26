@@ -74,11 +74,11 @@ const props = defineProps({
     default: () => {
       return new Date().getFullYear();
     },
-    cssClass: {
-      type: String,
-      default:
-        "relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-12 shadow-md focus:outline-none border border-[#91919F]",
-    },
+  },
+  cssClass: {
+    type: String,
+    default:
+      "relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-12 shadow-md focus:outline-none border border-[#91919F]",
   },
 });
 const emit = defineEmits(["update:modelValue"]);
