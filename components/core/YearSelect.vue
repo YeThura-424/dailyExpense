@@ -2,9 +2,7 @@
   <div class="w-full">
     <Listbox v-model="selectedYear">
       <div class="relative mt-1">
-        <ListboxButton
-          class="relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-14 shadow-md focus:outline-none border border-[#91919F]"
-        >
+        <ListboxButton :class="cssClass">
           <div class="truncate">{{ selectedYear?.name }}</div>
           <div
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
@@ -75,6 +73,11 @@ const props = defineProps({
     type: Number,
     default: () => {
       return new Date().getFullYear();
+    },
+    cssClass: {
+      type: String,
+      default:
+        "relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-12 shadow-md focus:outline-none border border-[#91919F]",
     },
   },
 });
