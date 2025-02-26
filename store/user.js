@@ -130,36 +130,28 @@ export const useUserStore = defineStore("user", () => {
   };
 
   const getWalletAndTransaction = async (payload) => {
+    console.log("payload herre", payload);
     try {
-      const query = supabase
+      let query = supabase
         .from("wallet_transaction_log")
         .select()
         .eq("user_id", user.value.id);
 
-      if (payload?.year) {
-        const year = new Date(payload.year).getFullYear();
-        query = query
-          .gte("action_date", `${year}-01-01`)
-          .lte("action_date", `${year}-12-31`);
-      }
-
-      if (payload?.month) {
-        const month = new Date(payload.year, payload.month).getMonth() + 1;
+      if (payload?.month && payload?.year) {
         query = query.filter(
           "action_date",
           "gte",
-          `${new Date().getFullYear()}-${month.toString().padStart(2, "0")}-01`
+          `${payload?.year}-${payload?.month.toString().padStart(2, "0")}-01`
         );
         query = query.filter(
           "action_date",
           "lt",
-          `${new Date().getFullYear()}-${(month + 1)
+          `${payload?.year}-${(payload?.month + 1)
             .toString()
             .padStart(2, "0")}-01`
         );
       }
 
-      // logic for filtering wallet amount and transaction(income and expence) with month and year
       const { data, error } = await query;
 
       if (error) throw new Error(error.message);

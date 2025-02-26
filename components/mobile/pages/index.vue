@@ -121,14 +121,13 @@ const loading = reactive({
   incomeExpend: false,
 });
 
-const accountData = ref([]);
 const incomeTotal = ref(0);
 const expendTotal = ref(0);
 const walletTotal = ref(0);
 
 const getIncomeExpense = async (year, month) => {
   loading.incomeExpend = true;
-  const result = await getWalletAndTransaction();
+  const result = await getWalletAndTransaction({ year: year, month: month });
 
   if (result.success) {
     incomeTotal.value = result.data
@@ -161,7 +160,10 @@ const getWallet = async () => {
 watch(
   () => selectedDate,
   (updateDate) => {
-    getIncomeExpense(updateDate?.year?.value, updateDate?.month?.id);
+    if (updateDate.year && updateDate.month) {
+      console.log(updateDate);
+      getIncomeExpense(updateDate?.year, updateDate?.month);
+    }
   },
   { deep: true }
 );
