@@ -11,7 +11,6 @@ export const useWalletStore = defineStore("wallet", () => {
       .from("wallet")
       .select()
       .eq("user_id", authUser.value.id);
-    // .order("created_at", { ascending: true });
 
     if (error) {
       return { success: false, message: error.message };

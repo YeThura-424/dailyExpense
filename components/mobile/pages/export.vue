@@ -75,7 +75,6 @@
         <div
           class="category-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
         >
-          <!-- <nuxt-link to="/category/add"> -->
           <button
             type="button"
             :disabled="!isReadyToExport"
@@ -88,7 +87,6 @@
             />
             Export Selected Data
           </button>
-          <!-- </nuxt-link> -->
         </div>
       </div>
     </div>
