@@ -36,10 +36,10 @@
       <p class="text-center text-xl p-4">or</p>
 
       <!-- social login button -->
-      <div class="flex flex-col gap-4">
+      <!-- <div class="flex flex-col gap-4">
         <CoreGithubLogin />
         <CoreGoogleLogin />
-      </div>
+      </div> -->
 
       <div class="forget-password text-center py-3">
         <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
