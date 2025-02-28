@@ -8,6 +8,7 @@
           text-color="text-black"
           showDelete="true"
           @back="backAction"
+          @delete="deleteAction"
         />
       </div>
     </div>
@@ -68,6 +69,7 @@
         </button>
       </div> -->
     </div>
+    <MobileLoadingDots v-if="loading" />
   </div>
 </template>
 <script setup>
@@ -78,13 +80,22 @@ const route = useRoute();
 const budgetId = route.params.id;
 const budgetDetail = ref(null);
 const budgetStore = useBudgetStore();
+const loading = ref(false);
 
 const backAction = () => {
   navigateTo("/budget");
 };
 
-const deleteAction = () => {
-  console.log("delete action");
+const deleteAction = async () => {
+  loading.value = true;
+  const result = await budgetStore.deleteBudget(budgetId);
+
+  if (result.success) {
+    navigateTo("/budget");
+  } else {
+    loading.value = false;
+    useNuxtApp().$toast.error(result.error);
+  }
 };
 
 const fetchBudget = async () => {
