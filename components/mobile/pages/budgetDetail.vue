@@ -88,7 +88,7 @@ const backAction = () => {
 
 const deleteAction = async () => {
   loading.value = true;
-  const result = await budgetStore.deleteBudget(budgetId);
+  const result = await budgetStore.budgetDelete(budgetId);
 
   if (result.success) {
     navigateTo("/budget");

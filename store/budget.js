@@ -235,11 +235,39 @@ export const useBudgetStore = defineStore("budget", () => {
     }
   };
 
+  const budgetDelete = async (id) => {
+    try {
+      const { error: budgetDeleteError } = await supabase
+        .from("budget")
+        .delete()
+        .eq("id", id);
+
+      if (budgetDeleteError) throw new Error(budgetDeleteError.message);
+
+      const { error: budgetCategoryDelete } = await supabase
+        .from("budget_categories")
+        .delete()
+        .eq("budget_id", id);
+
+      if (budgetCategoryDelete) throw new Error(budgetCategoryDelete.message);
+
+      return {
+        success: true,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+  };
+
   return {
     createBudget,
     fetchBudget,
     createBudgetV2,
     storeBudgetV2,
     budgetDetail,
+    budgetDelete,
   };
 });
