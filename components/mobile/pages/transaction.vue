@@ -122,6 +122,7 @@
 
 <script setup>
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import { useCategoryStore } from "~/store/category";
 import { usetransactionStore } from "~/store/transaction";
 
 const form = reactive({
@@ -134,6 +135,7 @@ const transactions = ref([]);
 const openFilter = ref(false);
 const transactionLoading = ref(true);
 const transactionStore = usetransactionStore();
+const categoryStore = useCategoryStore();
 
 const openFilterDialog = () => {
   openFilter.value = true;
@@ -145,7 +147,6 @@ const closeFilterDialog = (value) => {
 
 const applyFilter = (value) => {
   openFilter.value = value;
-  // console.log(form);
   let page = 1;
   fetchTransaction(page, form);
 };
@@ -205,5 +206,4 @@ const fetchCategory = async (type = []) => {
 };
 
 fetchTransaction();
-// fetchCategory();
 </script>
