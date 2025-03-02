@@ -32,13 +32,19 @@ export const useCategoryStore = defineStore("category", () => {
   const fetchCategoryWithType = async (type) => {
     const today = new Date().toISOString();
 
-    const { data, error } = await supabase
+    let query = supabase
       .from("categories")
       .select("id, name, budget_categories(user_id,budget(remaining_amount))")
       .eq("budget_categories.user_id", authUser.value.id)
-      .gt("budget_categories.budget.expired_at", today)
-      .eq("type", type)
-      .or(`is_default.eq.true,user_id.eq.${authUser.value?.id}`);
+      .gt("budget_categories.budget.expired_at", today);
+
+    if (type) {
+      query = query.eq("type", type);
+    }
+
+    const { data, error } = await query.or(
+      `is_default.eq.true,user_id.eq.${authUser.value?.id}`
+    );
 
     if (error) {
       return { success: false, error: error.message };
