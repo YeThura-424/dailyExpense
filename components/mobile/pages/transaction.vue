@@ -54,14 +54,14 @@
             Reset
           </button>
         </div>
-        <div class="filter-body">
+        <div class="filter-body flex flex-col gap-y-3">
           <!-- filter by section  -->
           <RadioGroup v-model="form.filterBy">
             <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
             <div class="grid grid-cols-3 gap-4 pt-3">
               <RadioGroupOption
                 as="template"
-                v-for="value in ['income', 'expend', 'transfer']"
+                v-for="value in ['income', 'expense', 'transfer']"
                 :value="value"
                 v-slot="{ active, checked }"
               >
@@ -106,11 +106,11 @@
           </RadioGroup>
 
           <!-- category selection here  -->
-          <div>
-            <h1>Category</h1>
+          <div v-if="showCategorySelectBox">
+            <h1 class="pb-3">Category</h1>
             <CoreSelectBox
               v-model="form.category"
-              :options="category"
+              :options="typeCategories"
               optionKey="id"
             />
           </div>
@@ -136,6 +136,8 @@ const openFilter = ref(false);
 const transactionLoading = ref(true);
 const transactionStore = usetransactionStore();
 const categoryStore = useCategoryStore();
+const { typeCategories } = storeToRefs(categoryStore);
+const showCategorySelectBox = ref(true);
 
 const openFilterDialog = () => {
   openFilter.value = true;
@@ -150,6 +152,14 @@ const applyFilter = (value) => {
   let page = 1;
   fetchTransaction(page, form);
 };
+
+watch(
+  () => form.filterBy,
+  (newVal) => {
+    if (newVal != "transfer") fetchCategory(newVal);
+    showCategorySelectBox.value = newVal == "transfer" ? false : true;
+  }
+);
 
 const resetFilter = () => {
   (form.filterBy = "income"), (form.sortBy = "highest"), (form.category = "");
@@ -189,21 +199,10 @@ const groupTransaction = (transactions) => {
   return groupedData;
 };
 
-const fetchCategory = async (type = []) => {
-  try {
-    await useFetch("/api/category", {
-      method: "GET",
-      params: {
-        type: type,
-      },
-      transform: (response) => {
-        category.value = response.data?.data;
-      },
-    });
-  } catch (error) {
-    console.log(error);
-  }
+const fetchCategory = async (type = "income") => {
+  await categoryStore.fetchCategoryWithType(type);
 };
 
 fetchTransaction();
+fetchCategory();
 </script>
