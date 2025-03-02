@@ -5,12 +5,13 @@ export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
   const transactions = ref([]);
 
-  const fetchTransactions = async (query) => {
-    const from = (query.page - 1) * query.perPage;
-    const to = from + query.perPage - 1;
+  const fetchTransactions = async (payload) => {
+    console.log(payload);
+    const from = (payload.page - 1) * payload.perPage;
+    const to = from + payload.perPage - 1;
 
     try {
-      const query = supabase
+      let query = supabase
         .from("transactions")
         .select(
           `
@@ -25,12 +26,24 @@ export const usetransactionStore = defineStore("transaction", () => {
         )
         .eq("user_id", authUser.value.id);
 
-      if (query.type) query = query.eq("type", query.type);
-      if (query.categoryId) query = query.eq("category_id", query.categoryId);
+      if (payload.type) query = query.eq("type", payload.type);
 
-      const { data, error } = await query
-        .range(from, to)
-        .order("created_at", { ascending: false });
+      if (payload.categoryId)
+        query = query.eq("category_id", payload.categoryId);
+
+      if (payload.sort) {
+        if (payload.sort == "highest" || payload.sort == "lowest") {
+          const sorting = payload.sort !== "highest" ? true : false;
+          query = query.order("amount", { ascending: sorting });
+        } else {
+          const sorting = payload.sort !== "newest" ? true : false;
+          query = query.order("action_date", { ascending: sorting });
+        }
+      } else {
+        query = query.order("created_at", { ascending: false });
+      }
+
+      const { data, error } = await query.range(from, to);
 
       if (error) throw new Error(error.message);
 

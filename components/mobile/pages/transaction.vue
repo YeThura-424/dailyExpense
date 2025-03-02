@@ -162,8 +162,12 @@ watch(
 );
 
 const resetFilter = () => {
-  (form.filterBy = "income"), (form.sortBy = "highest"), (form.category = "");
-  fetchTransaction();
+  form.filterBy = null;
+  form.sortBy = null;
+  form.category = null;
+  openFilter.value = false;
+  const page = 1;
+  fetchTransaction(page, form);
 };
 
 // fetch transaction (income expend)
