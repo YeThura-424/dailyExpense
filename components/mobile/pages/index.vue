@@ -127,6 +127,12 @@ const walletTotal = ref(0);
 
 const getIncomeExpense = async (year, month) => {
   loading.incomeExpend = true;
+  if (!isOnline()) {
+    useNuxtApp().$toast.warning("No Internet Connection, try again later!");
+    loading.incomeExpend = false;
+    return false;
+  }
+
   const result = await getWalletAndTransaction({ year: year, month: month });
 
   if (result.success) {
@@ -147,6 +153,10 @@ const getIncomeExpense = async (year, month) => {
 };
 
 const getWallet = async () => {
+  if (!isOnline()) {
+    return false;
+  }
+
   const result = await walletStore.fetchWallets();
 
   if (result.success) {

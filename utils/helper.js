@@ -136,3 +136,13 @@ export const debugLog = (message, data) => {
   console.log(message, data);
   throw new Error("Debug Logging ...");
 };
+
+export const isOnline = () => {
+  if (process.client) {
+    console.log(
+      "Initially " + (window.navigator.onLine ? "on" : "off") + "line"
+    );
+
+    return window.navigator.onLine;
+  }
+};

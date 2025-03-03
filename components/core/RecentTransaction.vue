@@ -67,24 +67,18 @@ const changeTab = (tab) => {
 };
 
 const fetchTransaction = async () => {
+  if (!isOnline()) {
+    transactionLoading.value = false;
+    return false;
+  }
+
   const filterParams = {
     today: activeTab.value === "today",
     week: activeTab.value === "week",
     month: activeTab.value === "month",
     year: activeTab.value === "year",
   };
-  // try {
-  //   await useFetch("/api/income/list", {
-  //     method: "GET",
-  //     params: filterParams,
-  //     transform: (response) => {
-  //       transactions.value = response?.data?.data;
-  //     },
-  //   });
-  // } catch (error) {
-  //   console.log(error)
-  // } finally {
-  // }
+
   transactionLoading.value = true;
 
   const result = await transactionStore.fetchTransactionsForToday(filterParams);
