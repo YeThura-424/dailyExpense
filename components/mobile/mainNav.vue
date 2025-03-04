@@ -97,8 +97,8 @@ const activeRoute = (route) => {
   background: #fff;
   border-top-right-radius: 20px;
   top: 10px;
-  right: 64px;
-  box-shadow: 5px -5px 0px 0px #eee;
+  right: 65px;
+  box-shadow: 6px -5px 0px 0px #eee;
 }
 
 .nav-link-item.center-item::after {
@@ -110,6 +110,6 @@ const activeRoute = (route) => {
   border-top-left-radius: 20px;
   top: 10px;
   left: 65px;
-  box-shadow: -2px -5px 0px 0px #eee;
+  box-shadow: -6px -5px 0px 0px #eee;
 }
 </style>
