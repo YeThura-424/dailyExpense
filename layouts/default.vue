@@ -12,9 +12,6 @@
   <div class="bg-[#eee] min-h-screen">
     <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
-    <!-- <div class=" w-full h-[50px] bg-[#eee] fixed bottom-6"> -->
-    <!-- <MobileFootNav /> -->
     <MobileMainNav v-if="!$device.isDesktopOrTablet" />
-    <!-- </div> -->
   </div>
 </template>

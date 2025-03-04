@@ -2,7 +2,6 @@
   <div>
     <div class="px-4">
       <div class="flex justify-between items-center py-2">
-        <!-- <CoreMonthSelect :months="transaction_type" /> -->
         <h1 class="text-[#212325] text-base font-medium">Filter</h1>
         <div class="filter-icon" @click="openFilterDialog">
           <IconFilter />
@@ -13,12 +12,12 @@
         class="transaction-section"
         style="height: calc(100vh - 120px); overflow: auto"
       >
-        <div
+        <!-- <div
           class="flex justify-between bg-[#ddd2f1] text-[#7F3DFF] p-3 mt-2 rounded-lg"
         >
           <h1 class="text-base font-normal">See your financial report</h1>
           <IconArrowRight />
-        </div>
+        </div> -->
 
         <!-- transaction list  -->
         <div v-if="!transactionLoading" class="transaction_list_warpper">
