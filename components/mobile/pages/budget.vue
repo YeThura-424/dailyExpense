@@ -15,13 +15,14 @@
         </template>
       </Carousel>
     </div>
+    <div v-if="budgetLoading" class="budget-loading h-full">
+      <MobileLoadingDots />
+    </div>
     <div
+      v-else
       class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
     >
-      <div v-if="budgetLoading" class="budget-loading">
-        <MobileLoadingDots />
-      </div>
-      <div v-else class="budget-listing">
+      <div class="budget-listing">
         <!-- budget listing  -->
         <div class="budget-listing" v-if="budgets.length">
           <ClientOnly>
