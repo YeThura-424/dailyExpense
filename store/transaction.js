@@ -3,7 +3,6 @@ import { supabase } from "~/lib/supabaseClient";
 
 export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
-  const transactions = ref([]);
 
   const fetchTransactions = async (payload) => {
     console.log(payload);
@@ -40,7 +39,7 @@ export const usetransactionStore = defineStore("transaction", () => {
           query = query.order("action_date", { ascending: sorting });
         }
       } else {
-        query = query.order("created_at", { ascending: false });
+        query = query.order("created_at", { ascending: true });
       }
 
       const { data, error } = await query.range(from, to);

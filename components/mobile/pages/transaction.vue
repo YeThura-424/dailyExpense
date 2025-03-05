@@ -1,7 +1,9 @@
 <template>
   <div>
-    <div class="px-4">
-      <div class="flex justify-between items-center py-2">
+    <div class="">
+      <div
+        class="flex justify-between items-center py-2 bg-[#fff] px-4 rounded-b-xl"
+      >
         <h1 class="text-[#212325] text-base font-medium">Filter</h1>
         <div class="filter-icon" @click="openFilterDialog">
           <IconFilter />
@@ -9,7 +11,7 @@
       </div>
       <!-- see report section  -->
       <div
-        class="transaction-section"
+        class="transaction-section px-4"
         style="height: calc(100vh - 120px); overflow: auto"
       >
         <!-- <div
@@ -21,15 +23,27 @@
 
         <!-- transaction list  -->
         <div v-if="!transactionLoading" class="transaction_list_warpper">
-          <div
-            v-for="(transactions, key) in transactions"
-            :key="key"
-            class="py-2"
-          >
-            <h1 class="font-semibold text-lg">{{ dayToName(key) }}</h1>
-            <div class="transaction_list pt-2">
-              <CoreTransactionListCard :transactions="transactions" />
+          <div v-if="!isTransactionEmpty" class="transaction-listing">
+            <div
+              v-for="(transactions, key) in transactions"
+              :key="key"
+              class="py-2"
+            >
+              <h1 class="font-semibold text-lg">{{ dayToName(key) }}</h1>
+              <div class="transaction_list pt-2">
+                <CoreTransactionListCard :transactions="transactions" />
+              </div>
             </div>
+          </div>
+          <div
+            v-else
+            class="empty-transaction pt-12 justify-center"
+            style="height: calc(100vh - 120px); overflow: auto"
+          >
+            <img src="/images/empty-transaction.svg" alt="Empty Transaction" />
+            <h1 class="text-center text-lg font-light pt-8 text-slate-500">
+              No Transaction for the selected cliteria!
+            </h1>
           </div>
         </div>
         <div v-else class="transaction-loading-list">
@@ -137,6 +151,7 @@ const transactionStore = usetransactionStore();
 const categoryStore = useCategoryStore();
 const { typeCategories } = storeToRefs(categoryStore);
 const showCategorySelectBox = ref(true);
+const isTransactionEmpty = ref(true);
 
 const openFilterDialog = () => {
   openFilter.value = true;
@@ -182,7 +197,12 @@ const fetchTransaction = async (page = 1, form = {}) => {
 
   if (result.success) {
     transactionLoading.value = false;
-    transactions.value = groupTransaction(result?.data);
+    if (result?.data.length > 0) {
+      isTransactionEmpty.value = false;
+      transactions.value = groupTransaction(result?.data);
+    } else {
+      isTransactionEmpty.value = true;
+    }
   } else {
     transactionLoading.value = false;
     useNuxtApp().$toast.error(result.error);
