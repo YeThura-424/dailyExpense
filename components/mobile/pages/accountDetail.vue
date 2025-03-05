@@ -35,7 +35,7 @@
             </div>
           </div>
         </div>
-        <div class="empty-transaction text-center py-12">
+        <div v-else class="empty-transaction text-center py-12">
           <h1>No Recent Transaction for current Wallet!</h1>
         </div>
       </div>
