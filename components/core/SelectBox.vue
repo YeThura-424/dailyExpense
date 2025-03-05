@@ -17,7 +17,7 @@
     <VDropdown
       compute-transform-origin
       :distance="6"
-      v-model:hide="hidePopOver"
+      :delay="{ show: 300, hide: 300 }"
     >
       <div :class="['input-wrapper h-14 relative']">
         <input
@@ -43,6 +43,7 @@
             <li
               v-for="list in options"
               :key="list"
+              v-close-popper
               @click="setOptionValue(list)"
               :class="
                 checkActive(list) ? 'bg-[#7F3DFF] text-white' : 'text-gray-900'
