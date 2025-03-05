@@ -14,7 +14,11 @@
       <p class="font-normal text-[#91919F]">Budget</p>
       <p class="font-medium text-[#FD3C4A]">{{ budget }} Ks</p>
     </div>
-    <VDropdown compute-transform-origin :distance="6">
+    <VDropdown
+      compute-transform-origin
+      :distance="6"
+      v-model:hide="hidePopOver"
+    >
       <div :class="['input-wrapper h-14 relative']">
         <input
           v-model="selectedOption.value"
@@ -135,6 +139,7 @@ const props = defineProps({
 
 const emit = defineEmits(["update:modelValue"]);
 
+const hidePopOver = ref(true);
 const amount = ref(null);
 const budget = ref(null);
 const selectedOption = reactive({
@@ -176,6 +181,7 @@ const setOptionValue = (list) => {
   if (props.showBudget) {
     budget.value = list?.budget_categories[0]?.budget?.remaining_amount ?? null;
   }
+  hidePopOver.value = true;
 };
 
 const checkActive = (data) => {
