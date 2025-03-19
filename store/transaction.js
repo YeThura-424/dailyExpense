@@ -39,7 +39,7 @@ export const usetransactionStore = defineStore("transaction", () => {
           query = query.order("action_date", { ascending: sorting });
         }
       } else {
-        query = query.order("created_at", { ascending: true });
+        query = query.order("created_at", { ascending: false });
       }
 
       const { data, error } = await query.range(from, to);
