@@ -1,15 +1,7 @@
 <template>
   <div class="date-picker-wrapper">
-    <VueDatePicker
-      ref="datepicker"
-      v-model="date"
-      auto-apply
-      :enable-time-picker="false"
-      :format="format"
-      :max-date="new Date()"
-      @date-update="dateClicked"
-      placeholder="Select Date"
-    />
+    <VueDatePicker ref="datepicker" v-model="date" auto-apply :enable-time-picker="false" :format="format"
+      :max-date="new Date()" @date-update="dateClicked" placeholder="Select Date" />
   </div>
 </template>
 
@@ -18,7 +10,7 @@ import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 
 const emit = defineEmits(["update:modelValue"]);
-const date = ref();
+const date = defineModel();
 const datepicker = ref(null);
 
 const dateClicked = (date) => {
@@ -37,6 +29,7 @@ const format = (date) => {
 
   return `${year}-${month}-${day}`;
 };
+
 </script>
 
 <style>

@@ -1,65 +1,32 @@
 <template>
   <div :class="['select-box-wrapper w-full']">
-    <div
-      v-if="showAmount && amount"
-      class="amount flex justify-between px-2 text-sm"
-    >
+    <div v-if="showAmount && amount" class="amount flex justify-between px-2 text-sm">
       <p class="font-normal text-[#91919F]">Wallet Balance</p>
       <p class="font-medium text-[#FD3C4A]">{{ amount }} Ks</p>
     </div>
-    <div
-      v-if="showBudget && budget"
-      class="amount flex justify-between px-2 text-sm"
-    >
+    <div v-if="showBudget && budget" class="amount flex justify-between px-2 text-sm">
       <p class="font-normal text-[#91919F]">Budget</p>
       <p class="font-medium text-[#FD3C4A]">{{ budget }} Ks</p>
     </div>
-    <VDropdown
-      compute-transform-origin
-      :distance="6"
-      :delay="{ show: 300, hide: 300 }"
-    >
+    <VDropdown compute-transform-origin :distance="6" :delay="{ show: 300, hide: 300 }">
       <div :class="['input-wrapper h-14 relative']">
-        <input
-          v-model="selectedOption.value"
-          id="select-box"
-          type="text"
-          readonly="readonly"
+        <input v-model="selectedOption.value" id="select-box" type="text" readonly="readonly"
           class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border border-[#91919f] inline-flex items-center text-left text-xl cursor-default rounded-xl gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white pe-9"
-          :placeholder="placeholder"
-        />
+          :placeholder="placeholder" />
       </div>
       <template #popper>
         <div class="z-20 group w-full">
           <ul
-            class="select-option-wrapper relative border border-[#91919f] focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60"
-          >
-            <input
-              placeholder="Search something..."
-              v-if="searchable"
-              autocomplete="off"
-              class="block w-[calc(100%+0.5rem)] focus:ring-transparent text-sm px-3 py-1.5 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-0 border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none"
-            />
-            <li
-              v-for="list in options"
-              :key="list"
-              v-close-popper
-              @click="setOptionValue(list)"
-              :class="
-                checkActive(list) ? 'bg-[#7F3DFF] text-white' : 'text-gray-900'
+            class="select-option-wrapper relative border border-[#91919f] focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60">
+            <input placeholder="Search something..." v-if="searchable" autocomplete="off"
+              class="block w-[calc(100%+0.5rem)] focus:ring-transparent text-sm px-3 py-1.5 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-0 border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none" />
+            <li v-for="list in options" :key="list" v-close-popper @click="setOptionValue(list)" :class="checkActive(list) ? 'bg-[#7F3DFF] text-white' : 'text-gray-900'
               "
-              class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-xl"
-            >
+              class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-xl">
               <div class="flex items-center gap-1.5 min-w-0">
-                <div
-                  v-if="showIcon && list?.icon"
-                  class="w-12 h-12 bg-[#eee5ff] rounded-full flex justify-center items-center"
-                >
-                  <img
-                    :src="list?.icon"
-                    alt="currency-icon"
-                    class="w-10 h-10"
-                  />
+                <div v-if="showIcon && list?.icon"
+                  class="w-12 h-12 bg-[#eee5ff] rounded-full flex justify-center items-center">
+                  <img :src="list?.icon" alt="currency-icon" class="w-10 h-10" />
                 </div>
                 <span class="truncate">{{ list.name }}</span>
               </div>
@@ -74,15 +41,9 @@
     <div v-if="selectedOption.value.length > 0 && multiple" class="">
       <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
         <li v-for="option in selectedOption.value" :key="option">
-          <div
-            class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md"
-          >
+          <div class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md">
             <span class="text-white text-sm">{{ option.name }}</span>
-            <Icon
-              name="ion:ios-close-circle-outline"
-              class="text-white"
-              @click="removeSelectedOption(option.id)"
-            />
+            <Icon name="ion:ios-close-circle-outline" class="text-white" @click="removeSelectedOption(option.id)" />
           </div>
         </li>
       </ul>
@@ -159,6 +120,21 @@ onMounted(() => {
     }
   }
 });
+
+watch(() => props.modelValue, (updateValue) => {
+  if (props.optionKey) {
+    const selected = props.options.find(
+      (list) => list[props.optionKey] === props.modelValue
+    );
+    if (selected) {
+      selectedOption.value = selected[props.optionValue];
+      selectedOption.key = selected[props.optionKey];
+    }
+  } else {
+    selectedOption.value = updateValue[props.optionValue];
+    selectedOption.key = updateValue;
+  }
+})
 
 watch(
   () => selectedOption.key,
