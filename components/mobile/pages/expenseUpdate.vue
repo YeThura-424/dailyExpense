@@ -158,7 +158,7 @@ const updateExpense = async () => {
     form.action_date = formattedDate;
 
     expenseLoading.value = true;
-    const result = await updateTransaction(form);
+    const result = await updateTransaction(form, expenseId.value);
 
     if (result.success) {
       expenseLoading.value = false;
