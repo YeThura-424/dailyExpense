@@ -5,7 +5,6 @@ export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
 
   const fetchTransactions = async (payload) => {
-
     const from = (payload.page - 1) * payload.perPage;
     const to = from + payload.perPage - 1;
 
@@ -241,14 +240,126 @@ export const usetransactionStore = defineStore("transaction", () => {
   };
 
   const updateTransaction = async (payload, id) => {
-    // update logic goes here
-  }
+    const { categoryId, walletId, description, amount, type, action_date } =
+      payload;
+    const userId = authUser.value.id;
+
+    try {
+      const { data: transactionData, error: transactionError } = await supabase
+        .from("transactions")
+        .select("*, categories(id, name), wallet(id,name,amount)")
+        .eq("id", id)
+        .single();
+
+      if (transactionError) throw new Error(transactionError.message);
+
+      const { error: transactionUpdateError } = await supabase
+        .from("transactions")
+        .update({
+          category_id: categoryId,
+          wallet_id: walletId,
+          user_id: userId,
+          description,
+          amount,
+          type,
+          action_date,
+        })
+        .eq("id", id);
+
+      if (transactionUpdateError)
+        throw new Error(transactionUpdateError.message);
+
+      // for same wellet (old transaction wallet and updating data)
+      if (transactionData.wellet.id == walletId) {
+        const amountDifference =
+          parseInt(transactionData.amount) - parseInt(amount);
+        const amountToBeUpdate =
+          amountDifference + parseInt(transactionData.wallet.amount);
+
+        const { error: walletErr } = await supabase
+          .from("wallet")
+          .update({ amount: amountToBeUpdate })
+          .eq("id", walletId);
+
+        if (walletErr) throw new Error(walletErr.message);
+
+        const oldWalletTotal = parseInt(transactionData.amount) + parseInt(transactionData.wallet.amount)
+        const { error: transactionLogUpdateErr } = await supabase
+        .from("wallet_transaction_log")
+        .update({
+          action_date,
+          user_id: userId,
+          wallet_id: walletId,
+          type,
+          before_amount: oldWalletTotal,
+          transaction_amount: amount,
+          after_amount: amountToBeUpdate,
+        }).eq('transaction_id', id);
+
+      if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
+
+      } else {
+        // for different wallet (old transaction wallet is not same with updating wallet)
+        //restoring old wallet amount
+        const amountToBeRestore =
+          type === "income"
+            ? parseInt(transactionData.wallet.amount) - parseInt(amount)
+            : parseInt(transactionData.wallet.amount) + parseInt(amount);
+
+        const { error: walletRestoreErr } = await supabase
+          .from("wallet")
+          .update({ amount: amountToBeRestore })
+          .eq("id", transactionData.wellet.id);
+
+        if (walletRestoreErr) throw new Error(walletRestoreErr.message);
+
+        // new wallet data
+        const { data: walletData, error: walletFetchError } = await supabase
+          .from("wallet")
+          .select("amount")
+          .eq("id", walletId)
+          .single();
+
+        if (walletFetchError) throw new Error(walletFetchError.message);
+        //  new total amount for updating wallet
+        const transactionAmount =
+          type === "income"
+            ? parseInt(walletData.amount) + parseInt(amount)
+            : parseInt(walletData.amount) - parseInt(amount);
+
+        // Update new wallet amount
+        const { error: walletErr } = await supabase
+          .from("wallet")
+          .update({ amount: transactionAmount })
+          .eq("id", walletId);
+
+        if (walletErr) throw new Error(walletErr.message);
+
+        const { error: transactionLogUpdateErr } = await supabase
+        .from("wallet_transaction_log")
+        .update({
+          action_date,
+          user_id: userId,
+          wallet_id: walletId,
+          type,
+          before_amount: walletData,
+          transaction_amount: amount,
+          after_amount: transactionAmount,
+        }).eq('transaction_id', id);
+        
+      if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
+
+      }
+    } catch (error) {
+      return { success: false, error: error.message };
+    }
+  };
 
   return {
     createTransaction,
     fetchTransactions,
     fetchTransactionsForToday,
     fetchTransactionDetail,
-    updateTransaction
+    updateTransaction,
   };
 });
