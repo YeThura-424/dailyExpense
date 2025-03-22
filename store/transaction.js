@@ -5,7 +5,7 @@ export const usetransactionStore = defineStore("transaction", () => {
   const authUser = useCookie("user");
 
   const fetchTransactions = async (payload) => {
-    console.log(payload);
+
     const from = (payload.page - 1) * payload.perPage;
     const to = from + payload.perPage - 1;
 
@@ -240,10 +240,15 @@ export const usetransactionStore = defineStore("transaction", () => {
     return { success: true, data: data };
   };
 
+  const updateTransaction = async (payload, id) => {
+    // update logic goes here
+  }
+
   return {
     createTransaction,
     fetchTransactions,
     fetchTransactionsForToday,
     fetchTransactionDetail,
+    updateTransaction
   };
 });

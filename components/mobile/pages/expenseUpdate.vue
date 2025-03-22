@@ -53,7 +53,7 @@
         </button>
       </div>
     </div>
-    <MobileLoadingDots v-if="expenseLoading" />
+    <MobileLoadingDots v-if="expenseLoading || initialLoading" />
   </div>
 </template>
 
@@ -79,7 +79,7 @@ const form = reactive({
 const categoryStore = useCategoryStore();
 const { typeCategories } = storeToRefs(categoryStore);
 const { fetchWallets } = useWalletStore();
-const { createTransaction, fetchTransactionDetail } = usetransactionStore();
+const { fetchTransactionDetail, updateTransaction } = usetransactionStore();
 const expenseLoading = ref(false);
 const initialLoading = ref(true);
 const wallet = ref([]);
@@ -134,7 +134,46 @@ const fetchExpense = async () => {
 }
 
 const updateExpense = async () => {
-  console.log('logging the form here', form);
+  if (form.amount > selectedWallet.value.amount) {
+    useNuxtApp().$toast.error(
+      "Expense amount cannot be greater than wallet amount!",
+      {
+        pauseOnFocusLoss: false,
+      }
+    );
+  } else {
+    if (isNaN(new Date(form.action_date))) {
+      useNuxtApp().$toast.error("Invalid date format");
+      return false;
+    }
+
+    if (form.amount <= 0) {
+      useNuxtApp().$toast.error("Expense Amount Must be greater than 0");
+      return false;
+    }
+
+    const formattedDate = new Date(form.action_date)
+      .toISOString()
+      .split("T")[0];
+    form.action_date = formattedDate;
+
+    expenseLoading.value = true;
+    const result = await updateTransaction(form);
+
+    if (result.success) {
+      expenseLoading.value = false;
+      useNuxtApp().$toast.success(result.message);
+      if (form.repeat) {
+        resetForm();
+      } else {
+        router.push("/transaction");
+      }
+    } else {
+      expenseLoading.value = false;
+      resetForm();
+      useNuxtApp().$toast.error(result.error);
+    }
+  }
 };
 fetchExpense();
 fetchWallet();
