@@ -160,6 +160,8 @@ const updateExpense = async () => {
     expenseLoading.value = true;
     const result = await updateTransaction(form, expenseId.value);
 
+    console.log('logging the result', result)
+
     if (result.success) {
       expenseLoading.value = false;
       useNuxtApp().$toast.success(result.message);

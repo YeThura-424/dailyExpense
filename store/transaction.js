@@ -268,9 +268,8 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (transactionUpdateError)
         throw new Error(transactionUpdateError.message);
-
       // for same wellet (old transaction wallet and updating data)
-      if (transactionData.wellet.id == walletId) {
+      if (transactionData.wallet.id == walletId) {
         const amountDifference =
           parseInt(transactionData.amount) - parseInt(amount);
         const amountToBeUpdate =
@@ -309,7 +308,7 @@ export const usetransactionStore = defineStore("transaction", () => {
         const { error: walletRestoreErr } = await supabase
           .from("wallet")
           .update({ amount: amountToBeRestore })
-          .eq("id", transactionData.wellet.id);
+          .eq("id", transactionData.wallet.id);
 
         if (walletRestoreErr) throw new Error(walletRestoreErr.message);
 
@@ -342,14 +341,15 @@ export const usetransactionStore = defineStore("transaction", () => {
           user_id: userId,
           wallet_id: walletId,
           type,
-          before_amount: walletData,
+          before_amount: walletData.amount,
           transaction_amount: amount,
           after_amount: transactionAmount,
         }).eq('transaction_id', id);
         
-      if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
-
+        if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
       }
+
+      return { success: true, message: "Transaction updated successfully." };
     } catch (error) {
       return { success: false, error: error.message };
     }
