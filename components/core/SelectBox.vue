@@ -38,7 +38,7 @@
     </VDropdown>
 
     <!-- selected values list  -->
-    <div v-if="selectedOption.value.length > 0 && multiple" class="">
+    <div v-if="selectedOption.value?.length > 0 && multiple" class="">
       <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
         <li v-for="option in selectedOption.value" :key="option">
           <div class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md">
@@ -125,6 +125,40 @@ onMounted(() => {
     }
   }
 });
+
+watch(() => props.modelValue, (updateValue) => {
+  if (updateValue) {
+    if (props.optionKey) {
+      const selected = props.options.find(
+        (list) => list[props.optionKey] === updateValue
+      );
+      if (selected) {
+        selectedOption.value = selected[props.optionValue];
+        selectedOption.key = selected[props.optionKey];
+      }
+    } else {
+      selectedOption.value = updateValue[props.optionValue];
+      selectedOption.key = updateValue;
+    }
+  }
+})
+
+watch(() => props.options, (updatedOptions) => {
+  if (props.modelValue) {
+    if (props.optionKey) {
+      const selected = updatedOptions.find(
+        (list) => list[props.optionKey] === props.modelValue
+      );
+      if (selected) {
+        selectedOption.value = selected[props.optionValue];
+        selectedOption.key = selected[props.optionKey];
+      }
+    } else {
+      selectedOption.value = props.modelValue[props.optionValue];
+      selectedOption.key = props.modelValue;
+    }
+  }
+})
 
 watch(
   () => selectedOption.key,
