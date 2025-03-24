@@ -90,7 +90,7 @@ const props = defineProps({
     default: false,
   },
   modelValue: {
-    type: Number,
+    type: [Object, String, Number],
     default: "",
   },
   multiple: {
@@ -110,31 +110,21 @@ const selectedOption = reactive({
 });
 
 onMounted(() => {
-  if (props.modelValue && props.optionKey) {
-    const selected = props.options.find(
-      (list) => list[props.optionKey] === props.modelValue
-    );
-    if (selected) {
-      selectedOption.value = selected[props.optionValue];
-      selectedOption.key = selected[props.optionKey];
+  if (props.modelValue) {
+    if (props.optionKey) {
+      const selected = props.options.find(
+        (list) => list[props.optionKey] === props.modelValue
+      );
+      if (selected) {
+        selectedOption.value = selected[props.optionValue];
+        selectedOption.key = selected[props.optionKey];
+      }
+    } else {
+      selectedOption.value = props.modelValue[props.optionValue];
+      selectedOption.key = props.modelValue;
     }
   }
 });
-
-watch(() => props.modelValue, (updateValue) => {
-  if (props.optionKey) {
-    const selected = props.options.find(
-      (list) => list[props.optionKey] === props.modelValue
-    );
-    if (selected) {
-      selectedOption.value = selected[props.optionValue];
-      selectedOption.key = selected[props.optionKey];
-    }
-  } else {
-    selectedOption.value = updateValue[props.optionValue];
-    selectedOption.key = updateValue;
-  }
-})
 
 watch(
   () => selectedOption.key,
