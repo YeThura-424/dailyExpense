@@ -245,6 +245,7 @@ export const usetransactionStore = defineStore("transaction", () => {
     const userId = authUser.value.id;
 
     try {
+      // retrived old transactionData with id 
       const { data: transactionData, error: transactionError } = await supabase
         .from("transactions")
         .select("*, categories(id, name), wallet(id,name,amount)")
@@ -253,6 +254,7 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (transactionError) throw new Error(transactionError.message);
 
+      // update transaction with payload data
       const { error: transactionUpdateError } = await supabase
         .from("transactions")
         .update({
@@ -268,13 +270,16 @@ export const usetransactionStore = defineStore("transaction", () => {
 
       if (transactionUpdateError)
         throw new Error(transactionUpdateError.message);
+
       // for same wellet (old transaction wallet and updating data)
       if (transactionData.wallet.id == walletId) {
+        // recalculate the transaction amount 
         const amountDifference =
           parseInt(transactionData.amount) - parseInt(amount);
         const amountToBeUpdate =
           amountDifference + parseInt(transactionData.wallet.amount);
 
+        // update the wallet amount 
         const { error: walletErr } = await supabase
           .from("wallet")
           .update({ amount: amountToBeUpdate })
@@ -282,21 +287,26 @@ export const usetransactionStore = defineStore("transaction", () => {
 
         if (walletErr) throw new Error(walletErr.message);
 
-        const oldWalletTotal = parseInt(transactionData.amount) + parseInt(transactionData.wallet.amount)
+        // for wallet transaction log (amount before)
+        const oldWalletTotal =
+          parseInt(transactionData.amount) +
+          parseInt(transactionData.wallet.amount);
+        
         const { error: transactionLogUpdateErr } = await supabase
-        .from("wallet_transaction_log")
-        .update({
-          action_date,
-          user_id: userId,
-          wallet_id: walletId,
-          type,
-          before_amount: oldWalletTotal,
-          transaction_amount: amount,
-          after_amount: amountToBeUpdate,
-        }).eq('transaction_id', id);
+          .from("wallet_transaction_log")
+          .update({
+            action_date,
+            user_id: userId,
+            wallet_id: walletId,
+            type,
+            before_amount: oldWalletTotal,
+            transaction_amount: amount,
+            after_amount: amountToBeUpdate,
+          })
+          .eq("transaction_id", id);
 
-      if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
-
+        if (transactionLogUpdateErr)
+          throw new Error(transactionLogUpdateErr.message);
       } else {
         // for different wallet (old transaction wallet is not same with updating wallet)
         //restoring old wallet amount
@@ -334,51 +344,138 @@ export const usetransactionStore = defineStore("transaction", () => {
 
         if (walletErr) throw new Error(walletErr.message);
 
+        // update wallet transaction log with updated walletId
         const { error: transactionLogUpdateErr } = await supabase
-        .from("wallet_transaction_log")
-        .update({
-          action_date,
-          user_id: userId,
-          wallet_id: walletId,
-          type,
-          before_amount: walletData.amount,
-          transaction_amount: amount,
-          after_amount: transactionAmount,
-        }).eq('transaction_id', id);
-        
-        if (transactionLogUpdateErr) throw new Error(transactionLogUpdateErr.message);
+          .from("wallet_transaction_log")
+          .update({
+            action_date,
+            user_id: userId,
+            wallet_id: walletId,
+            type,
+            before_amount: walletData.amount,
+            transaction_amount: amount,
+            after_amount: transactionAmount,
+          })
+          .eq("transaction_id", id);
+
+        if (transactionLogUpdateErr)
+          throw new Error(transactionLogUpdateErr.message);
       }
 
-       // expense ဆိုမှ budget ကို update လုပ်မယ်
+      // expense ဆိုမှ budget ကို update လုပ်မယ်
       if (type == "expense") {
-        const currentDate = new Date();
-        const { data: budgetData, error: budgetError } = await supabase
-          .from("budget")
-          .select("*, budget_categories!inner(category_id)") //!inner ensures that only budgets with matching category_id in budget_categories are retrieved
-          .eq("budget_categories.category_id", categoryId)
-          .eq("user_id", userId)
-          .gte("expired_at", currentDate.toISOString())
-          .maybeSingle();
-
-        if (budgetError) throw new Error(budgetError.message);
-        //
-        if (budgetData) {
-          const spendAmount =
-            parseInt(budgetData.spend_amount ?? 0) + parseInt(amount);
-          const usage = parseInt(budgetData.usage) + parseInt(amount);
-          const remainingAmount =
-            parseInt(budgetData.remaining_amount) - parseInt(amount);
-
-          const { error: budgetUpdateErr } = await supabase
+        // expense category မပြောင်းရင်
+        if (transactionData.categories.id == categoryId) {
+          const currentDate = new Date();
+          // retrive budget with category to update used amount
+          const { data: budgetData, error: budgetError } = await supabase
             .from("budget")
-            .update({
-              spend_amount: spendAmount,
-              usage: usage,
-              remaining_amount: remainingAmount,
-            })
-            .eq("id", budgetData.id);
+            .select("*, budget_categories!inner(category_id)") //!inner ensures that only budgets with matching category_id in budget_categories are retrieved
+            .eq("budget_categories.category_id", categoryId)
+            .eq("user_id", userId)
+            .gte("expired_at", currentDate.toISOString())
+            .maybeSingle();
 
-          if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
+          if (budgetError) throw new Error(budgetError.message);
+
+          if (budgetData) {
+            // recalculate the spend, usage and remaining amount with old and new transaction amount 
+            const spendAmount =
+              parseInt(budgetData.spend_amount ?? 0) +
+              (parseInt(amount) - parseInt(transactionData.amount));
+            const usage =
+              parseInt(budgetData.usage) +
+              (parseInt(amount) - parseInt(transactionData.amount));
+            const remainingAmount =
+              parseInt(budgetData.remaining_amount) -
+              (parseInt(amount) - parseInt(transactionData.amount));
+
+            // update the budget
+            const { error: budgetUpdateErr } = await supabase
+              .from("budget")
+              .update({
+                spend_amount: spendAmount,
+                usage: usage,
+                remaining_amount: remainingAmount,
+              })
+              .eq("id", budgetData.id);
+
+            if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
+          }
+        } else {
+          // categoryId ပြောင်းထားရင် budget ကမတူနိုင်ဘူး
+          const currentDate = new Date();
+          //restoring old budget ( for different category)
+          const { data: oldBudgetData, error: oldBudgetError } = await supabase
+            .from("budget")
+            .select("*, budget_categories!inner(category_id)") //!inner ensures that only budgets with matching category_id in budget_categories are retrieved
+            .eq("budget_categories.category_id", transactionData.categories.id)
+            .eq("user_id", userId)
+            .gte("expired_at", currentDate.toISOString())
+            .maybeSingle();
+
+          if (oldBudgetError) throw new Error(oldBudgetError.message);
+          //
+          if (oldBudgetData) {
+            // recalculate all the amount to update budget
+            const spendAmount =
+              parseInt(oldBudgetData.spend_amount ?? 0) -
+              parseInt(transactionData.amount);
+            const usage =
+              parseInt(oldBudgetData.usage) - parseInt(transactionData.amount);
+            const remainingAmount =
+              parseInt(oldBudgetData.remaining_amount) +
+              parseInt(transactionData.amount);
+
+            // restoring old budget 
+            const { error: oldBudgetUpdateErr } = await supabase
+              .from("budget")
+              .update({
+                spend_amount: spendAmount,
+                usage: usage,
+                remaining_amount: remainingAmount,
+              })
+              .eq("id", oldBudgetData.id);
+
+            if (oldBudgetUpdateErr) throw new Error(oldBudgetUpdateErr.message);
+
+            // updating different budget
+            // for new budget of transaction
+            const { data: budgetData, error: budgetError } = await supabase
+              .from("budget")
+              .select("*, budget_categories!inner(category_id)") //!inner ensures that only budgets with matching category_id in budget_categories are retrieved
+              .eq("budget_categories.category_id", categoryId) //newly selected category id
+              .eq("user_id", userId)
+              .gte("expired_at", currentDate.toISOString())
+              .maybeSingle();
+
+            if (budgetError) throw new Error(budgetError.message);
+
+            if (budgetData) {
+              // calculating new spend amount for updated category
+              const spendAmount =
+                parseInt(budgetData.spend_amount ?? 0) +
+                (parseInt(amount) - parseInt(transactionData.amount));
+              const usage =
+                parseInt(budgetData.usage) +
+                (parseInt(amount) - parseInt(transactionData.amount));
+              const remainingAmount =
+                parseInt(budgetData.remaining_amount) -
+                (parseInt(amount) - parseInt(transactionData.amount));
+
+              // update amount for budget
+              const { error: budgetUpdateErr } = await supabase
+                .from("budget")
+                .update({
+                  spend_amount: spendAmount,
+                  usage: usage,
+                  remaining_amount: remainingAmount,
+                })
+                .eq("id", budgetData.id);
+
+              if (budgetUpdateErr) throw new Error(budgetUpdateErr.message);
+            }
+          }
         }
       }
 
