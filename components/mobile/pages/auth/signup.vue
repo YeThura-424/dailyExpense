@@ -1,24 +1,15 @@
 <template>
   <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
-    <MobilePageHeader
-      title="Sign Up"
-      text-color="text-black"
-      :show-back="false"
-    />
+    <MobilePageHeader title="Sign Up" text-color="text-black" :show-back="false" />
     <div class="login-form-wrapper pt-10">
       <div class="name py-3">
         <CoreInputBox v-model="form.username" placeholder="Name" type="text" />
       </div>
 
       <div class="currency py-3">
-        <CoreSelectBox
-          placeholder="Select Default Currency"
-          :options="currency"
-          v-model="form.currency"
-          option-key="value"
-          show-icon
-        />
+        <CoreSelectBox placeholder="Select Default Currency" :options="currency" v-model="form.currency"
+          option-key="value" show-icon />
       </div>
 
       <div class="email py-3">
@@ -26,46 +17,24 @@
       </div>
 
       <div class="password py-3">
-        <CoreInputBox
-          v-model="form.password"
-          placeholder="Password"
-          type="password"
-        />
+        <CoreInputBox v-model="form.password" placeholder="Password" type="password" />
       </div>
 
       <div class="password py-3">
-        <CoreInputBox
-          v-model="form.password_confirmation"
-          placeholder="Confirm Password"
-          type="password"
-        />
+        <CoreInputBox v-model="form.password_confirmation" placeholder="Confirm Password" type="password" />
       </div>
 
       <div class="checkbox flex gap-x-2">
-        <input
-          id="termsandcondition"
-          type="checkbox"
-          v-model="form.terms"
-          class="h-8 w-8 border-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
-        />
-        <label for="termsandcondition" class="text-lg"
-          >By signing up, you agree to the
-          <span class="text-[#7F3DFF]"
-            >Terms of Service and Privacy Policy</span
-          >
+        <input id="termsandcondition" type="checkbox" v-model="form.terms"
+          class="h-8 w-8 border-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
+        <label for="termsandcondition" class="text-lg">By signing up, you agree to the
+          <span class="text-[#7F3DFF]">Terms of Service and Privacy Policy</span>
         </label>
       </div>
       <div class="sign-up py-3">
-        <button
-          type="button"
-          @click="registerUser"
-          :disabled="!isReadySignUp ? true : false"
-          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
-        >
-          <Icon
-            name="ion:ios-log-in"
-            class="text-white text-2xl cursor-pointer"
-          />
+        <button type="button" @click="registerUser" :disabled="!isReadySignUp ? true : false"
+          class="w-full flex items-center justify-center gap-x-2 rounded-md border border-transparent bg-[#7F3DFF] text-white px-4 py-1.5 text-lg font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed">
+          <Icon name="ion:ios-log-in" class="text-white text-2xl cursor-pointer" />
           Sign Up
         </button>
       </div>
@@ -91,6 +60,7 @@ const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
   { name: "USD", value: "usd", icon: "/images/dollar.png" },
   { name: "Baht", value: "baht", icon: "/images/baht.png" },
+  { name: "AED", value: "aed", icon: "/images/aed.png" },
 ]);
 
 const router = useRouter();
