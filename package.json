@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare",
     "supabase:init": "supabase init",
     "supabase:login": "supabase login",
-    "supabase:link": "supabase link --project-ref eszqsoixyvrokeacwzcn",
+    "supabase:link": "supabase link --project-ref fxweptdecyobagvcaimt",
     "make:migration": "supabase migration new",
     "db:reset": "supabase db reset --linked",
     "db:seed": "node --env-file=.env database/seed.js",
