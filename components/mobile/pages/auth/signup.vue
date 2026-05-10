@@ -26,7 +26,7 @@
 
       <div class="checkbox flex gap-x-2">
         <input id="termsandcondition" type="checkbox" v-model="form.terms"
-          class="shrink-0 h-7 w-7 border-2 rounded cursor-pointer accent-[#7F3DFF] border-gray-300" />
+          class="h-8 w-8 border-2 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600" />
         <label for="termsandcondition" class="text-lg">By signing up, you agree to the
           <span class="text-[#7F3DFF]">Terms of Service and Privacy Policy</span>
         </label>
@@ -77,10 +77,10 @@ const form = reactive({
 const { signup } = useUserStore();
 
 watch(form, (newValue) => {
-  if (newValue.password == newValue.password_confirmation && newValue.terms) {
-    isReadySignUp.value = true;
-  } else {
+  if (newValue.password !== newValue.password_confirmation && !newValue.terms) {
     isReadySignUp.value = false;
+  } else {
+    isReadySignUp.value = true;
   }
 });
 

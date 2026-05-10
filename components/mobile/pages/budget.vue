@@ -1,7 +1,11 @@
 <template>
   <div class="bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
-      <Carousel ref="budgetCarousel" @slide-start="handleSlideStart">
+      <Carousel
+        ref="budgetCarousel"
+        @slide-start="handleSlideStart"
+        @slide-registered=""
+      >
         <Slide v-for="month in months" :key="month">
           <div class="carousel__item text-lg">{{ month }}</div>
         </Slide>
@@ -11,29 +15,34 @@
         </template>
       </Carousel>
     </div>
+    <div v-if="budgetLoading" class="budget-loading h-full">
+      <MobileLoadingDots />
+    </div>
     <div
+      v-else
       class="px-4 pt-4 budget-list pb-[58px] rounded-t-[40px] bg-[#eee] relative overflow-auto"
     >
-      <MobileBudgetEmptyState v-if="false" />
-      <!-- budget listing  -->
-      <div class="budget-listing" v-if="budgets.length">
-        <ClientOnly>
-          <MobileBudgetListingCard :budgets="budgets" />
-        </ClientOnly>
-      </div>
-      <div
-        v-else
-        class="flex flex-col gap-5 justify-center items-center w-full h-full overflow-hidden"
-      >
-        <div
-          class="w-[300px] h-[300px] overflow-hidden"
-          style="border-radius: 37% 52% 0% 38%; border: 2px solid transparent"
-        >
-          <IconNoBudget />
+      <div class="budget-listing">
+        <!-- budget listing  -->
+        <div class="budget-listing" v-if="budgets.length">
+          <ClientOnly>
+            <MobileBudgetListingCard :budgets="budgets" />
+          </ClientOnly>
         </div>
-        <h1 class="font-500 text-gray-600 text-xl capitalize">
-          no budget for this month
-        </h1>
+        <div
+          v-else
+          class="flex flex-col gap-5 justify-center items-center w-full h-full overflow-hidden"
+        >
+          <div
+            class="w-[300px] h-[300px] overflow-hidden"
+            style="border-radius: 37% 52% 0% 38%; border: 2px solid transparent"
+          >
+            <IconNoBudget />
+          </div>
+          <h1 class="font-500 text-gray-600 text-xl capitalize">
+            no budget for this month
+          </h1>
+        </div>
       </div>
       <div
         class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2"
@@ -56,6 +65,8 @@
   </div>
 </template>
 <script setup>
+import { useBudgetStore } from "~/store/budget";
+
 const months = [
   "January",
   "Febuary",
@@ -75,9 +86,13 @@ const budgets = ref([]);
 const currentSlideMonth = ref(null);
 
 const budgetCarousel = ref(null);
+const budgetStore = useBudgetStore();
+
 const date = new Date();
 const currentMonth = date.getMonth();
 const currentYear = date.getUTCFullYear();
+const budgetLoading = ref(false);
+
 onMounted(() => {
   if (budgetCarousel.value && budgetCarousel.value.slideTo) {
     budgetCarousel.value.slideTo(currentMonth);
@@ -88,24 +103,24 @@ onMounted(() => {
 
 const handleSlideStart = (month) => {
   currentSlideMonth.value = month.slidingToIndex;
-  getBudgets(currentSlideMonth.value);
+  const currentMonthDate = getDateByMonth(currentSlideMonth.value);
+  getBudgets(currentMonthDate);
 };
 
 const getBudgets = async (month) => {
-  await useFetch("/api/budget/user-budget", {
-    method: "GET",
-    params: {
-      month: month + 1,
-      year: currentYear,
-      per_page: 15,
-    },
-    transform: (response) => {
-      budgets.value = response?.data?.data;
-    },
-  });
+  budgetLoading.value = true;
+  const result = await budgetStore.fetchBudget(month);
+
+  if (result.success) {
+    budgetLoading.value = false;
+    budgets.value = result.data;
+  } else {
+    budgetLoading.value = false;
+    useNuxtApp().$toast.error(result.error);
+  }
 };
 
-getBudgets(currentMonth);
+// getBudgets(currentMonth);
 </script>
 
 <style>

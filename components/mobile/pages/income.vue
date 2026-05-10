@@ -2,12 +2,16 @@
   <div class="bg-[#00A86B]">
     <div class="income_main_content px-6 py-4">
       <div class="income_header">
-        <MobilePageHeader title="Income" icon-color="text-white" @back="backAction" />
+        <MobilePageHeader
+          title="Income"
+          icon-color="text-white"
+          @back="backAction"
+        />
       </div>
       <div class="income_amount text-white pt-36">
         <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
-          <span class="font-extrabold text-5xl">$</span>
+          <span class="font-extrabold text-5xl"> {{ getCurrency() }} </span>
           <input
             v-model="form.amount"
             type="text"
@@ -22,21 +26,25 @@
       </div>
       <div class="category_select py-2">
         <CoreSelectBox
-          :options="category"
+          :options="typeCategories"
           option-key="id"
           name="Category"
           placeholder="Select Category..."
-          v-model="form.category_id"
+          v-model="form.categoryId"
         />
       </div>
       <div class="description_input py-2">
-        <CoreInputBox
-          placeholder="Description"
-          v-model="form.description"
-        />
+        <CoreInputBox placeholder="Description" v-model="form.description" />
       </div>
       <div class="wallet_select py-2">
-        <CoreSelectBox :options="wallet" option-key="id" name="Wallet" v-model="form.wallet_id" placeholder="Select Category" />
+        <CoreSelectBox
+          :options="wallet"
+          option-key="id"
+          name="Wallet"
+          v-model="form.walletId"
+          placeholder="Select Wallet"
+          showAmount
+        />
       </div>
       <div class="repeat-transaction flex justify-between items-center py-3">
         <div class="text">
@@ -72,93 +80,92 @@
         </button>
       </div>
     </div>
-    <MobileLoadingDots v-if="incomeLoading"/>
+    <MobileLoadingDots v-if="incomeLoading" />
   </div>
 </template>
 
 <script setup>
 import { Switch } from "@headlessui/vue";
+import { useCategoryStore } from "~/store/category";
+import { usetransactionStore } from "~/store/transaction";
+import { useWalletStore } from "~/store/wallet";
 
 const router = useRouter();
 const form = reactive({
-  action_date:"",
+  action_date: "",
   amount: 0,
   description: "",
-  category_id: "",
-  wallet_id: "",
+  categoryId: "",
+  walletId: "",
   repeat: false,
-  type: "income"
+  type: "income",
 });
 
-const category = ref([]);
 const wallet = ref([]);
+const categoryStore = useCategoryStore();
+const { typeCategories } = storeToRefs(categoryStore);
+const { fetchWallets } = useWalletStore();
+const { createTransaction } = usetransactionStore();
 const incomeLoading = ref(false);
 
-onMounted( async() => {
+onMounted(async () => {
   await fetchCategory();
   await fetchWallet();
-})
+});
 
 const resetForm = () => {
-  form.action_date = "",
-  form.amount = 0,
-  form.description = "",
-  form.repeat = false
-}
+  form.action_date = null;
+  form.amount = 0;
+  form.description = "";
+  form.repeat = false;
+  form.categoryId = null;
+  form.walletId = null;
+};
 
 const backAction = () => {
   router.back();
 };
 
-const fetchCategory = async() => {
-  try {
-    await useFetch("/api/category", {
-      method: "GET",
-      params: {
-        type: 'income'
-      },
-      transform: (response) => {
-        console.log(response, 'budget category');
-        category.value = response.data?.data;
-      }
-    })
-  } catch (error) {
-    console.log(error);
-  }
-}
+const fetchCategory = async () => {
+  await categoryStore.fetchCategoryWithType("income");
+};
 
 const fetchWallet = async () => {
-  try {
-    await useFetch("/api/wallet/user-wallet", {
-      method: "GET",
-      transform: (response) => {
-        wallet.value = response.data?.user_wallet
-      }
-    })
-  } catch (error) {
-    console.error(error)
-  }
-}
+  const result = await fetchWallets();
+  wallet.value = result.data;
+};
 
 const saveIncome = async () => {
+  if (isNaN(new Date(form.action_date))) {
+    useNuxtApp().$toast.error("Invalid date format");
+    return false;
+  }
+
+  if (form.amount <= 0) {
+    useNuxtApp().$toast.error("Income Amount Must be greater than 0");
+    return false;
+  }
+
+  const formattedDate = new Date(form.action_date).toISOString().split("T")[0];
+  form.action_date = formattedDate;
+
   incomeLoading.value = true;
-  try {
-    useFetch("/api/income/create", {
-      method: "POST",
-      body: form
-    })
+  const result = await createTransaction(form);
+
+  if (result.success) {
+    incomeLoading.value = false;
+    useNuxtApp().$toast.success(result.message);
     if (form.repeat) {
       resetForm();
-      useNuxtApp().$toast.success("Income Record Created Successfully");
     } else {
-      navigateTo('/transaction')
+      router.push("/transaction");
     }
-  } catch (error) {
-    console.log(error)
-  } finally {
+  } else {
     incomeLoading.value = false;
+    resetForm();
+    useNuxtApp().$toast.error(result.error);
   }
-}
+};
 
 fetchWallet();
 fetchCategory();

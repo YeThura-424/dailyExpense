@@ -5,27 +5,66 @@ export const toTitleCase = (str) => {
     .join(" "); // Join words with spaces
 };
 
-export const getPreviousMonth = () => {
+export const getPreviousMonth = (year) => {
   const currentDate = new Date();
   const currentMonth = currentDate.getMonth();
+  const currentYear = currentDate.getFullYear();
   const previousMonths = [];
-  for (let i = 0; i <= currentMonth; i++) {
-    previousMonths.push({
-      id: i + 1,
-      name: new Date(currentDate.getFullYear(), i).toLocaleString('default', { month: 'long' }),
-      value: i
-    })
+
+  const isPastYear = year !== currentYear;
+  if (isPastYear) {
+    for (let i = 0; i < 12; i++) {
+      previousMonths.push({
+        id: i + 1,
+        name: new Date(2024, i).toLocaleString("default", {
+          month: "long",
+        }),
+        value: i + 1,
+      });
+    }
+  } else {
+    for (let i = 0; i <= currentMonth; i++) {
+      previousMonths.push({
+        id: i + 1,
+        name: new Date(2024, i).toLocaleString("default", {
+          month: "long",
+        }),
+        value: i + 1,
+      });
+    }
   }
 
   return previousMonths;
-}
+};
+
+export const getPreviousYear = (minYear) => {
+  const today = new Date();
+
+  const currentYear = today.getFullYear(); //2025
+
+  let previousYear = minYear; //2023
+
+  const years = [];
+  let i = 1;
+  do {
+    years.push({
+      id: i + 1,
+      name: previousYear,
+      value: previousYear,
+    });
+    previousYear++;
+    i++;
+  } while (previousYear <= currentYear);
+
+  return years;
+};
 
 export const formatDate = (dateString) => {
   if (!dateString) {
     return;
   }
-  const parts = dateString.split(" ")[0].split("-");
-  return new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+
+  return dateString.split("T")[0];
 };
 
 export const isSameDate = (date1, date2) => {
@@ -37,58 +76,73 @@ export const isSameDate = (date1, date2) => {
 };
 
 export const dayToName = (rawDate) => {
-  const date = formatDate(rawDate);
+  const formattedDate = rawDate.split("T")[0];
+  const date = new Date(formattedDate);
   const today = new Date();
   const yesterday = new Date();
   yesterday.setDate(today.getDate() - 1);
 
-  if (isSameDate(date, today)) return 'Today'
-  if (isSameDate(date, yesterday)) return 'Yesterday'
-  return rawDate 
-}
-
-export const dateLocalString = (rawDate) => {
-
-const [datePart, timePart, period] = rawDate.split(' ');
-const [day, month, year] = datePart.split('-');
-let [hour, minute, second] = timePart.split(':');
-
-if (period.toLowerCase() === 'pm' && hour !== '12') {
-  hour = parseInt(hour, 10) + 12;
-} else if (period.toLowerCase() === 'am' && hour === '12') {
-  hour = '00';
-}
-
-const date = new Date(`${year}-${month}-${day}T${hour}:${minute}:${second}`);
-
-const options = { 
-  weekday: 'long', 
-  day: 'numeric', 
-  month: 'long', 
-  year: 'numeric', 
-  hour: '2-digit', 
-  minute: '2-digit',
-  hour12: false 
+  if (isSameDate(date, today)) return "Today";
+  if (isSameDate(date, yesterday)) return "Yesterday";
+  return formattedDate;
 };
 
-// Format the date
-return date.toLocaleString('en-GB', options);
-}
+export const dateLocalString = (rawDate) => {
+  const date = new Date(rawDate);
+
+  const options = {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+  };
+
+  // Format the date
+  return date.toLocaleString("en-GB", options);
+};
 
 export const getCurrency = () => {
-  const user = useCookie('user');
-  let userCurrency = user?.value?.currency ?? 'ks';
-  const currency = {
-    ks: 'Ks',
-    usd: '$',
-    baht: 'B'
-  }
+  const profile = useCookie("profile");
+  let userCurrency = profile?.value?.currency ?? "ks";
 
-  return currency[userCurrency] ?? 'Ks';
-}
+  const currency = {
+    ks: "Ks",
+    usd: "$",
+    baht: "B",
+  };
+
+  return currency[userCurrency] ?? "Ks";
+};
 
 export const formatAmount = (amount) => {
   let currency = new Intl.NumberFormat();
 
+  if (!amount || amount < 0) return `${getCurrency()} - 0`;
+
   return `${getCurrency()} ${currency.format(amount)}`;
-}
+};
+
+export const getDateByMonth = (month) => {
+  const today = new Date();
+  const newDate = new Date(today.getFullYear(), month, today.getDate());
+
+  return newDate.toISOString();
+};
+
+export const debugLog = (message, data) => {
+  console.log(message, data);
+  throw new Error("Debug Logging ...");
+};
+
+export const isOnline = () => {
+  if (process.client) {
+    console.log(
+      "Initially " + (window.navigator.onLine ? "on" : "off") + "line"
+    );
+
+    return window.navigator.onLine;
+  }
+};

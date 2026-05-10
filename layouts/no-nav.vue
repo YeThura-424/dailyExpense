@@ -10,7 +10,7 @@
     <Meta property="og:type" content="website" />
   </Head>
   <div class="bg-[#eee] min-h-screen">
-    <NuxtLoadingIndicator color="#7F3DFF" />
+    <!-- <NuxtLoadingIndicator color="#7F3DFF" /> -->
     <slot />
   </div>
 </template>

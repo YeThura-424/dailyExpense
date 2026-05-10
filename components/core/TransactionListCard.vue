@@ -1,5 +1,4 @@
 <template>
-
   <div v-for="transaction in transactions" :key="transaction.id">
     <nuxt-link :to="`/${transaction.type}/${transaction.id}`"
       class="flex justify-between items-center bg-[#FCFCFC] p-4 rounded-lg mt-2">
@@ -16,7 +15,7 @@
         </div>
         <div class="transaction_list_desctiption w-3/4">
           <h1 class="font-semibold text-lg text-[#292B2D] line-clamp-1">
-            {{ transaction?.category?.name }}
+            {{ transaction?.categories?.name }}
           </h1>
           <span class="text-sm text-[#91919F] line-clamp-1">{{
             transaction?.description
@@ -24,24 +23,25 @@
         </div>
       </div>
       <div class="transaction_list_amount w-1/4 text-right">
-        <h1 v-if="transaction.type == 'expense'" class="font-semibold text-lg text-[#FD3C4A]">
-          $-{{ transaction.amount }}
+        <span class="text-sm text-[#91919F] truncate">{{
+          transaction.wallet.name
+        }}</span>
+        <h1 v-if="transaction.type == 'expense'" class="font-semibold text-lg text-[#FD3C4A] truncate">
+          {{ getCurrency() }}-{{ transaction.amount }}
         </h1>
-        <h1 v-else class="font-semibold text-lg text-[#00A86B]">
-          $+{{ transaction.amount }}
+        <h1 v-else class="font-semibold text-lg text-[#00A86B] truncate">
+          {{ getCurrency() }}+{{ transaction.amount }}
         </h1>
-        <span class="text-sm text-[#91919F]">{{ transaction.time }}</span>
       </div>
     </nuxt-link>
   </div>
-
 </template>
 
 <script setup>
 const props = defineProps({
   transactions: {
     type: Array,
-    required: true
-  }
-})
+    required: true,
+  },
+});
 </script>

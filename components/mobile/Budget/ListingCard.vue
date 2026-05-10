@@ -1,15 +1,32 @@
 <template>
   <div>
-    <div class="listing-card-wrapper p-4 bg-[#ffffff] rounded-2xl mb-3" v-for="budget in budgets" :key="budget">
+    <div
+      class="listing-card-wrapper p-4 bg-[#ffffff] rounded-2xl mb-3"
+      v-for="budget in budgets"
+      :key="budget"
+    >
       <div class="card-header flex justify-between items-center">
-        <div class="header-type py-2">
-          <button class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5">
+        <div class="header-type py-2 flex gap-x-2">
+          <button
+            v-for="(budgetCategory, index) in budget.budget_categories"
+            v-show="index == 0"
+            class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5"
+          >
             <Icon name="ion:ios-radio-button-on" :class="alertTheme(budget)" />
-            {{ budget.category.name }}
+            {{ budgetCategory.categories.name }}
+          </button>
+          <button
+            v-if="budget.budget_categories.length > 1"
+            class="flex items-center text-lg gap-x-1 bg-[#F1F1FA] rounded-full px-3 py-1.5"
+          >
+            + {{ budget.budget_categories.length - 1 }}
           </button>
         </div>
-        <div class="header-alert">
-          <Icon name="ion:information-circled" :class="['text-3xl', alertTheme(budget)]" />
+        <div class="header-alert" @click="budgetDetail(budget.id)">
+          <Icon
+            name="ion:information-circled"
+            :class="['text-3xl', alertTheme(budget)]"
+          />
         </div>
       </div>
       <div class="card-info">
@@ -17,12 +34,18 @@
           Remaining {{ formatAmount(remaining(budget)) }}
         </h1>
         <div class="budget-bar-wrapper rounded-lg w-full bg-slate-300 flex">
-          <div :class="['budget-bar p-2 rounded-lg', alertBg(budget)]" :style="{ width: spentPercent(budget) }"></div>
+          <div
+            :class="['budget-bar p-2 rounded-lg', alertBg(budget)]"
+            :style="{ width: spentPercent(budget) }"
+          ></div>
         </div>
         <p class="text-[#6f6f74] text-lg">
-          {{ formatAmount(budget.spend_amount ?? 0) }} of {{ formatAmount(budget.total) }}
+          {{ formatAmount(budget.spend_amount ?? 0) }} of
+          {{ formatAmount(budget.total) }}
         </p>
-        <span v-if="isExceed(budget)" :class="['text-xl', alertTheme(budget)]">You've exceed the limit!</span>
+        <span v-if="isExceed(budget)" :class="['text-xl', alertTheme(budget)]"
+          >You've exceed the limit!</span
+        >
       </div>
     </div>
   </div>
@@ -40,7 +63,8 @@ const remaining = (budget) => {
 };
 
 const isExceed = (budget) => {
-  return budget.spend_amount ?? 0 >= budget.total;
+  let amount = budget.spend_amount ?? 0;
+  return amount >= budget.total;
 };
 
 const alertTheme = (budget) => {
@@ -65,5 +89,9 @@ const spentPercent = (budget) => {
   const percent = Math.floor((budget.spend_amount / budget.total) * 100);
 
   return `${percent}%`;
+};
+
+const budgetDetail = (id) => {
+  navigateTo(`/budget/${id}`);
 };
 </script>

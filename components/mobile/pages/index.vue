@@ -1,20 +1,22 @@
 <template>
   <div>
-    <div class="relative pb-[78px]">
+    <div class="relative" style="height: calc(100vh - 70px); overflow: auto">
       <!-- header section starts here  -->
       <div class="py-4 px-4 bg-[#FFF6E5] rounded-b-3xl">
         <div class="flex justify-between items-center">
           <div class="profile">
             <NuxtLink :to="`/profile/${user?.id}`">
-              <img :src="user?.image ?? '/images/user.jpg'" class="w-8 h-8 rounded-full border-2 border-[#7F3DFF] p-1"
-                alt="" />
+              <img :src="profile?.avatar_url
+                ? getUserProfilePhoto(profile?.avatar_url)
+                : '/images/user.jpg'
+                " class="w-8 h-8 rounded-full border-2 border-[#7F3DFF] p-1" alt="" />
             </NuxtLink>
           </div>
           <div class="year_select">
-            <CoreMonthSelect v-model="selectedDate.year" :months="rawYear" />
+            <CoreYearSelect v-model="selectedDate.year" :min-year="2023" />
           </div>
           <div class="month_select">
-            <CoreMonthSelect v-model="selectedDate.month" :months="rawMonth" />
+            <CoreMonthSelect v-model="selectedDate.month" :current-year="yearForMonth" />
           </div>
           <div class="notification">
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -36,8 +38,10 @@
               Account Balance
             </h1>
             <!-- <span class="text-2xl font-semibold text-[#161719]">{{ accountData.walletBalance }} Ks </span> -->
-            <span class="text-2xl font-semibold text-[#161719]"> {{ formatAmount(accountData.walletBalance) }}</span>
-
+            <span class="text-2xl font-semibold text-[#161719]">
+              <!-- {{ formatAmount(accountData?.walletBalance ?? 0) }} -->
+              {{ formatAmount(walletTotal) }}
+            </span>
           </div>
           <div class="income_expense flex justify-between gap-x-4">
             <div class="income flex items-center gap-x-1 bg-[#00A86B] p-3 rounded-2xl w-full">
@@ -46,7 +50,10 @@
               </div>
               <div class="income_text text-white">
                 <span class="text-lg">Income</span>
-                <h1 class="text-lg"> {{ formatAmount(accountData?.income?.amount) }}</h1>
+                <h1 class="text-lg">
+                  <!-- {{ formatAmount(accountData?.income?.amount ?? 0) }} -->
+                  {{ formatAmount(incomeTotal) }}
+                </h1>
               </div>
             </div>
             <div class="expense flex items-center gap-x-1 bg-[#FD3C4A] p-3 rounded-2xl w-full">
@@ -55,12 +62,14 @@
               </div>
               <div class="expense_text text-white">
                 <span class="text-lg">Expense</span>
-                <h1 class="text-lg"> {{ formatAmount(accountData?.expend?.amount) }}</h1>
+                <h1 class="text-lg">
+                  <!-- {{ formatAmount(accountData?.expend?.amount ?? 0) }} -->
+                  {{ formatAmount(expendTotal) }}
+                </h1>
               </div>
             </div>
           </div>
         </div>
-
       </div>
       <!-- header section ends here  -->
 
@@ -74,40 +83,85 @@
 </template>
 
 <script setup>
-
-const rawMonth = computed(() => getPreviousMonth());
-const user = useCookie('user');
-const rawYear = ref([
-  { id: 1, name: 2024, value: 2024 }
-])
+import { useUserStore } from "~/store/user";
+import { useWalletStore } from "~/store/wallet";
 
 const selectedDate = reactive({
   year: null,
-  month: null
-})
+  month: null,
+});
 
+const yearForMonth = ref(selectedDate.year);
+const user = useCookie("user");
+const profile = useCookie("profile");
+
+const { getWalletAndTransaction, getUserProfilePhoto } = useUserStore();
+const walletStore = useWalletStore();
 const loading = reactive({
   incomeExpend: false,
-})
+});
 
-const accountData = ref([]);
+const incomeTotal = ref(0);
+const expendTotal = ref(0);
+const walletTotal = ref(0);
 
 const getIncomeExpense = async (year, month) => {
   loading.incomeExpend = true;
-  await useFetch('api/income-expend', {
-    method: "GET",
-    params: {
-      year: year,
-      month: month
-    },
-    transform: (response) => {
-      accountData.value = response.data?.data;
-    }
-  })
-  loading.incomeExpend = false;
-}
+  if (!isOnline()) {
+    useNuxtApp().$toast.warning("No Internet Connection, try again later!");
+    loading.incomeExpend = false;
+    return false;
+  }
 
-watch(() => selectedDate, (updateDate) => {
-  getIncomeExpense(updateDate.year.value, updateDate.month.id);
-}, { deep: true })
+  const result = await getWalletAndTransaction({ year: year, month: month });
+
+  if (result.success) {
+    incomeTotal.value = result.data
+      .filter((item) => item.type === "income")
+      .reduce((total, income) => total + income.transaction_amount, 0);
+
+    expendTotal.value = result.data
+      .filter((item) => item.type === "expense")
+      .reduce((total, expense) => total + expense.transaction_amount, 0);
+
+    getWallet();
+  } else {
+    loading.incomeExpend = false;
+    useNuxtApp().$toast.error(result.error);
+  }
+  loading.incomeExpend = false;
+};
+
+const getWallet = async () => {
+  if (!isOnline()) {
+    return false;
+  }
+
+  const result = await walletStore.fetchWallets();
+
+  if (result.success) {
+    walletTotal.value = result.data.reduce(
+      (total, wallet) => total + wallet.amount,
+      0
+    );
+  }
+};
+
+watch(
+  () => selectedDate,
+  (updateDate) => {
+    if (updateDate.year && updateDate.month) {
+      console.log(updateDate);
+      getIncomeExpense(updateDate?.year, updateDate?.month);
+    }
+  },
+  { deep: true }
+);
+
+watch(
+  () => selectedDate.year,
+  (newYear) => {
+    yearForMonth.value = newYear;
+  }
+);
 </script>

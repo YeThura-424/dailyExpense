@@ -1,27 +1,37 @@
 <template>
   <div>
-    <div class="px-4">
-      <div class="flex justify-between items-center py-2">
-        <!-- <CoreMonthSelect :months="transaction_type" /> -->
+    <div class="">
+      <div class="flex justify-between items-center py-2 bg-[#fff] px-4 rounded-b-xl">
         <h1 class="text-[#212325] text-base font-medium">Filter</h1>
         <div class="filter-icon" @click="openFilterDialog">
           <IconFilter />
         </div>
       </div>
       <!-- see report section  -->
-      <div class="transaction-section" style="height:calc(100vh - 120px); overflow: auto;">
-        <div class="flex justify-between bg-[#ddd2f1] text-[#7F3DFF] p-3 mt-2 rounded-lg">
+      <div class="transaction-section px-4" style="height: calc(100vh - 120px); overflow: auto">
+        <!-- <div
+          class="flex justify-between bg-[#ddd2f1] text-[#7F3DFF] p-3 mt-2 rounded-lg"
+        >
           <h1 class="text-base font-normal">See your financial report</h1>
           <IconArrowRight />
-        </div>
+        </div> -->
 
         <!-- transaction list  -->
         <div v-if="!transactionLoading" class="transaction_list_warpper">
-          <div v-for="(transactions, key) in transactions" :key="key" class="py-2">
-            <h1 class="font-semibold text-lg">{{ dayToName(key) }}</h1>
-            <div class="transaction_list pt-2">
-              <CoreTransactionListCard :transactions="transactions" />
+          <div v-if="!isTransactionEmpty" class="transaction-listing">
+            <div v-for="(transactions, key) in transactions" :key="key" class="py-2">
+              <h1 class="font-semibold text-lg">{{ dayToName(key) }}</h1>
+              <div class="transaction_list pt-2">
+                <CoreTransactionListCard :transactions="transactions" />
+              </div>
             </div>
+          </div>
+          <div v-else class="empty-transaction pt-12 justify-center"
+            style="height: calc(100vh - 120px); overflow: auto">
+            <img src="/images/empty-transaction.svg" alt="Empty Transaction" />
+            <h1 class="text-center text-lg font-light pt-8 text-slate-500">
+              No Transaction for the selected cliteria!
+            </h1>
           </div>
         </div>
         <div v-else class="transaction-loading-list">
@@ -37,12 +47,12 @@
             Reset
           </button>
         </div>
-        <div class="filter-body">
+        <div class="filter-body flex flex-col gap-y-3">
           <!-- filter by section  -->
           <RadioGroup v-model="form.filterBy">
             <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
             <div class="grid grid-cols-3 gap-4 pt-3">
-              <RadioGroupOption as="template" v-for="value in ['income', 'expend', 'transfer']" :value="value"
+              <RadioGroupOption as="template" v-for="value in ['income', 'expense', 'transfer']" :value="value"
                 v-slot="{ active, checked }">
                 <div :class="[
                   active ? 'bg-[#EEE5FF] text-[#7F3DFF]' : '',
@@ -75,9 +85,9 @@
           </RadioGroup>
 
           <!-- category selection here  -->
-          <div>
-            <h1>Category</h1>
-            <CoreSelectBox v-model="form.category" :options="category" optionKey="id" />
+          <div v-if="showCategorySelectBox">
+            <h1 class="pb-3">Category</h1>
+            <CoreSelectBox v-model="form.category" :options="typeCategories" optionKey="id" />
           </div>
         </div>
       </div>
@@ -87,16 +97,23 @@
 
 <script setup>
 import { RadioGroup, RadioGroupLabel, RadioGroupOption } from "@headlessui/vue";
+import { useCategoryStore } from "~/store/category";
+import { usetransactionStore } from "~/store/transaction";
 
 const form = reactive({
-  filterBy: 'income',
-  sortBy: 'highest',
-  category: ''
+  filterBy: "income",
+  sortBy: "highest",
+  category: "",
 });
-const category = ref([]);
 const transactions = ref([]);
 const openFilter = ref(false);
 const transactionLoading = ref(true);
+const transactionStore = usetransactionStore();
+const categoryStore = useCategoryStore();
+const { typeCategories } = storeToRefs(categoryStore);
+const showCategorySelectBox = ref(true);
+const isTransactionEmpty = ref(true);
+
 const openFilterDialog = () => {
   openFilter.value = true;
 };
@@ -107,38 +124,49 @@ const closeFilterDialog = (value) => {
 
 const applyFilter = (value) => {
   openFilter.value = value;
-  // console.log(form);
-  let page = 1
+  let page = 1;
   fetchTransaction(page, form);
-}
+};
+
+watch(
+  () => form.filterBy,
+  (newVal) => {
+    if (newVal != "transfer") fetchCategory(newVal);
+    showCategorySelectBox.value = newVal == "transfer" ? false : true;
+  }
+);
 
 const resetFilter = () => {
-  form.filterBy = 'income',
-    form.sortBy = 'highest',
-    form.category = ''
-  fetchTransaction();
-}
+  form.filterBy = null;
+  form.sortBy = null;
+  form.category = null;
+  openFilter.value = false;
+  const page = 1;
+  fetchTransaction(page, form);
+};
 
 // fetch transaction (income expend)
 const fetchTransaction = async (page = 1, form = {}) => {
   transactionLoading.value = true;
-  try {
-    await useFetch("/api/income/list", {
-      method: "GET",
-      params: {
-        page: page,
-        type: form?.filterBy ?? [],
-        sort: form?.sortBy ?? [],
-        category_id: form?.category ?? [],
-        perpage: 15,
-      },
-      transform: (response) => {
-        transactions.value = groupTransaction(response?.data?.data);
-      },
-    });
+  const result = await transactionStore.fetchTransactions({
+    page: page,
+    type: form?.filterBy ?? null,
+    sort: form?.sortBy ?? null,
+    categoryId: form?.category ?? null,
+    perPage: 15,
+  });
+
+  if (result.success) {
     transactionLoading.value = false;
-  } catch (error) {
-    console.log(error);
+    if (result?.data.length > 0) {
+      isTransactionEmpty.value = false;
+      transactions.value = groupTransaction(result?.data);
+    } else {
+      isTransactionEmpty.value = true;
+    }
+  } else {
+    transactionLoading.value = false;
+    useNuxtApp().$toast.error(result.error);
   }
 };
 
@@ -155,21 +183,9 @@ const groupTransaction = (transactions) => {
   return groupedData;
 };
 
-const fetchCategory = async (type = []) => {
-  try {
-    await useFetch("/api/category", {
-      method: "GET",
-      params: {
-        type: type
-      },
-      transform: (response) => {
-        category.value = response.data?.data;
-      }
-    })
-  } catch (error) {
-    console.log(error);
-  }
-}
+const fetchCategory = async (type = "income") => {
+  await categoryStore.fetchCategoryWithType(type);
+};
 
 fetchTransaction();
 fetchCategory();

@@ -1,19 +1,17 @@
 <template>
-  <div class="min-w-28">
+  <div class="w-full">
     <Listbox v-model="selectedMonth">
       <div class="relative mt-1">
-        <ListboxButton
-          class="relative min-w-28 cursor-default rounded-full bg-white py-2 pl-3 pr-10 text-center shadow-md focus:outline-none border-2 border-[#7F3DFF]"
-        >
-          <span class="block truncate">{{ selectedMonth.name }}</span>
-          <span
+        <ListboxButton :class="cssClass">
+          <div class="truncate">{{ selectedMonth?.name }}</div>
+          <div
             class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
           >
             <ChevronUpDownIcon
               class="h-5 w-5 text-gray-400"
               aria-hidden="true"
             />
-          </span>
+          </div>
         </ListboxButton>
 
         <transition
@@ -22,11 +20,11 @@
           leave-to-class="opacity-0"
         >
           <ListboxOptions
-            class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
+            class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm"
           >
             <ListboxOption
               v-slot="{ active, selected }"
-              v-for="month in months"
+              v-for="month in monthOptions"
               :key="month.name"
               :value="month"
               as="template"
@@ -69,18 +67,52 @@ import {
   ListboxOption,
 } from "@headlessui/vue";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/vue/20/solid";
+
 const props = defineProps({
-  months: {
-    type: Array,
-    required: true,
+  currentYear: {
+    type: Number,
+    default: () => {
+      return new Date().getFullYear();
+    },
+  },
+  cssClass: {
+    type: String,
+    default:
+      "relative w-full cursor-default rounded-xl bg-white py-2 pl-3 text-left pr-10 h-12 shadow-md focus:outline-none border border-[#91919F]",
   },
 });
-const emit = defineEmits(['update:modelValue']);
-const selectedMonth = ref(props.months[props.months.length - 1]); // to get current month
+const emit = defineEmits(["update:modelValue"]);
 
-watch(() => selectedMonth.value, (updateValue) => {
-  emit('update:modelValue', updateValue);
-})
+const monthOptions = ref(getPreviousMonth(props.currentYear));
 
-emit('update:modelValue', selectedMonth.value);
+const today = new Date();
+
+const currentMonth = today.getMonth() + 1;
+
+const selectedMonth = ref(null);
+
+onMounted(() => {
+  selectedMonth.value = monthOptions.value.find(
+    (month) => month.value == currentMonth
+  );
+});
+
+watch(
+  () => props.currentYear,
+  (newYear) => {
+    monthOptions.value = getPreviousMonth(newYear);
+    selectedMonth.value = monthOptions.value.find(
+      (month) => month.value == currentMonth
+    );
+  }
+);
+
+watch(
+  () => selectedMonth.value,
+  (updateValue) => {
+    emit("update:modelValue", updateValue.value);
+  }
+);
+
+emit("update:modelValue", selectedMonth.value?.value);
 </script>
