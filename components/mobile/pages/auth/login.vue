@@ -1,5 +1,5 @@
 <template>
-  <MobileLoadingDots v-if="loading || resetLoading" />
+  <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
     <MobilePageHeader title="Login" :show-back="false" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
@@ -51,7 +51,7 @@
       </div>
       <div class="wallet_name_input py-2">
         <label class="text-base text-[#91919F]">Email</label>
-        <CoreInputBox placeholder="email" v-model="form.email" />
+        <CoreInputBox placeholder="email" v-model="resetEmail" />
       </div>
       <div v-if="resetMessage" class="mt-4 p-3 bg-green-50 border border-green-200 rounded text-green-700 text-sm">
         {{ resetMessage }}
@@ -66,14 +66,15 @@
 
 <script setup>
 import { useUserStore } from "~/store/user";
+import { supabase } from "../lib/supabaseClient";
 
 const { login } = useUserStore();
 const loading = ref(false);
 const router = useRouter();
 const forgetPasswordModel = ref(false);
-const resetLoading = ref(false)
 const resetMessage = ref('')
 const resetError = ref('')
+const resetEmail = ref('')
 
 const form = reactive({
   email: "",
@@ -89,14 +90,14 @@ const closeForgetPasswordModel = () => {
 }
 
 const sendResetEmail = async () => {
-  resetLoading.value = true
+  loading.value = true
   resetError.value = ''
   resetMessage.value = ''
 
-  const { error } = await $supabase.auth.resetPasswordForEmail(
-    form.email,
+  const { error } = await supabase.auth.resetPasswordForEmail(
+    resetEmail.value,
     {
-      redirectTo: `${window.location.origin}/auth/password-reset`,
+      redirectTo: `${window.location.origin}/password-reset`,
     }
   )
 
@@ -111,7 +112,7 @@ const sendResetEmail = async () => {
     }, 800);
   }
 
-  resetLoading.value = false
+  loading.value = false
 }
 
 const loginUser = async () => {
