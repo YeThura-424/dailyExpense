@@ -84,7 +84,6 @@
 
 <script setup>
 import { useUserStore } from "~/store/user";
-import { useWalletStore } from "~/store/wallet";
 
 const selectedDate = reactive({
   year: null,
@@ -95,8 +94,7 @@ const yearForMonth = ref(selectedDate.year);
 const user = useCookie("user");
 const profile = useCookie("profile");
 
-const { getWalletAndTransaction, getUserProfilePhoto } = useUserStore();
-const walletStore = useWalletStore();
+const { getDashboardSummary, getUserProfilePhoto } = useUserStore();
 const loading = reactive({
   incomeExpend: false,
 });
@@ -113,38 +111,17 @@ const getIncomeExpense = async (year, month) => {
     return false;
   }
 
-  const result = await getWalletAndTransaction({ year: year, month: month });
+  const result = await getDashboardSummary({ year: year, month: month });
 
   if (result.success) {
-    incomeTotal.value = result.data
-      .filter((item) => item.type === "income")
-      .reduce((total, income) => total + income.transaction_amount, 0);
-
-    expendTotal.value = result.data
-      .filter((item) => item.type === "expense")
-      .reduce((total, expense) => total + expense.transaction_amount, 0);
-
-    getWallet();
+    incomeTotal.value = result.data.incomeTotal;
+    expendTotal.value = result.data.expenseTotal;
+    walletTotal.value = result.data.walletTotal;
   } else {
     loading.incomeExpend = false;
     useNuxtApp().$toast.error(result.error);
   }
   loading.incomeExpend = false;
-};
-
-const getWallet = async () => {
-  if (!isOnline()) {
-    return false;
-  }
-
-  const result = await walletStore.fetchWallets();
-
-  if (result.success) {
-    walletTotal.value = result.data.reduce(
-      (total, wallet) => total + wallet.amount,
-      0
-    );
-  }
 };
 
 watch(

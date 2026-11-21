@@ -103,7 +103,6 @@ const fetchCategory = async () => {
 };
 
 const submit = async () => {
-  budgetLoading.value = true;
   if (form.category.length <= 0) {
     useNuxtApp().$toast.error("Please choose at least one category");
     return false;
@@ -113,6 +112,7 @@ const submit = async () => {
     useNuxtApp().$toast.error("Please set alert percent!!");
     return false;
   }
+  budgetLoading.value = true;
   const result = await budgetStore.createBudgetV2(form);
   if (result.success) {
     useNuxtApp().$toast.success("Budget Created Successfully!!");

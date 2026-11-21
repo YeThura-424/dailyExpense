@@ -1,265 +1,168 @@
-import { defineStore } from "pinia";
-import { supabase } from "../lib/supabaseClient";
+import { defineStore } from 'pinia';
+import { appendResponseHeader } from 'h3';
+import { apiResult, compactQuery } from '~/utils/apiPayload';
 
-export const useUserStore = defineStore("user", () => {
-  const user = useCookie("user");
-  const profile = useCookie("profile");
-  const token = useCookie("token");
-
-  const signup = async (form) => {
-    const { data, error } = await supabase.auth.signUp({
-      email: form.email,
-      password: form.password,
-    });
-    if (error) {
-      return { success: false, error: error.message };
-    }
-    if (data.user) {
-      const { error, data: profile } = await supabase.from("profiles").insert({
-        id: data.user.id,
-        username: form.username,
-        currency: form.currency,
-      });
-
-      if (error) {
-        return { success: false, error: error.message };
-      }
-
-      token.value = data.session.access_token; // set token to cookie
-      user.value = data.user;
-      setProfile();
-
-      return { success: true };
-    }
-    return { success: false, error: "Internal Server Error!!" };
-  };
-
-  const login = async (formData) => {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    });
-
-    if (error) {
-      return { success: false, error: error.message };
-    }
-
-    if (data) {
-      user.value = data.user;
-      token.value = data.session.access_token;
-      setProfile();
-      return { success: true };
-    }
-
-    return { success: false, error: "Unknown error occurred." };
-  };
-
-  const setProfile = async () => {
-    if (!user.value) {
-      profile.value = null;
-      return;
-    }
-
-    if (!profile.value || profile.value.id !== user.value.id) {
-      const { data } = await supabase
-        .from("profiles")
-        .select()
-        .eq("id", user.value.id)
-        .single();
-
-      profile.value = data;
-    }
-  };
-
-  const logout = async () => {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) return { success: false, error: error.message };
-
-    user.value = null;
-    token.value = null;
-    profile.value = null;
-
-    return true;
-  };
-
-  const updatePassword = async (payload) => {
-    const { data, error } = await supabase.auth.updateUser({
-      password: payload.new_password,
-    });
-
-    if (error) {
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-
-    return {
-      success: true,
-    };
-  };
-
-  const getSession = async () => {
-    const { data } = await supabase.auth.getSession();
-    if (data.session) {
-      token.value = data.session.access_token;
-      user.value = data.session.user;
-      setProfile();
-    } else {
-      user.value = null;
-      token.value = null;
-      profile.value = null;
-    }
-  };
-
-  const trackAuthChange = () => {
-    supabase.auth.onAuthStateChange(async (event, session) => {
-      setTimeout(async () => {
-        if (session) {
-          token.value = session.access_token;
-          user.value = session.user;
-          setProfile();
-        } else {
-          user.value = null;
-          token.value = null;
-          profile.value = null;
+export const useUserStore = defineStore('user', {
+  state: () => ({
+    user: useCookie('user'),
+    profile: useCookie('profile'),
+  }),
+  actions: {
+    async getSession() {
+      try {
+        const event = import.meta.server ? useRequestEvent() : undefined;
+        const { data, error } = await useFetch('/api/auth/session', {
+          method: 'GET',
+          watch: false,
+          retry: 0,
+          onResponse({ response }) {
+            if (event) {
+              for (const cookie of response.headers.getSetCookie()) {
+                appendResponseHeader(event, 'set-cookie', cookie);
+              }
+            }
+          },
+        });
+        const result = apiResult(data, error);
+        if (result.success) {
+          this.user = result.data.user;
+          this.profile = result.data.profile;
+        } else if (result.statusCode === 401) {
+          this.user = null;
+          this.profile = null;
         }
-      }, 0);
-    });
-  };
-
-  const getWalletAndTransaction = async (payload) => {
-    console.log("payload herre", payload);
-    try {
-      let query = supabase
-        .from("wallet_transaction_log")
-        .select()
-        .eq("user_id", user.value.id);
-
-      if (payload?.month && payload?.year) {
-        query = query.filter(
-          "action_date",
-          "gte",
-          `${payload?.year}-${payload?.month.toString().padStart(2, "0")}-01`
-        );
-        query = query.filter(
-          "action_date",
-          "lt",
-          `${payload?.year}-${(payload?.month + 1)
-            .toString()
-            .padStart(2, "0")}-01`
-        );
+        return result;
+      } catch (error) {
+        return apiResult(null, { value: error });
       }
-
-      const { data, error } = await query;
-
-      if (error) throw new Error(error.message);
-
-      return {
-        success: true,
-        data: data,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
-  };
-
-  const updateProfile = async (payload) => {
-    const oldProfile = payload.profile;
-    const newProfile = payload.newProfile;
-    const avatarUrl = ref(null);
-
-    try {
-      // update profile photo and delete old one if both present
-      if (oldProfile && newProfile) {
-        const updateResult = await updateProfilePhoto(newProfile, oldProfile);
-
-        if (!updateResult.success) throw new Error(updateResult.error);
-
-        avatarUrl.value = updateResult.data;
+    },
+    async signup(form) {
+      try {
+        const { data, error } = await useFetch('/api/auth/signup', {
+          method: 'POST',
+          body: { email: form.email, password: form.password, username: form.username, currency: form.currency },
+          watch: false,
+          retry: 0,
+        });
+        const result = apiResult(data, error);
+        if (!result.success) return result;
+        if (!result.data.authenticated) return { success: false, error: 'Your account was created. Please log in.' };
+        return this.getSession();
+      } catch (error) {
+        return apiResult(null, { value: error });
       }
-      // only store new profile if old photo does not exist
-      if (newProfile && !oldProfile) {
-        const updateResult = await storeProfilePhoto(newProfile);
-
-        if (!updateResult.success) throw new Error(updateResult.error);
-
-        avatarUrl.value = updateResult.data;
+    },
+    async login(form) {
+      try {
+        const { data, error } = await useFetch('/api/auth/login', {
+          method: 'POST',
+          body: { email: form.email, password: form.password },
+          watch: false,
+          retry: 0,
+        });
+        const result = apiResult(data, error);
+        if (!result.success) return result;
+        return this.getSession();
+      } catch (error) {
+        return apiResult(null, { value: error });
       }
-
-      const { data, error: updateError } = await supabase
-        .from("profiles")
-        .update({
-          username: payload.name,
-          currency: payload.currency,
-          avatar_url: avatarUrl.value,
-        })
-        .eq("id", user.value.id)
-        .select()
-        .single();
-
-      if (updateError) throw new Error(updateError.message);
-
-      return { success: true, data: data };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
-  };
-
-  const storeProfilePhoto = async (fileData) => {
-    const file = fileData[0];
-    const fileName = `${Date.now()}-${file.name}`;
-
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("user_profile")
-      .upload(fileName, file, {
-        cacheControl: "3600",
-        upsert: false,
-      });
-
-    if (uploadError) return { success: false, error: uploadError.message };
-
-    if (uploadData) return { success: true, data: uploadData.path };
-  };
-
-  const updateProfilePhoto = async (newFile, oldFile) => {
-    const file = newFile[0];
-
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("user_profile")
-      .update(oldFile, file, {
-        cacheControl: "3600",
-        upsert: true,
-      });
-
-    if (uploadError) return { success: false, error: uploadError.message };
-
-    if (uploadData) return { success: true, data: uploadData.path };
-  };
-
-  const getUserProfilePhoto = (id) => {
-    const { data } = supabase.storage.from("user_profile").getPublicUrl(id);
-
-    if (data) return data.publicUrl;
-
-    return null;
-  };
-
-  return {
-    user,
-    token,
-    signup,
-    login,
-    logout,
-    trackAuthChange,
-    getSession,
-    getWalletAndTransaction,
-    updateProfile,
-    getUserProfilePhoto,
-    updatePassword,
-  };
+    },
+    async logout() {
+      try {
+        const { data, error } = await useFetch('/api/auth/logout', {
+          method: 'POST',
+          watch: false,
+          retry: 0,
+        });
+        const result = apiResult(data, error);
+        if (result.success || result.statusCode === 401) {
+          this.user = null;
+          this.profile = null;
+          return true;
+        }
+        return result;
+      } catch (error) {
+        return apiResult(null, { value: error });
+      }
+    },
+    async forgotPassword(email) {
+      try {
+        const { data, error } = await useFetch('/api/auth/forgot-password', {
+          method: 'POST',
+          body: { email },
+          watch: false,
+          retry: 0,
+        });
+        return apiResult(data, error);
+      } catch (error) {
+        return apiResult(null, { value: error });
+      }
+    },
+    async updatePassword(payload) {
+      try {
+        const { data, error } = await useFetch('/api/auth/password', {
+          method: 'PATCH',
+          body: {
+            new_password: payload.new_password,
+            ...(payload.recoveryToken ? { recoveryToken: payload.recoveryToken } : {}),
+          },
+          watch: false,
+          retry: 0,
+        });
+        const result = apiResult(data, error);
+        if (result.success) {
+          this.user = null;
+          this.profile = null;
+        }
+        return result;
+      } catch (error) {
+        return apiResult(null, { value: error });
+      }
+    },
+    async getDashboardSummary(payload) {
+      try {
+        const { data, error } = await useFetch('/api/dashboard/summary', {
+          method: 'GET',
+          query: compactQuery(payload),
+          watch: false,
+          retry: 0,
+        });
+        return apiResult(data, error);
+      } catch (error) {
+        return apiResult(null, { value: error });
+      }
+    },
+    async updateProfile(payload) {
+      try {
+        const file = payload.newProfile?.[0];
+        if (file) {
+          const form = new FormData();
+          form.append('file', file);
+          const { data, error } = await useFetch('/api/users/me/avatar', {
+            method: 'PUT',
+            body: form,
+            watch: false,
+            retry: 0,
+          });
+          const upload = apiResult(data, error);
+          if (!upload.success) return upload;
+          this.profile = upload.data.profile;
+        }
+        const { data, error } = await useFetch('/api/users/me/profile', {
+          method: 'PATCH',
+          body: { name: payload.name, currency: payload.currency },
+          watch: false,
+          retry: 0,
+        });
+        const result = apiResult(data, error);
+        if (result.success) this.profile = result.data;
+        return result;
+      } catch (error) {
+        return apiResult(null, { value: error });
+      }
+    },
+    getUserProfilePhoto(path) {
+      return path ? `/api/avatars/${path.split('/').map(encodeURIComponent).join('/')}` : null;
+    },
+  },
 });

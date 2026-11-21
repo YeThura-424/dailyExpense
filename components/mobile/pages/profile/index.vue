@@ -117,6 +117,8 @@ const Logout = async () => {
   loading.value = true;
   const data = await logout();
 
-  if (data) navigateTo("/");
+  loading.value = false;
+  if (data === true) return navigateTo('/login');
+  useNuxtApp().$toast.error(data.error);
 };
 </script>

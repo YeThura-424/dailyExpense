@@ -1,3 +1,5 @@
+import { useUserStore } from '~/store/user';
+
 export const toTitleCase = (str) => {
   return str
     .split("_") // Split by underscores
@@ -105,16 +107,18 @@ export const dateLocalString = (rawDate) => {
 };
 
 export const getCurrency = () => {
-  const profile = useCookie("profile");
-  let userCurrency = profile?.value?.currency ?? "ks";
-
-  const currency = {
+  const profile = useUserStore().profile;
+  const selectedCurrency = String(profile?.currency || "ks").trim().toLowerCase();
+  const symbols = {
     ks: "Ks",
+    mmk: "Ks",
     usd: "$",
-    baht: "B",
+    baht: "฿",
+    thb: "฿",
+    aed: "AED",
   };
 
-  return currency[userCurrency] ?? "Ks";
+  return symbols[selectedCurrency] ?? selectedCurrency.toUpperCase();
 };
 
 export const formatAmount = (amount) => {

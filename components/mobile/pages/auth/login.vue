@@ -66,9 +66,8 @@
 
 <script setup>
 import { useUserStore } from "~/store/user";
-import { supabase } from "../lib/supabaseClient";
 
-const { login } = useUserStore();
+const { login, forgotPassword } = useUserStore();
 const loading = ref(false);
 const router = useRouter();
 const forgetPasswordModel = ref(false);
@@ -94,15 +93,10 @@ const sendResetEmail = async () => {
   resetError.value = ''
   resetMessage.value = ''
 
-  const { error } = await supabase.auth.resetPasswordForEmail(
-    resetEmail.value,
-    {
-      redirectTo: `${window.location.origin}/password-reset`,
-    }
-  )
+  const result = await forgotPassword(resetEmail.value)
 
-  if (error) {
-    resetError.value = error.message
+  if (!result.success) {
+    resetError.value = result.error
   } else {
     resetMessage.value =
       'If an account exists for this email, a password reset link has been sent.'

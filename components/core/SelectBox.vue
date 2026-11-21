@@ -2,11 +2,11 @@
   <div :class="['select-box-wrapper w-full']">
     <div v-if="showAmount && amount" class="amount flex justify-between px-2 text-sm">
       <p class="font-normal text-[#91919F]">Wallet Balance</p>
-      <p class="font-medium text-[#FD3C4A]">{{ amount }} Ks</p>
+      <p class="font-medium text-[#FD3C4A]">{{ formatAmount(amount) }}</p>
     </div>
     <div v-if="showBudget && budget" class="amount flex justify-between px-2 text-sm">
       <p class="font-normal text-[#91919F]">Budget</p>
-      <p class="font-medium text-[#FD3C4A]">{{ budget }} Ks</p>
+      <p class="font-medium text-[#FD3C4A]">{{ formatAmount(budget) }}</p>
     </div>
     <VDropdown compute-transform-origin :distance="6" :delay="{ show: 300, hide: 300 }">
       <div :class="['input-wrapper h-14 relative']">

@@ -52,7 +52,7 @@
           <RadioGroup v-model="form.filterBy">
             <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
             <div class="grid grid-cols-3 gap-4 pt-3">
-              <RadioGroupOption as="template" v-for="value in ['income', 'expense', 'transfer']" :value="value"
+              <RadioGroupOption as="template" v-for="value in ['income', 'expense']" :value="value"
                 v-slot="{ active, checked }">
                 <div :class="[
                   active ? 'bg-[#EEE5FF] text-[#7F3DFF]' : '',
@@ -173,7 +173,7 @@ const fetchTransaction = async (page = 1, form = {}) => {
 // to group transactions with date
 const groupTransaction = (transactions) => {
   const groupedData = transactions.reduce((acc, item) => {
-    const date = item.action_date.split(" ")[0];
+    const date = item.action_date.split("T")[0];
     if (!acc[date]) {
       acc[date] = [];
     }

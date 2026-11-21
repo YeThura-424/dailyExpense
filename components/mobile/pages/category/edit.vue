@@ -60,14 +60,13 @@ const categoryTypes = ref([
   },
 ]);
 const categoryDetailLoading = ref(true);
-const { categoryDetail } = useCategoryStore();
+const { categoryDetail, updateCategory: saveCategory } = useCategoryStore();
 
 const form = reactive({
   id: "",
   type: "",
   name: "",
 });
-// const oldIcon = ref(null);
 const route = useRoute();
 const categoryId = route.params.id;
 
@@ -97,28 +96,13 @@ const getCategoryDetail = async () => {
 };
 
 const updateCategory = async () => {
-  const data = transform(form);
   loading.value = true;
-  try {
-    useFetch(`/api/file-upload/category/${form.id}`, {
-      method: "POST",
-      body: data,
-    });
-    loading.value = false;
-  } catch (error) {
-    console.error(error);
-  } finally {
-    navigateTo("/category");
+  const result = await saveCategory(form);
+  loading.value = false;
+  if (result.success) {
+    return navigateTo('/category');
   }
-};
-
-const transform = (form) => {
-  let formData = new FormData();
-  formData.append("name", form.name);
-  formData.append("type", form.type);
-  formData.append("updated_icon", form.categoryImage[0]);
-
-  return formData;
+  useNuxtApp().$toast.error(result.error);
 };
 
 getCategoryDetail();
