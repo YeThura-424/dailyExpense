@@ -231,6 +231,7 @@ const currency = ref([
   { name: "Ks", value: "ks", icon: "/images/ks.png" },
   { name: "USD", value: "usd", icon: "/images/dollar.png" },
   { name: "Baht", value: "baht", icon: "/images/baht.png" },
+  { name: "AED", value: "aed", icon: "/images/aed.png" },
 ]);
 
 watch(
