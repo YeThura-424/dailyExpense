@@ -1,11 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
-    apiSecret: process.env.X_API_TOKEN,
-
-    public: {
-      url: process.env.API_URL || "http://localhost:8000",
-    },
+    apiBaseUrl: process.env.NUXT_API_BASE_URL || process.env.API_URL || "http://localhost:4800/api/v1",
+    sessionCookieSecure: process.env.NODE_ENV === "production",
   },
   build: {
     transpile: ["@vuepic/vue-datepicker"],
