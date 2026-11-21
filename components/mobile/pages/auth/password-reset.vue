@@ -21,22 +21,30 @@
 </template>
 
 <script setup>
-import { supabase } from "../lib/supabaseClient";
+import { useUserStore } from "~/store/user";
 
+const { updatePassword } = useUserStore();
 const loading = ref(false);
-
-const form = reactive({
-  password: "",
+const form = reactive({ password: "" });
+const recoveryToken = ref(null);
+onMounted(() => {
+  recoveryToken.value = new URLSearchParams(window.location.hash.slice(1)).get('access_token');
+  window.history.replaceState(null, '', window.location.pathname + window.location.search);
 });
 
 const resetPassword = async () => {
-  loading.value = true;
-  const { error } = await supabase.auth.updateUser({
-    password: form.password
-  })
-
-  if (!error) {
-    return navigateTo('/login')
+  if (!recoveryToken.value) {
+    useNuxtApp().$toast.error('Open the password reset link from your email.');
+    return;
   }
-}
+  loading.value = true;
+  const result = await updatePassword({ new_password: form.password, recoveryToken: recoveryToken.value });
+  loading.value = false;
+  if (result.success) {
+    recoveryToken.value = null;
+    useNuxtApp().$toast.success('Password updated. Please log in.');
+    return navigateTo('/login');
+  }
+  useNuxtApp().$toast.error(result.error);
+};
 </script>

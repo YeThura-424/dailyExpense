@@ -310,8 +310,7 @@ const updateUserPassword = async () => {
 
   if (result.success) {
     useNuxtApp().$toast.success("Password updated successfully");
-    logout();
-    navigateTo("/");
+    await navigateTo("/login");
   } else {
     userLoading.value = false;
     useNuxtApp().$toast.error(result.error);
