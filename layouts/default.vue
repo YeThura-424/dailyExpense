@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>Daily Expence</Title>
+    <Title>Daily Expense</Title>
     <Meta name="description" content="Expence Tracker" />
     <Meta
       property="og:description"
@@ -9,9 +9,8 @@
     <Meta property="og:title" content="Expence Tracker" />
     <Meta property="og:type" content="website" />
   </Head>
-  <div class="bg-[#eee] min-h-screen">
+  <AppShell>
     <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
-    <MobileMainNav v-if="!$device.isDesktopOrTablet" />
-  </div>
+  </AppShell>
 </template>
