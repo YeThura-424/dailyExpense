@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="content-page categories-page">
     <div class="category_content pb-4">
       <div class="category_header px-4">
         <MobilePageHeader
@@ -54,7 +54,6 @@
         <div
           v-else
           class="empty_account_state flex items-center"
-          style="height: calc(100vh - 150px)"
         >
           <div class="text-center">
             <p class="text-base font-medium">You don't any category</p>
@@ -65,7 +64,7 @@
         </div>
 
         <div
-          class="category-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
+          class="page-action category-create"
         >
           <nuxt-link to="/category/add">
             <button
@@ -105,7 +104,7 @@ getCategory();
 
 <style>
 .category-list-wrapper.bg-white {
-  max-height: calc(100vh - 130px);
+  min-height: 160px;
   overflow-x: auto;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-wrapper" v-if="expenseData">
+  <div class="content-page detail-page main-wrapper" v-if="expenseData">
     <div class="bg-[#FD3C4A] p-3 rounded-b-[40px] relative">
       <div class="main-header">
         <!-- show-delete @delete="deleteAction" -->
