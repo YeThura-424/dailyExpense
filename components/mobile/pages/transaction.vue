@@ -1,14 +1,14 @@
 <template>
-  <div>
+  <div class="content-page transactions-page">
     <div class="">
       <div class="flex justify-between items-center py-2 bg-[#fff] px-4 rounded-b-xl">
-        <h1 class="text-[#212325] text-base font-medium">Filter</h1>
-        <div class="filter-icon" @click="openFilterDialog">
+        <h1 class="text-[#212325] text-base font-semibold">All transactions</h1>
+        <button type="button" class="filter-icon" aria-label="Filter transactions" @click="openFilterDialog">
           <IconFilter />
-        </div>
+        </button>
       </div>
       <!-- see report section  -->
-      <div class="transaction-section px-4" style="height: calc(100vh - 120px); overflow: auto">
+      <div class="transaction-section px-4">
         <!-- <div
           class="flex justify-between bg-[#ddd2f1] text-[#7F3DFF] p-3 mt-2 rounded-lg"
         >
@@ -26,11 +26,10 @@
               </div>
             </div>
           </div>
-          <div v-else class="empty-transaction pt-12 justify-center"
-            style="height: calc(100vh - 120px); overflow: auto">
+          <div v-else class="empty-transaction pt-12 justify-center">
             <img src="/images/empty-transaction.svg" alt="Empty Transaction" />
             <h1 class="text-center text-lg font-light pt-8 text-slate-500">
-              No Transaction for the selected cliteria!
+              No transactions match your filters.
             </h1>
           </div>
         </div>
@@ -51,7 +50,7 @@
           <!-- filter by section  -->
           <RadioGroup v-model="form.filterBy">
             <RadioGroupLabel class="font-semibold">Filter By</RadioGroupLabel>
-            <div class="grid grid-cols-3 gap-4 pt-3">
+            <div class="grid grid-cols-2 gap-4 pt-3">
               <RadioGroupOption as="template" v-for="value in ['income', 'expense']" :value="value"
                 v-slot="{ active, checked }">
                 <div :class="[
@@ -69,7 +68,7 @@
           <!-- sort by section  -->
           <RadioGroup v-model="form.sortBy">
             <RadioGroupLabel class="font-semibold">Sort By</RadioGroupLabel>
-            <div class="grid grid-cols-3 gap-4 pt-3">
+            <div class="grid grid-cols-2 gap-4 pt-3">
               <RadioGroupOption as="template" v-for="value in ['highest', 'lowest', 'newest', 'oldest']" :value="value"
                 v-slot="{ active, checked }">
                 <div :class="[
