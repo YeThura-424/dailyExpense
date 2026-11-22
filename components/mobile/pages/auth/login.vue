@@ -1,7 +1,7 @@
 <template>
   <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
-    <MobilePageHeader title="Login" :show-back="false" text-color="text-black" />
+    <MobilePageHeader title="Welcome back" :show-back="false" text-color="text-black" />
     <div class="login-form-wrapper pt-16">
       <div class="username py-3">
         <CoreInputBox placeholder="Email" type="email" v-model="form.email" />
@@ -19,7 +19,7 @@
         </button>
       </div>
 
-      <p class="text-center text-xl p-4">or</p>
+
 
       <!-- social login button -->
       <!-- <div class="flex flex-col gap-4">
@@ -28,7 +28,7 @@
       </div> -->
 
       <div class="forget-password text-center py-3" @click="openForgetPasswordModelBox">
-        <p class="text-lg font-medium text-[#7F3DFF]">Forget Password ?</p>
+        <p class="text-lg font-medium text-[#7F3DFF]">Forgot password?</p>
       </div>
 
       <div class="sign-up-link text-center">
