@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-white">
+  <div class="content-page wallets-page bg-white">
     <div class="account_content">
       <div class="account_header">
         <MobilePageHeader
@@ -72,7 +72,7 @@
       </div>
       <!-- create button for account  -->
       <div
-        class="account-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
+        class="page-action account-create"
       >
         <nuxt-link to="/account/add">
           <button
@@ -185,10 +185,10 @@ pullWallet();
 
 <style scoped>
 .account_info {
-  background-image: url("/images/account_bg.png");
+  background-color: #fff6e5;
 }
 
 .account-modules-wrapper {
-  height: calc(100vh - 320px);
+  min-height: 160px;
 }
 </style>

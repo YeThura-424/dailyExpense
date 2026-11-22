@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#7F3DFF]">
+  <div class="content-page budgets-page bg-[#7F3DFF]">
     <div class="budget-month-carousel bg-[#7F3DFF] text-white px-3 pt-8 pb-12">
       <Carousel
         ref="budgetCarousel"
@@ -24,7 +24,7 @@
     >
       <div class="budget-listing">
         <!-- budget listing  -->
-        <div class="budget-listing" v-if="budgets.length">
+        <div class="budget-listing budget-cards" v-if="budgets.length">
           <ClientOnly>
             <MobileBudgetListingCard :budgets="budgets" />
           </ClientOnly>
@@ -45,7 +45,7 @@
         </div>
       </div>
       <div
-        class="budget-create fixed bottom-[70px] w-[95%] left-1/2 -translate-x-1/2"
+        class="page-action budget-create"
       >
         <nuxt-link to="/budget/create">
           <button
@@ -93,7 +93,7 @@ const currentMonth = date.getMonth();
 const currentYear = date.getUTCFullYear();
 const budgetLoading = ref(false);
 
-onMounted(() => {
+onNuxtReady(() => {
   if (budgetCarousel.value && budgetCarousel.value.slideTo) {
     budgetCarousel.value.slideTo(currentMonth);
   } else {
@@ -130,6 +130,6 @@ button.carousel__prev.budget-carousel {
 }
 
 .budget-list {
-  height: calc(100vh - 204px);
+  min-height: 340px;
 }
 </style>

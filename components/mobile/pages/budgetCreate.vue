@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#7F3DFF] flex flex-col justify-between h-screen">
+  <div class="entry-page entry-budget bg-[#7F3DFF] flex flex-col justify-between">
     <div
       class="budget_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
@@ -15,7 +15,7 @@
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">{{ getCurrency() }}</span>
           <input
-            v-model="form.total"
+            v-model="form.total" aria-label="Budget amount" inputmode="decimal"
             type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3"
           />
@@ -69,7 +69,7 @@
             name="ion:save-outline"
             class="text-white text-2xl cursor-pointer"
           />
-          Continue
+          Save budget
         </button>
       </div>
     </div>

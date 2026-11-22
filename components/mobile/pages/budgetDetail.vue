@@ -1,5 +1,5 @@
 <template>
-  <div class="main-wrapper">
+  <div class="content-page detail-page main-wrapper">
     <div class="p-3 relative">
       <div class="main-header">
         <MobilePageHeader
