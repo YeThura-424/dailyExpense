@@ -1,255 +1,97 @@
 <template>
-  <div :class="['select-box-wrapper w-full']">
-    <div v-if="showAmount && amount" class="amount flex justify-between px-2 text-sm">
-      <p class="font-normal text-[#91919F]">Wallet Balance</p>
-      <p class="font-medium text-[#FD3C4A]">{{ formatAmount(amount) }}</p>
-    </div>
-    <div v-if="showBudget && budget" class="amount flex justify-between px-2 text-sm">
-      <p class="font-normal text-[#91919F]">Budget</p>
-      <p class="font-medium text-[#FD3C4A]">{{ formatAmount(budget) }}</p>
-    </div>
-    <VDropdown compute-transform-origin :distance="6" :delay="{ show: 300, hide: 300 }">
-      <div :class="['input-wrapper h-14 relative']">
-        <input v-model="selectedOption.value" id="select-box" type="text" readonly="readonly"
-          class="relative w-full h-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border border-[#91919f] inline-flex items-center text-left text-xl cursor-default rounded-xl gap-x-1.5 px-2.5 py-1.5 shadow-sm bg-white pe-9"
-          :placeholder="placeholder" />
-      </div>
-      <template #popper>
-        <div class="z-20 group w-full">
-          <ul
-            class="select-option-wrapper relative border border-[#91919f] focus:outline-none overflow-y-auto scroll-py-1 rounded-md shadow-lg bg-white p-1 max-h-60">
-            <input placeholder="Search something..." v-if="searchable" autocomplete="off"
-              class="block w-[calc(100%+0.5rem)] focus:ring-transparent text-sm px-3 py-1.5 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-800 border-0 border-b border-gray-200 dark:border-gray-700 sticky -top-1 -mt-1 mb-1 -mx-1 z-10 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none" />
-            <li v-for="list in options" :key="list" v-close-popper @click="setOptionValue(list)" :class="checkActive(list) ? 'bg-[#7F3DFF] text-white' : 'text-gray-900'
-              "
-              class="cursor-default select-none relative flex items-center justify-between gap-1 rounded-md px-1.5 py-1.5 text-xl">
-              <div class="flex items-center gap-1.5 min-w-0">
-                <div v-if="showIcon && list?.icon"
-                  class="w-12 h-12 bg-[#eee5ff] rounded-full flex justify-center items-center">
-                  <img :src="list?.icon" alt="currency-icon" class="w-10 h-10" />
-                </div>
-                <span class="truncate">{{ list.name }}</span>
-              </div>
-            </li>
-            <li v-if="options.length < 1">List is Empty</li>
-          </ul>
+  <div class="select-box-wrapper w-full">
+    <div v-if="showAmount && amount != null" class="select-hint"><span>Wallet balance</span><strong>{{ formatAmount(amount) }}</strong></div>
+    <div v-if="showBudget && budget != null" class="select-hint"><span>Budget remaining</span><strong>{{ formatAmount(budget) }}</strong></div>
+    <ul v-if="multiple && selected.length" class="selected-chips" aria-label="Selected options">
+      <li v-for="option in selected" :key="identity(option)"><span>{{ option[optionValue] }}</span><button type="button" :aria-label="`Remove ${option[optionValue]}`" :disabled="disabled" @click="removeOption(option)"><Icon name="ion:close" /></button></li>
+    </ul>
+    <Combobox v-slot="{ open }" :model-value="selected" :multiple="multiple" :by="sameOption" :disabled="disabled" @update:model-value="selectOption">
+      <div class="search-select">
+        <div ref="control" class="search-select-control" :class="{ 'is-open': open, 'is-disabled': disabled }">
+          <ComboboxInput class="search-select-input" :display-value="displayValue" :placeholder="placeholder" :aria-label="name || placeholder" :readonly="!searchable" autocomplete="off" @change="query = $event.target.value" @click="openOptions(open)" />
+          <ComboboxButton ref="toggleButton" class="search-select-toggle" @click="query = ''" :aria-label="`Choose ${name || 'an option'}`"><Icon name="ion:chevron-down" :class="{ 'rotate-180': open }" /></ComboboxButton>
         </div>
-      </template>
-    </VDropdown>
-
-    <!-- selected values list  -->
-    <div v-if="selectedOption.value?.length > 0 && multiple" class="">
-      <ul class="h-[75px] overflow-x-auto flex flex-wrap gap-2 mt-2">
-        <li v-for="option in selectedOption.value" :key="option">
-          <div class="flex items-center gap-x-2 bg-[#7F3DFF] px-2 py-1 rounded-md">
-            <span class="text-white text-sm">{{ option.name }}</span>
-            <Icon name="ion:ios-close-circle-outline" class="text-white" @click="removeSelectedOption(option.id)" />
-          </div>
-        </li>
-      </ul>
-    </div>
-    <!-- selected values list ends  -->
+        <Transition @before-enter="positionOptions" leave-active-class="transition duration-100 ease-in" leave-from-class="opacity-100" leave-to-class="opacity-0">
+          <ComboboxOptions class="search-select-options" :style="menuStyle">
+            <li class="select-search-caption"><Icon name="ion:search-outline" /><span>{{ searchable ? 'Type in the field to search' : 'Choose an option' }}</span><span v-if="query" class="ml-auto">{{ filteredOptions.length }} found</span></li>
+            <ComboboxOption v-for="option in filteredOptions" :key="identity(option)" v-slot="{ active, selected: checked }" :value="option" as="template">
+              <li :class="['search-select-option', { 'is-highlighted': active, 'is-selected': checked }]">
+                <img v-if="showIcon && option.icon" :src="option.icon" alt="" class="select-option-icon" />
+                <span class="min-w-0 flex-1 truncate">{{ option[optionValue] }}</span><Icon v-if="checked" name="ion:checkmark" class="shrink-0 text-[#7F3DFF]" />
+              </li>
+            </ComboboxOption>
+            <li v-if="!filteredOptions.length" class="select-no-results" role="status"><Icon name="ion:search-outline" /><span>{{ query ? `No results for “${query}”` : 'No options available' }}</span><small v-if="query">Try a different search.</small></li>
+          </ComboboxOptions>
+        </Transition>
+      </div>
+    </Combobox>
   </div>
 </template>
 
 <script setup>
+import { Combobox, ComboboxInput, ComboboxButton, ComboboxOptions, ComboboxOption } from '@headlessui/vue';
 const props = defineProps({
-  searchable: {
-    type: Boolean,
-    default: false,
-  },
-  options: {
-    type: Array,
-    require: false,
-    default: () => [],
-  },
-  // to emit the selected options
-  optionKey: {
-    type: String,
-    default: () => null,
-  },
-  // to show the selected value in input
-  optionValue: {
-    type: String,
-    default: "name",
-  },
-  placeholder: {
-    type: String,
-    default: "Select something...",
-  },
-  showAmount: {
-    type: Boolean,
-    default: false,
-  },
-  showBudget: {
-    type: Boolean,
-    default: false,
-  },
-  showIcon: {
-    type: Boolean,
-    default: false,
-  },
-  modelValue: {
-    type: [Object, String, Number],
-    default: "",
-  },
-  multiple: {
-    type: Boolean,
-    default: false,
-  },
+  searchable: { type: Boolean, default: true },
+  options: { type: Array, default: () => [] },
+  optionKey: { type: String, default: null },
+  optionValue: { type: String, default: 'name' },
+  placeholder: { type: String, default: 'Select an option' },
+  name: { type: String, default: '' },
+  showAmount: { type: Boolean, default: false },
+  showBudget: { type: Boolean, default: false },
+  showIcon: { type: Boolean, default: false },
+  modelValue: { type: [Object, String, Number, Array], default: '' },
+  multiple: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
 });
-
-const emit = defineEmits(["update:modelValue"]);
-
-const hidePopOver = ref(true);
-const amount = ref(null);
-const budget = ref(null);
-const selectedOption = reactive({
-  key: [],
-  value: [],
-});
-
+const emit = defineEmits(['update:modelValue']);
+const query = ref('');
+const toggleButton = ref(null);
+const control = ref(null);
+const menuStyle = ref({});
+const positionOptions = () => {
+  const rect = control.value?.getBoundingClientRect();
+  if (!rect || !control.value.classList.contains('is-open')) return;
+  const viewport = window.visualViewport;
+  const bottomEdge = viewport ? viewport.offsetTop + viewport.height : window.innerHeight;
+  const below = bottomEdge - rect.bottom - 16;
+  const above = rect.top - (viewport?.offsetTop || 0) - 16;
+  const openAbove = below < 240 && above > below;
+  menuStyle.value = {
+    top: openAbove ? 'auto' : 'calc(100% + 8px)',
+    bottom: openAbove ? 'calc(100% + 8px)' : 'auto',
+    maxHeight: `${Math.max(100, Math.min(288, openAbove ? above : below))}px`,
+  };
+};
 onMounted(() => {
-  if (props.modelValue) {
-    if (props.optionKey) {
-      const selected = props.options.find(
-        (list) => list[props.optionKey] === props.modelValue
-      );
-      if (selected) {
-        selectedOption.value = selected[props.optionValue];
-        selectedOption.key = selected[props.optionKey];
-      }
-    } else {
-      selectedOption.value = props.modelValue[props.optionValue];
-      selectedOption.key = props.modelValue;
-    }
-  }
+  window.addEventListener('resize', positionOptions);
+  window.addEventListener('scroll', positionOptions, true);
 });
-
-watch(() => props.modelValue, (updateValue) => {
-  if (updateValue) {
-    if (props.optionKey) {
-      const selected = props.options.find(
-        (list) => list[props.optionKey] === updateValue
-      );
-      if (selected) {
-        selectedOption.value = selected[props.optionValue];
-        selectedOption.key = selected[props.optionKey];
-      }
-    } else {
-      selectedOption.value = updateValue[props.optionValue];
-      selectedOption.key = updateValue;
-    }
-  }
-})
-
-watch(() => props.options, (updatedOptions) => {
-  if (props.modelValue) {
-    if (props.optionKey) {
-      const selected = updatedOptions.find(
-        (list) => list[props.optionKey] === props.modelValue
-      );
-      if (selected) {
-        selectedOption.value = selected[props.optionValue];
-        selectedOption.key = selected[props.optionKey];
-      }
-    } else {
-      selectedOption.value = props.modelValue[props.optionValue];
-      selectedOption.key = props.modelValue;
-    }
-  }
-})
-
-watch(
-  () => selectedOption.key,
-  (newVal) => {
-    emit("update:modelValue", newVal);
-  }
-);
-
-const setOptionValue = (list) => {
-  selectedOption.value = list[props.optionValue];
-
-  if (props.optionKey) {
-    selectedOption.key = list[props.optionKey];
-  } else {
-    selectedOption.key = list;
-  }
-
-  if (props.showAmount) {
-    amount.value = list.amount;
-  }
-  if (props.showBudget) {
-    budget.value = list?.budget_categories[0]?.budget?.remaining_amount ?? null;
-  }
-  hidePopOver.value = true;
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', positionOptions);
+  window.removeEventListener('scroll', positionOptions, true);
+});
+const identity = option => option?.[props.optionKey || 'id'] ?? option?.value ?? option?.[props.optionValue];
+const sameOption = (a, b) => a != null && b != null && identity(a) === identity(b);
+const findOption = value => props.optionKey ? props.options.find(option => option[props.optionKey] === value) : props.options.find(option => sameOption(option, value)) || value;
+const selected = computed(() => props.multiple
+  ? (Array.isArray(props.modelValue) ? props.modelValue.map(findOption).filter(Boolean) : [])
+  : findOption(props.modelValue) || null);
+const displayValue = option => props.multiple ? '' : option?.[props.optionValue] || '';
+const normalize = text => String(text ?? '').normalize('NFKD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+const filteredOptions = computed(() => props.options.filter(option => normalize(option[props.optionValue]).includes(normalize(query.value))));
+const amount = computed(() => props.multiple ? null : selected.value?.amount);
+const budget = computed(() => props.multiple ? null : selected.value?.budget_categories?.[0]?.budget?.remaining_amount);
+const modelValueFor = option => props.optionKey ? option?.[props.optionKey] : option;
+const selectOption = option => {
+  emit('update:modelValue', props.multiple ? option.map(modelValueFor) : modelValueFor(option));
+  query.value = '';
 };
-
-const checkActive = (data) => {
-  if (props.multiple) {
-    if (props.optionKey) {
-      return selectedOption.key.every((item) => item === data[props.optionKey]);
-    } else {
-      return selectedOption.key.every((item) => item === data);
-    }
-  } else {
-    if (props.optionKey) {
-      return selectedOption.key === data[props.optionKey];
-    } else {
-      selectedOption.key === data;
-    }
+const openOptions = open => {
+  if (!open) {
+    query.value = '';
+    toggleButton.value?.$el?.click();
   }
 };
-
-const removeSelectedOption = (id) => {
-  selectedOption.key = selectedOption.key.filter((option) => option.id !== id);
-  selectedOption.key = [
-    ...selectedOption.key,
-    options.find((option) => option.id === id),
-  ].sort((a, b) => a.id - b.id);
-};
+const removeOption = option => selectOption(selected.value.filter(item => !sameOption(item, option)));
 </script>
-
-<style scoped>
-.input-wrapper::before {
-  content: "";
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-width: 0 2px 2px 0;
-  border-radius: 2px;
-  border-color: #9e9d9d;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%) rotate(45deg);
-  transition: all 0.3s;
-  z-index: 1;
-}
-
-.input-wrapper.active::before {
-  content: "";
-  display: block;
-  width: 8px;
-  height: 8px;
-  border-width: 0 2px 2px 0;
-  border-radius: 2px;
-  border-color: #9e9d9d;
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%) rotate(225deg);
-  z-index: 1;
-}
-
-.select-option-wrapper::-webkit-scrollbar {
-  width: 5px;
-  display: none;
-  background-color: #ffffff;
-}
-
-.select-option-wrapper::-webkit-scrollbar-thumb {
-  -webkit-box-shadow: inset 0 0 6px rgba(107, 107, 107, 0.3);
-  background-color: #555;
-}
-</style>
