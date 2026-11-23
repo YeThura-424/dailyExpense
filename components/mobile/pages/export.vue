@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="content-page export-page">
     <div class="export_content pb-4">
       <div class="category_header px-4">
         <MobilePageHeader
@@ -73,7 +73,7 @@
         </div>
 
         <div
-          class="category-create fixed bottom-3 w-[95%] left-1/2 -translate-x-1/2"
+          class="page-action category-create"
         >
           <button
             type="button"
@@ -354,7 +354,7 @@ const excelExport = (data, name) => {
 
 <style>
 .export-filter-section {
-  height: calc(100vh - 120px);
+  min-height: 320px;
   overflow-x: auto;
 }
 </style>
