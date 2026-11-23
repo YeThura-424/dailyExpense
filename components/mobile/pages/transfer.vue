@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#0077FF] flex flex-col justify-between h-screen">
+  <div class="entry-page entry-transfer bg-[#0077FF] flex flex-col justify-between">
     <div
       class="budget_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
@@ -15,7 +15,7 @@
         <div class="flex items-center">
           <span class="font-extrabold text-5xl">{{ getCurrency() }}</span>
           <input
-            v-model="form.amount"
+            v-model="form.amount" aria-label="Amount" inputmode="decimal"
             type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3"
           />
