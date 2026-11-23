@@ -2,12 +2,12 @@
   <div class="loading-wrapper" v-if="loading">
     <MobileLoadingDots />
   </div>
-  <div class="bg-[#7F3DFF] flex flex-col justify-between h-screen">
+  <div class="entry-page entry-category bg-[#7F3DFF] flex flex-col justify-between">
     <div
       class="expense_main_content px-6 py-4 flex flex-col justify-between h-full"
     >
       <MobilePageHeader
-        title="Add New Category"
+        title="Edit Category"
         icon-color="text-white"
         @back="backAction"
       />
@@ -39,7 +39,7 @@
             name="ion:save-outline"
             class="text-white text-2xl cursor-pointer"
           />
-          Continue
+          Save changes
         </button>
       </div>
     </div>

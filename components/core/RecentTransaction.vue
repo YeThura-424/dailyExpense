@@ -1,50 +1,10 @@
 <template>
   <div class="transaction-wrapper">
-    <div class="transaction-tab-wrapper">
-      <div class="tabs-content flex justify-between space-x-1 rounded-xl p-1">
-        <button
-          v-for="tab in tabs"
-          :key="tab.key"
-          @click="changeTab(tab.key)"
-          :class="[
-            'px-3 rounded-2xl py-2 text-base font-medium leading-5 ',
-            'ring-white/60 ring-offset-2 ring-offset-none focus:outline-none',
-            activeTab == tab.key
-              ? 'bg-[#FCEED4] text-[#FCAC12] shadow'
-              : 'text-[#91919F] hover:bg-white/[0.12] hover:text-white',
-          ]"
-        >
-          {{ tab.name }}
-        </button>
-      </div>
-    </div>
-    <div class="transaction-title-section">
-      <div class="filter-head flex justify-between items-center pt-2">
-        <h1 class="text-xl font-semibold text-[#292B2D]">Filter Transaction</h1>
-        <NuxtLink to="/transaction">
-          <button
-            class="text-[#7F3DFF] bg-[#ddd2f1] px-4 py-1.5 rounded-[22px]"
-          >
-            See All
-          </button>
-        </NuxtLink>
-      </div>
-    </div>
-    <div class="transaction-tab-content">
-      <div v-if="transactionLoading">
-        <LazyMobileLoadingIncomeExpenseCard :cards="4" />
-      </div>
-      <div v-else>
-        <div v-if="transactions.length > 0" class="transaction_list pt-2">
-          <CoreTransactionListCard :transactions="transactions" />
-        </div>
-        <div v-else class="empty-transactions">
-          <h1 class="text-center py-8">
-            No Transaction for selected criteria!
-          </h1>
-        </div>
-      </div>
-    </div>
+    <div class="section-heading"><div><p class="eyebrow">YOUR EVERYDAY ACTIVITY</p><h3>Recent transactions</h3></div><NuxtLink to="/transaction" class="text-link">View all <Icon name="ion:arrow-forward" /></NuxtLink></div>
+    <div class="transaction-tabs" aria-label="Transaction period"><button v-for="tab in tabs" :key="tab.key" type="button" :class="{ 'is-active': activeTab === tab.key }" :aria-pressed="activeTab === tab.key" @click="changeTab(tab.key)">{{ tab.name }}</button></div>
+    <div v-if="transactionLoading"><LazyMobileLoadingIncomeExpenseCard :cards="4" /></div>
+    <div v-else-if="transactions.length" class="transaction-list"><CoreTransactionListCard :transactions="transactions" /></div>
+    <div v-else class="activity-empty"><span><Icon name="ion:receipt-outline" /></span><h4>A little quiet here.</h4><p>No transactions for this period.<br />Your next entry will appear right here.</p><NuxtLink to="/expense" class="text-link"><Icon name="ion:add" /> Add a transaction</NuxtLink></div>
   </div>
 </template>
 
@@ -92,5 +52,5 @@ const fetchTransaction = async () => {
   transactionLoading.value = false;
 };
 
-fetchTransaction();
+onNuxtReady(fetchTransaction);
 </script>

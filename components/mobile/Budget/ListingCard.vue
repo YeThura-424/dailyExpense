@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="budget-cards-grid">
     <div
       class="listing-card-wrapper p-4 bg-[#ffffff] rounded-2xl mb-3"
       v-for="budget in budgets"

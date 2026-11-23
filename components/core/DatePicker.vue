@@ -34,11 +34,11 @@ const format = (date) => {
 
 <style>
 .dp__input {
-  height: 56px;
-  font-size: 20px;
+  height: 52px;
+  font-size: 16px;
   /* margin-left: 15px; */
-  color: #9ca3b7;
-  border: 1px solid #91919f;
+  color: #292b2d;
+  border: 1px solid #e3e5e5;
   border-radius: 0.75rem;
 }
 

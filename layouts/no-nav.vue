@@ -1,6 +1,6 @@
 <template>
   <Head>
-    <Title>Daily Expence</Title>
+    <Title>Daily Expense</Title>
     <Meta name="description" content="Expence Tracker" />
     <Meta
       property="og:description"
@@ -9,8 +9,8 @@
     <Meta property="og:title" content="Expence Tracker" />
     <Meta property="og:type" content="website" />
   </Head>
-  <div class="bg-[#eee] min-h-screen">
-    <!-- <NuxtLoadingIndicator color="#7F3DFF" /> -->
+  <AppShell :mobile-navigation="false">
+    <NuxtLoadingIndicator color="#7F3DFF" />
     <slot />
-  </div>
+  </AppShell>
 </template>

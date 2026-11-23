@@ -5,11 +5,10 @@
     </div>
     <div class="input-box relative">
       <input :value="modelValue" :type="inputType" :placeholder="placeholder" :class="inputClass" @input="updateValue"
-        :disabled="disabled" />
+        :disabled="disabled" :aria-label="showLabel ? label : placeholder" />
 
       <div class="show-password absolute right-4 top-1/2 -translate-y-1/2" v-if="type == 'password'">
-        <Icon @click="toggleShowPassword" :name="inputType == 'text' ? 'ion:eye-off-sharp' : 'ion:eye-sharp'" size="26"
-          class="text-[#91919F] cursor-pointer" />
+        <button type="button" :aria-label="inputType === 'text' ? 'Hide password' : 'Show password'" class="flex items-center justify-center text-[#91919F]" @click="toggleShowPassword"><Icon :name="inputType == 'text' ? 'ion:eye-off-sharp' : 'ion:eye-sharp'" size="22" /></button>
       </div>
     </div>
   </div>
@@ -36,14 +35,14 @@ const props = defineProps({
   inputClass: {
     type: String,
     default:
-      "text-xl px-4 py-2 rounded-xl h-14 w-full focus:outline-none border border-[#91919F]",
+      "text-base px-4 py-3 rounded-xl h-[52px] w-full bg-white text-[#292B2D] placeholder:text-[#91919F] focus:outline-none focus:ring-2 focus:ring-[#7F3DFF]/20 focus:border-[#7F3DFF] border border-[#E3E5E5] transition-colors",
   },
   placeholder: {
     type: String,
     default: "Please Type Something...",
   },
   modelValue: {
-    type: String,
+    type: [String, Number],
   },
   disabled: {
     type: Boolean,

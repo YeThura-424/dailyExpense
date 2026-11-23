@@ -41,7 +41,6 @@ useHead({
 
 <template>
   <div>
-    <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesAuthLogin v-else />
+    <LazyMobilePagesAuthLogin />
   </div>
 </template>

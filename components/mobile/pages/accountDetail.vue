@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="content-page wallet-detail-page">
     <div class="px-4 pt-3 pb-3">
       <!-- see report section  -->
       <div class="account_detail_header pb-3">

@@ -1,3 +1,5 @@
+import { showError } from '#app';
+
 export const compactQuery = (payload = {}) => Object.fromEntries(
   Object.entries(payload).filter(([, value]) => value !== undefined && value !== null && value !== '')
 );
@@ -37,10 +39,23 @@ export const apiResult = (data, error) => {
     ? responseData.data
     : responseData;
   if (!error?.value && result?.success !== false) {
-    return result || { success: false, error: 'No response received', message: 'No response received' };
+    if (result) return result;
   }
   const response = error?.value?.data;
   const details = response?.data || response || result || error?.value;
   const message = details?.message || details?.error || 'Unable to connect. Please try again.';
-  return { success: false, error: message, message, statusCode: error?.value?.statusCode || error?.value?.status };
+  const statusCode = Number(error?.value?.statusCode || error?.value?.status || result?.statusCode)
+    || (error?.value || !result ? 503 : undefined);
+
+  // Keep expected form/authentication errors inline; outages need a recovery page.
+  if (statusCode >= 500) {
+    showError({
+      statusCode,
+      statusMessage: 'Service unavailable',
+      fatal: true,
+      data: { kind: 'api' },
+    });
+  }
+
+  return { success: false, error: message, message, statusCode };
 };

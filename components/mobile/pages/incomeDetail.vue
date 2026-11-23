@@ -1,5 +1,5 @@
 <template>
-  <div class="main-wrapper" v-if="incomeData">
+  <div class="content-page detail-page main-wrapper" v-if="incomeData">
     <div class="bg-[#00A86B] p-3 rounded-b-[40px] relative">
       <div class="main-header">
         <MobilePageHeader title="Income Detail" icon-color="text-white" @back="backAction" />

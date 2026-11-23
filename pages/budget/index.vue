@@ -17,7 +17,6 @@ useHead({
 
 <template>
   <div>
-    <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesBudget v-else />
+    <LazyMobilePagesBudget />
   </div>
 </template>

@@ -40,7 +40,6 @@ useHead({
 
 <template>
   <div>
-    <LazyDesktop v-if="$device.isDesktopOrTablet" />
-    <LazyMobilePagesAuthPasswordReset v-else />
+    <LazyMobilePagesAuthPasswordReset />
   </div>
 </template>

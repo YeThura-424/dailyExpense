@@ -1,7 +1,7 @@
 <template>
   <MobileLoadingDots v-if="loading" />
   <div class="login-wrapper px-6 py-4">
-    <MobilePageHeader title="Sign Up" text-color="text-black" :show-back="false" />
+    <MobilePageHeader title="Create your account" text-color="text-black" :show-back="false" />
     <div class="login-form-wrapper pt-10">
       <div class="name py-3">
         <CoreInputBox v-model="form.username" placeholder="Name" type="text" />

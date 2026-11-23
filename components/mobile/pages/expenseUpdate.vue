@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-[#FD3C4A]">
+  <div class="entry-page entry-expense bg-[#FD3C4A]">
     <div class="expense_main_content px-6 py-4">
       <div class="expense_header">
         <MobilePageHeader title="Expense" icon-color="text-white" @back="backAction" />
@@ -8,7 +8,7 @@
         <span class="text-lg">How Much ?</span>
         <div class="flex items-center">
           <span class="font-extrabold text-5xl"> {{ getCurrency() }} </span>
-          <input v-model="form.amount" type="text"
+          <input v-model="form.amount" aria-label="Amount" inputmode="decimal" type="text"
             class="bg-transparent focus:outline-none font-extrabold text-5xl px-2 w-2/3" />
         </div>
       </div>
