@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-info-wrapper">
+  <div class="content-page profile-detail-page profile-info-wrapper">
     <div class="profile_header">
       <MobilePageHeader
         title="Edit Profile"
